@@ -216,6 +216,14 @@ body {
   margin-left: 5%;
   border-radius: 30px;
 }
+#postImagePreview{
+  transform: scale(0.2);
+  /* margin-top: 0; */
+  position: absolute;
+  top: -25vmax;
+  right: -15vmax;
+
+}
 
 .cover-image {
   height: 12vmax;

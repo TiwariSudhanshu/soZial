@@ -64,7 +64,7 @@ function Info() {
       const data = await response.json();
       if (response.ok) {
         toast.success("Registered successfully!");
-        navigate("/");
+        navigate("/login");
       } else {
         toast.error(data.message || "Failed registration");
       }

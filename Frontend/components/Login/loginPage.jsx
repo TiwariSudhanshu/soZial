@@ -40,7 +40,7 @@ function LoginPage() {
       if(response.ok){
         toast.success("Logged in Successfully")
           localStorage.setItem('user', JSON.stringify(data))
-          navigate("/profile");
+          navigate("/");
       }else{
         toast.error("Login failed");
       }

@@ -8,7 +8,7 @@ import OtherProfile from "../components/Profile/otherProfile";
 import EditProfile from "../components/Profile/editProfile";
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/login",
     element: <LoginPage />,
   },
   {
@@ -20,7 +20,7 @@ const router = createBrowserRouter([
     element: <Info />,
   },
   {
-    path: "/profile",
+    path: "/",
     element: <Profile />,
   },
   {

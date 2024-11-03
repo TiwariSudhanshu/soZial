@@ -65,3 +65,21 @@
   background-color: #1d9bf0;
   right: 1.5vmax;
 }
+
+
+.menubar{
+  display: flex;
+  flex-direction: column;
+  border-right: 2px solid lightgray;
+  padding: 5vmax;
+}
+#menubar-link{
+  text-decoration: none;
+  color: var(--text-color);
+  margin-top: 6vmax;
+  font-size: 1.2em;
+  font-weight: 800;
+}
+.pass-center{
+  margin-top: 2vmax;
+}

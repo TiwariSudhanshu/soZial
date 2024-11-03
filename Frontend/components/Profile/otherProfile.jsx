@@ -165,7 +165,7 @@ function OtherProfile() {
           </button>
           <button
             onClick={() => {
-              navigate("/profile");
+              navigate("/");
             }}
           >
             <i class="fa-solid fa-user"></i>
@@ -184,7 +184,7 @@ function OtherProfile() {
             <i class="fa-solid fa-pen-to-square"></i>Edit Profile
           </button>
           <button>
-            <i class="fa-solid fa-circle-info"></i>Your Information
+          <i class="fa-solid fa-bookmark"></i>Bookmarks
           </button>
           <button id="toggleMode" onClick={toggleMode}>
             <i class="fa-solid fa-toggle-on"></i>
@@ -298,9 +298,6 @@ function OtherProfile() {
           })}
       </div>
       <div className="rightbar">
-        <div className="searchbox">
-          <input type="text" placeholder="Search" id="search" />
-        </div>
         <h2>Suggestions</h2>
         <div className="suggestions">
           {users.map((suggestion) => (

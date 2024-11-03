@@ -6,6 +6,18 @@ import { toast } from "react-toastify";
 function Profile() {
   const navigate = useNavigate();
   const userData = JSON.parse(localStorage.getItem("user"));
+  const [previewImage, setPreviewImage] = useState(null);
+  
+  useEffect(() => {
+    if (!userData) {
+      navigate('/login');
+    }
+  }, [userData, navigate]);
+
+  if(!userData){
+    return null;
+  }
+
 
   const [formData, setFormData] = useState({
     postContent: "",
@@ -49,7 +61,8 @@ function Profile() {
 
       if (response.ok) {
         toast("Logged out");
-        navigate("/");
+        localStorage.removeItem('user');
+        navigate("/login");
       }
     } catch (error) {
       toast.error("Failed to logout");
@@ -67,11 +80,22 @@ function Profile() {
     if (files.length > 0) {
       const file = files[0];
       setFormData({ ...formData, postImage: file });
+  
+      const previewURL = URL.createObjectURL(file);
+      setPreviewImage(previewURL);
+    } else {
+      setPreviewImage(null);
     }
   };
+  
 
   const addNewPost = async (e) => {
     e.preventDefault();
+    
+    if (!formData.postContent.trim() || !formData.postImage) {
+      toast.error("Post should not be empty");
+      return;
+    }
     setLoader(true);
     const formDataToSend = new FormData();
     formDataToSend.append("postContent", formData.postContent);
@@ -264,7 +288,7 @@ function Profile() {
               <i
                 class="fa-solid fa-user"
                 onClick={() => {
-                  navigate("/profile");
+                  navigate("/");
                 }}
               ></i>
               <span>Profile</span>
@@ -286,7 +310,7 @@ function Profile() {
               <i class="fa-solid fa-pen-to-square"></i>Edit Profile
             </button>
             <button>
-              <i class="fa-solid fa-circle-info"></i>Your Information
+            <i class="fa-solid fa-bookmark"></i>Bookmarks
             </button>
             <button id="toggleMode" onClick={toggleMode}>
               <i class="fa-solid fa-toggle-on"></i>
@@ -309,38 +333,37 @@ function Profile() {
           </div>
         </div>
         <form>
-          <div
-            className="postModel"
-            style={{ display: isDialogOpen ? "flex" : "none" }}
-          >
-            {loader ? (
-              <div className="loader"></div>
-            ) : (
-              <>
-                <button id="closeDialog" onClick={closeDialog}>
-                  <i class="fa-solid fa-xmark"></i>
-                </button>
-                <h2>Post Now</h2>
-                <textarea
-                  name="postContent"
-                  id="postContent"
-                  onChange={handleChange}
-                  value={formData.postContent}
-                  placeholder="Enter your content.."
-                />
-                <input
-                  type="file"
-                  onChange={handleFileChange}
-                  id="postImage"
-                  name="postImage"
-                />
-                <button id="post" type="button" onClick={addNewPost}>
-                  Post
-                </button>
-              </>
-            )}
-            {/* Change onSubmit to onClick to prevent premature submission */}
-          </div>
+        <div className="postModel" style={{ display: isDialogOpen ? "flex" : "none" }}>
+  {loader ? (
+    <div className="loader" style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}></div>
+  ) : (
+    <>
+      <button id="closeDialog" onClick={closeDialog}>
+        <i className="fa-solid fa-xmark"></i>
+      </button>
+      <h2>Post Now</h2>
+      <textarea
+        name="postContent"
+        id="postContent"
+        onChange={handleChange}
+        value={formData.postContent}
+        placeholder="Enter your content.."
+        required
+      />
+      <input
+        type="file"
+        onChange={handleFileChange}
+        id="postImage"
+        name="postImage"
+      />
+      {previewImage && <img src={previewImage} alt="Preview" id='postImagePreview' className="image-preview" />}
+      <button id="post" type="button" onClick={addNewPost}>
+        Post
+      </button>
+    </>
+  )}
+</div>
+
         </form>
         <form>
           <div
@@ -476,9 +499,6 @@ function Profile() {
             })}
         </div>
         <div className="rightbar">
-          <div className="searchbox">
-            <input type="text" placeholder="Search" id="search" />
-          </div>
           <h2>Suggestions</h2>
           <div className="suggestions">
             {users.map((suggestion) => (

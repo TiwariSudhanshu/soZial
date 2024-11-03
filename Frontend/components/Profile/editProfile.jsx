@@ -3,6 +3,7 @@ import "./profile.css";
 import "./editProfile.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { Link, NavLink } from "react-router-dom";
 
 function EditProfile() {
   const [loader, setLoader] = useState(false);
@@ -13,7 +14,7 @@ function EditProfile() {
   const [avatar, setAvatar] = useState(null);
   const [avatarPreview, setAvatarPreview] = useState("");
   const [coverImagePreview, setCoverImagePreview] = useState("");
-
+  const [pageToggle, setPageToggle] = useState(true);
   const [formData, setFormData] = useState({
     name: "",
     username: "",
@@ -149,132 +150,177 @@ function EditProfile() {
           </button>
         </div>
       </div>
-
-      <div className="center edit-center">
-        <h1>Edit Profile</h1>
-        <form onSubmit={handleSubmit}>
-          <div className="change">
-            <label htmlFor="avatar" id="avatar-label">
-              <i className="fa-solid fa-pen"></i>
-            </label>
-            {avatarPreview ? (
-              <img
-                src={avatarPreview}
-                alt="Avatar Preview"
-                className="avatar-preview"
-              />
-            ) : (
-              <img
-                src={user.avatar}
-                alt="Default Avatar"
-                className="avatar-preview"
-              />
-            )}
-            <input
-              type="file"
-              id="avatar"
-              onChange={handleFileChange}
-              accept="image/*"
-              style={{ display: "none" }}
-            />
-          </div>
-          <div className="change">
-            <label htmlFor="name">Name</label>
-            <input
-              type="text"
-              name="name"
-              id="name"
-              placeholder="Name"
-              value={formData.name}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="change">
-            <label htmlFor="username">Username</label>
-            <input
-              type="text"
-              name="username"
-              id="username"
-              placeholder="Username"
-              value={formData.username}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="change">
-            <label htmlFor="bio">Bio</label>
-            <input
-              type="text"
-              name="bio"
-              id="bio"
-              placeholder="Bio"
-              value={formData.bio}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="change">
-            <label htmlFor="coverImage">Cover Image:</label>
-            <input
-              type="file"
-              id="coverImage"
-              name="coverImage"
-              onChange={handleFileChange}
-            />
-
-            {/* Check for coverImagePreview first, then user cover image, else show nothing */}
-            {coverImagePreview ? (
-              <div
-                className="coverImage"
-                style={{
-                  backgroundImage: `url(${coverImagePreview})`,
-                  width: "100%",
-                  height: "100px",
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }}
-              ></div>
-            ) : user?.coverImage ? (
-              <div
-                className="coverImage"
-                style={{
-                  backgroundImage: `url(${user.coverImage})`,
-                  width: "100%",
-                  height: "100px",
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }}
-              ></div>
-            ) : null}
-          </div>
-
-          <div className="change">
-            <label htmlFor="mobileNo">Mobile No</label>
-            <input
-              type="text"
-              name="mobileNo"
-              id="mobileNo"
-              placeholder="Mobile No"
-              value={formData.mobileNo}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="change">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              placeholder="Email"
-              value={formData.email}
-              onChange={handleChange}
-            />
-          </div>
-          {loader ? (
-            <div className="loader"></div>
-          ) : (
-            <button className="changeButton">Change</button>
-          )}
-        </form>
+      <div className="menubar">
+        <NavLink id="menubar-link" onClick={()=>{setPageToggle(true)}} >Edit profile Info</NavLink>
+        <NavLink id="menubar-link" onClick={()=>{setPageToggle(false)}}>Change password</NavLink>
       </div>
+      <div className="center">
+  {pageToggle ? (
+    <div className="edit-center">
+      <h1>Edit Profile</h1>
+      <form onSubmit={handleSubmit}>
+        <div className="change">
+          <label htmlFor="avatar" id="avatar-label">
+            <i className="fa-solid fa-pen"></i>
+          </label>
+          {avatarPreview ? (
+            <img
+              src={avatarPreview}
+              alt="Avatar Preview"
+              className="avatar-preview"
+            />
+          ) : (
+            <img
+              src={user.avatar}
+              alt="Default Avatar"
+              className="avatar-preview"
+            />
+          )}
+          <input
+            type="file"
+            id="avatar"
+            onChange={handleFileChange}
+            accept="image/*"
+            style={{ display: "none" }}
+          />
+        </div>
+        <div className="change">
+          <label htmlFor="name">Name</label>
+          <input
+            type="text"
+            name="name"
+            id="name"
+            placeholder="Name"
+            value={formData.name}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="change">
+          <label htmlFor="username">Username</label>
+          <input
+            type="text"
+            name="username"
+            id="username"
+            placeholder="Username"
+            value={formData.username}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="change">
+          <label htmlFor="bio">Bio</label>
+          <input
+            type="text"
+            name="bio"
+            id="bio"
+            placeholder="Bio"
+            value={formData.bio}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="change">
+          <label htmlFor="coverImage">Cover Image:</label>
+          <input
+            type="file"
+            id="coverImage"
+            name="coverImage"
+            onChange={handleFileChange}
+          />
+          {coverImagePreview ? (
+            <div
+              className="coverImage"
+              style={{
+                backgroundImage: `url(${coverImagePreview})`,
+                width: "100%",
+                height: "100px",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            ></div>
+          ) : user?.coverImage ? (
+            <div
+              className="coverImage"
+              style={{
+                backgroundImage: `url(${user.coverImage})`,
+                width: "100%",
+                height: "100px",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            ></div>
+          ) : null}
+        </div>
+        <div className="change">
+          <label htmlFor="mobileNo">Mobile No</label>
+          <input
+            type="text"
+            name="mobileNo"
+            id="mobileNo"
+            placeholder="Mobile No"
+            value={formData.mobileNo}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="change">
+          <label htmlFor="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleChange}
+          />
+        </div>
+        {loader ? (
+          <div className="loader"></div>
+        ) : (
+          <button className="changeButton">Change</button>
+        )}
+      </form>
+    </div>
+  ) : (
+    <div className="pass-center edit-center">
+      <h1>Change Password</h1>
+      <form >
+        <div className="change">
+          <label htmlFor="current-password">Current Password</label>
+          <input
+            type="password"
+            id="current-password"
+            placeholder="Current Password"
+            className="password-input"
+          />
+        </div>
+        <div className="change">
+          <label htmlFor="new-password">New Password</label>
+          <input
+            type="password"
+            id="new-password"
+            placeholder="New Password"
+            className="password-input"
+           autoComplete="new-password"
+          />
+        </div>
+        <div className="change">
+          <label htmlFor="confirm-password">Confirm Password</label>
+          <input
+            type="password"
+            id="confirm-password"
+            placeholder="Confirm Password"
+            className="password-input"
+            autoComplete="new-password"
+          />
+        </div>
+        {loader ? (
+          <div className="loader"></div>
+        ) : (
+          <button type="submit" className="changeButton">Change</button>
+        )}
+      </form>
+    </div>
+  )}
+</div>
+
     </div>
   );
 }
