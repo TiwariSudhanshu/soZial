@@ -101,7 +101,7 @@ function SignupPage() {
                 Sign Up
               </button>
               <p>
-                Have an acoount ? <a href="/login">Sign in</a>
+                Have an acoount ? <a href="/">Sign in</a>
               </p>
             </div>
           </form>

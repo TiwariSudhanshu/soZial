@@ -10,7 +10,7 @@ function Profile() {
   
   useEffect(() => {
     if (!userData) {
-      navigate('/login');
+      navigate('/');
     }
   }, [userData, navigate]);
 
@@ -48,8 +48,10 @@ function Profile() {
     return date.toLocaleString("en-US", options);
   };
 
+  const[logoutLoader, setLogoutLoader] = useState(false)
   // Logout user
   const logoutUser = async () => {
+    setLogoutLoader(true)
     try {
       const response = await fetch("/api/v1/user/logout", {
         method: "POST",
@@ -62,10 +64,12 @@ function Profile() {
       if (response.ok) {
         toast("Logged out");
         localStorage.removeItem('user');
-        navigate("/login");
+        navigate("/");
       }
     } catch (error) {
       toast.error("Failed to logout");
+    } finally{
+      setLogoutLoader(false)
     }
   };
 
@@ -92,7 +96,7 @@ function Profile() {
   const addNewPost = async (e) => {
     e.preventDefault();
     
-    if (!formData.postContent.trim() || !formData.postImage) {
+    if (!formData.postContent.trim() && !formData.postImage) {
       toast.error("Post should not be empty");
       return;
     }
@@ -114,6 +118,7 @@ function Profile() {
           postContent: "",
           postImage: "",
         });
+        setPreviewImage(null);
         setIsDialogOpen(!isDialogOpen);
       } else {
         toast.error(data.message || "Failed to add post");
@@ -288,7 +293,7 @@ function Profile() {
               <i
                 class="fa-solid fa-user"
                 onClick={() => {
-                  navigate("/");
+                  navigate("/profile");
                 }}
               ></i>
               <span>Profile</span>
@@ -326,11 +331,15 @@ function Profile() {
               <i class="fa-solid fa-ellipsis-vertical"></i>
             </button>
           </div>
-          <div className="DotBox" style={{ display: dots ? "block" : "none" }}>
+            <div className="DotBox" style={{ display: dots ? "block" : "none" }}>
+            {logoutLoader ? (
+            <div className="loader"></div>
+          ):(
             <button id="logoutBtn" onClick={logoutUser}>
               Logout
             </button>
-          </div>
+          )}
+          </div> 
         </div>
         <form>
         <div className="postModel" style={{ display: isDialogOpen ? "flex" : "none" }}>
@@ -350,6 +359,7 @@ function Profile() {
         placeholder="Enter your content.."
         required
       />
+      
       <input
         type="file"
         onChange={handleFileChange}
@@ -390,7 +400,7 @@ function Profile() {
               <div className="loader"></div>
             ) : (
               searchProfile && (
-                <div className="searchedUser">
+                <div className="searchedUser" onClick={()=>{navigate("/otherProfile", { state: searchProfile._id })}}>
                   {searchProfile.avatar ? (
                     <img
                       src={searchProfile.avatar}
@@ -440,7 +450,7 @@ function Profile() {
                 <div className="post">
                   <div className="post-details">
                     <div className="post-details-left">
-                      <img id="post-avatar" src={user.avatar} alt="" />
+                      <img loading="lazy" id="post-avatar" src={user.avatar} alt="" />
                       <div>
                         <h3>{user.name}</h3>
                         <p>@{user.username}</p>
@@ -493,7 +503,7 @@ function Profile() {
                   <div className="post-content">
                     <p>{userPost.content}</p>
                   </div>
-                  <img id="postImage" src={userPost.image} alt="" />
+                  <img id="postImage" loading="lazy" src={userPost.image} alt="" />
                 </div>
               );
             })}
@@ -509,7 +519,7 @@ function Profile() {
                   navigate("/otherProfile", { state: suggestion._id });
                 }}
               >
-                <img src={suggestion.avatar} alt="img" id="suggestImage" />
+                <img loading="lazy" src={suggestion.avatar} alt="img" id="suggestImage" />
                 <div className="suggestDetail">
                   <p id="suggestName">{suggestion.name}</p>
                   <p id="suggestUsername">@{suggestion.username}</p>

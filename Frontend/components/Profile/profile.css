@@ -217,11 +217,11 @@ body {
   border-radius: 30px;
 }
 #postImagePreview{
-  transform: scale(0.2);
+  transform: scale(0.1);
   /* margin-top: 0; */
   position: absolute;
-  top: -25vmax;
-  right: -15vmax;
+  top: -32vmax;
+  right: -20vmax;
 
 }
 

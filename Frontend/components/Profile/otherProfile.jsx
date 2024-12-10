@@ -155,7 +155,7 @@ function OtherProfile() {
       <div className="sidebar">
         <p id="logo">Profiler</p>
         <div className="tabs">
-          <button>
+          <button onClick={()=>{navigate("/profile")}}>
             <i class="fa-solid fa-house"></i>
             <span> Home</span>
           </button>
@@ -165,7 +165,7 @@ function OtherProfile() {
           </button>
           <button
             onClick={() => {
-              navigate("/");
+              navigate("/profile");
             }}
           >
             <i class="fa-solid fa-user"></i>
@@ -197,7 +197,10 @@ function OtherProfile() {
           className="searchModel"
           style={{ display: isSearchDialogOpen ? "flex" : "none" }}
         >
-          <button id="closeDialog" onClick={closeSearchDialog}>
+          <button id="closeDialog" onClick={()=>{
+            e.preventDefault();
+            closeSearchDialog();
+          }}>
             <i class="fa-solid fa-xmark"></i>
           </button>
           <h2>Search</h2>
@@ -217,7 +220,7 @@ function OtherProfile() {
             <div className="loader"></div> // This can be a spinner or loading animation
           ) : (
             searchProfile && (
-              <div className="searchedUser">
+              <div className="searchedUser"  onClick={()=>{navigate("/otherProfile", { state: searchProfile._id })}}>
                 {searchProfile.avatar ? (
                   <img
                     src={searchProfile.avatar}
@@ -231,6 +234,7 @@ function OtherProfile() {
                   <h3>{searchProfile.name || ""}</h3>
                   <p>{searchProfile.username || ""}</p>
                 </div>
+                
               </div>
             )
           )}
@@ -266,7 +270,7 @@ function OtherProfile() {
               <div className="post">
                 <div className="post-details">
                   <div className="post-details-left">
-                    <img id="post-avatar" src={profile.avatar} alt="" />
+                    <img loading="lazy" id="post-avatar" src={profile.avatar} alt="" />
                     <div>
                       <h3>{profile.name}</h3>
                       <p>@{profile.username}</p>
@@ -292,7 +296,7 @@ function OtherProfile() {
                 <div className="post-content">
                   <p>{userPost.content}</p>
                 </div>
-                <img id="postImage" src={userPost.image} alt="" />
+                <img loading="lazy" id="postImage" src={userPost.image} alt="" />
               </div>
             );
           })}
@@ -308,7 +312,7 @@ function OtherProfile() {
                 navigate("/otherProfile", { state: suggestion._id });
               }}
             >
-              <img src={suggestion.avatar} alt="img" id="suggestImage" />
+              <img loading="lazy" src={suggestion.avatar} alt="img" id="suggestImage" />
               <div className="suggestDetail">
                 <p id="suggestName">{suggestion.name}</p>
                 <p id="suggestUsername">@{suggestion.username}</p>
