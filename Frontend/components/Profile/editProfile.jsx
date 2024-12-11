@@ -25,11 +25,20 @@ function EditProfile() {
     coverImage: null,
   });
 
+  const [passData, setPassData] = useState({
+    oldPass: '',
+    newPass: '',
+    confirmPass: ''
+  })
+
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
   };
-
+  const handlePassChange = (e)=>{
+    const { id, value } = e.target;
+    setPassData({ ...passData, [id]: value });
+  }
   const handleFileChange = (e) => {
     const { id, files } = e.target;
     if (files.length > 0) {
@@ -114,6 +123,39 @@ function EditProfile() {
 
     fetchUser();
   }, []);
+  const [passLoader, setPassLoader] = useState(false)
+  const handlePasswordChange = async(e)=>{
+    e.preventDefault();
+    setPassLoader(true)
+    try {
+      const response = await fetch("http://localhost:3000/api/v1/user/edit/changePassword", {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(
+          {
+            oldPass: passData.oldPass,
+            newPass: passData.newPass,
+            confirmPass: passData.confirmPass
+          }
+        ),
+        credentials: "include",
+      })
+      console.log(response)
+      if(response.ok){
+        toast.success("Password changed")
+        navigate("/profile")
+      } else{
+        toast.error("Error in response")
+      }
+    } catch (error) {
+      toast.error("Error")
+      console.log("Error in password change : ", error)
+    } finally{
+      setPassLoader(false)
+    }
+  }
 
   if (!user) {
     return (
@@ -281,23 +323,27 @@ function EditProfile() {
   ) : (
     <div className="pass-center edit-center">
       <h1>Change Password</h1>
-      <form >
+      <form onSubmit={handlePasswordChange}>
         <div className="change">
           <label htmlFor="current-password">Current Password</label>
           <input
             type="password"
-            id="current-password"
+            id="oldPass"
             placeholder="Current Password"
             className="password-input"
+            value={passData.oldPass}
+            onChange={handlePassChange}
           />
         </div>
         <div className="change">
           <label htmlFor="new-password">New Password</label>
           <input
             type="password"
-            id="new-password"
+            id="newPass"
             placeholder="New Password"
             className="password-input"
+            value={passData.newPass}
+            onChange={handlePassChange}
            autoComplete="new-password"
           />
         </div>
@@ -305,13 +351,15 @@ function EditProfile() {
           <label htmlFor="confirm-password">Confirm Password</label>
           <input
             type="password"
-            id="confirm-password"
+            id="confirmPass"
             placeholder="Confirm Password"
             className="password-input"
             autoComplete="new-password"
+            value={passData.confirmPass}
+            onChange={handlePassChange}
           />
         </div>
-        {loader ? (
+        {passLoader ? (
           <div className="loader"></div>
         ) : (
           <button type="submit" className="changeButton">Change</button>

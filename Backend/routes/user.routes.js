@@ -4,7 +4,7 @@ import { loginUser, logoutUser, registerUser } from "../controllers/user.control
 import { verifyJWT } from "../middleware/auth.middleware.js";
 import { suggestions } from "../controllers/suggestions.controllers.js";
 import { addNewPost, deletePost } from "../controllers/post.controllers.js";
-import { changeInfo, fetchUser } from "../controllers/edit.controllers.js";
+import { changeInfo, changePassword, fetchUser } from "../controllers/edit.controllers.js";
 
 const router = Router();
 
@@ -38,5 +38,6 @@ router.route("/edit/change").post(verifyJWT,upload.fields([
         maxCount: 1
     }
 ]), changeInfo)
+router.route("/edit/changePassword").post(verifyJWT,changePassword);
 
 export default router;
