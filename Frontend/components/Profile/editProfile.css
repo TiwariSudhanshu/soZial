@@ -19,6 +19,7 @@
   height: 100%;
   width: 100%;
   background-color: black;
+  margin-top: -5vmax;
 }
 
 /* Avatar */
@@ -50,6 +51,10 @@
 
 .change button:hover {
   background-color: #04b404;
+}
+#changeloader{
+  margin-bottom: 4vmax;
+  margin-left: 35%;
 }
 
 #avatar-label {

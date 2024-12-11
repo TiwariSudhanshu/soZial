@@ -7,17 +7,17 @@ function Profile() {
   const navigate = useNavigate();
   const userData = JSON.parse(localStorage.getItem("user"));
   const [previewImage, setPreviewImage] = useState(null);
-  
+
   useEffect(() => {
     if (!userData) {
-      navigate('/');
+      navigate("/");
     }
   }, [userData, navigate]);
 
-  if(!userData){
+  if (!userData) {
     return null;
   }
-
+  
 
   const [formData, setFormData] = useState({
     postContent: "",
@@ -48,10 +48,10 @@ function Profile() {
     return date.toLocaleString("en-US", options);
   };
 
-  const[logoutLoader, setLogoutLoader] = useState(false)
+  const [logoutLoader, setLogoutLoader] = useState(false);
   // Logout user
   const logoutUser = async () => {
-    setLogoutLoader(true)
+    setLogoutLoader(true);
     try {
       const response = await fetch("/api/v1/user/logout", {
         method: "POST",
@@ -63,13 +63,13 @@ function Profile() {
 
       if (response.ok) {
         toast("Logged out");
-        localStorage.removeItem('user');
+        localStorage.removeItem("user");
         navigate("/");
       }
     } catch (error) {
       toast.error("Failed to logout");
-    } finally{
-      setLogoutLoader(false)
+    } finally {
+      setLogoutLoader(false);
     }
   };
 
@@ -84,18 +84,17 @@ function Profile() {
     if (files.length > 0) {
       const file = files[0];
       setFormData({ ...formData, postImage: file });
-  
+
       const previewURL = URL.createObjectURL(file);
       setPreviewImage(previewURL);
     } else {
       setPreviewImage(null);
     }
   };
-  
 
   const addNewPost = async (e) => {
     e.preventDefault();
-    
+
     if (!formData.postContent.trim() && !formData.postImage) {
       toast.error("Post should not be empty");
       return;
@@ -234,9 +233,7 @@ function Profile() {
 
   // Delete post request
 
-  const [idToDel, setIdToDel] = useState("");
-
-  const deletePostRequest = async (e) => {
+  const deletePostRequest = async (id) => {
     try {
       const response = await fetch("/api/v1/user/post/delete", {
         method: "Post",
@@ -244,17 +241,14 @@ function Profile() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          id: idToDel,
+          id,
         }),
         credentials: "include",
       });
 
       if (response.ok) {
         toast.success("Post deleted successfully");
-        setIdToDel("");
-        setPosts((prevPosts) =>
-          prevPosts.filter((post) => post._id !== idToDel)
-        );
+        setPosts((prevPosts) => prevPosts.filter((post) => post._id !== id));
       } else {
         toast.error("Unexpected error in deleting post");
       }
@@ -315,7 +309,7 @@ function Profile() {
               <i class="fa-solid fa-pen-to-square"></i>Edit Profile
             </button>
             <button>
-            <i class="fa-solid fa-bookmark"></i>Bookmarks
+              <i class="fa-solid fa-bookmark"></i>Bookmarks
             </button>
             <button id="toggleMode" onClick={toggleMode}>
               <i class="fa-solid fa-toggle-on"></i>
@@ -331,49 +325,66 @@ function Profile() {
               <i class="fa-solid fa-ellipsis-vertical"></i>
             </button>
           </div>
-            <div className="DotBox" style={{ display: dots ? "block" : "none" }}>
+          <div className="DotBox" style={{ display: dots ? "block" : "none" }}>
             {logoutLoader ? (
-            <div className="loader"></div>
-          ):(
-            <button id="logoutBtn" onClick={logoutUser}>
-              Logout
-            </button>
-          )}
-          </div> 
+              <div className="loader"></div>
+            ) : (
+              <button id="logoutBtn" onClick={logoutUser}>
+                Logout
+              </button>
+            )}
+          </div>
         </div>
         <form>
-        <div className="postModel" style={{ display: isDialogOpen ? "flex" : "none" }}>
-  {loader ? (
-    <div className="loader" style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%" }}></div>
-  ) : (
-    <>
-      <button id="closeDialog" onClick={closeDialog}>
-        <i className="fa-solid fa-xmark"></i>
-      </button>
-      <h2>Post Now</h2>
-      <textarea
-        name="postContent"
-        id="postContent"
-        onChange={handleChange}
-        value={formData.postContent}
-        placeholder="Enter your content.."
-        required
-      />
-      
-      <input
-        type="file"
-        onChange={handleFileChange}
-        id="postImage"
-        name="postImage"
-      />
-      {previewImage && <img src={previewImage} alt="Preview" id='postImagePreview' className="image-preview" />}
-      <button id="post" type="button" onClick={addNewPost}>
-        Post
-      </button>
-    </>
-  )}
-</div>
+          <div
+            className="postModel"
+            style={{ display: isDialogOpen ? "flex" : "none" }}
+          >
+            {loader ? (
+              <div
+                className="loader"
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%",
+                }}
+              ></div>
+            ) : (
+              <>
+                <button id="closeDialog" onClick={closeDialog}>
+                  <i className="fa-solid fa-xmark"></i>
+                </button>
+                <h2>Post Now</h2>
+                <textarea
+                  name="postContent"
+                  id="postContent"
+                  onChange={handleChange}
+                  value={formData.postContent}
+                  placeholder="Enter your content.."
+                  required
+                />
 
+                <input
+                  type="file"
+                  onChange={handleFileChange}
+                  id="postImage"
+                  name="postImage"
+                />
+                {previewImage && (
+                  <img
+                    src={previewImage}
+                    alt="Preview"
+                    id="postImagePreview"
+                    className="image-preview"
+                  />
+                )}
+                <button id="post" type="button" onClick={addNewPost}>
+                  Post
+                </button>
+              </>
+            )}
+          </div>
         </form>
         <form>
           <div
@@ -400,7 +411,12 @@ function Profile() {
               <div className="loader"></div>
             ) : (
               searchProfile && (
-                <div className="searchedUser" onClick={()=>{navigate("/otherProfile", { state: searchProfile._id })}}>
+                <div
+                  className="searchedUser"
+                  onClick={() => {
+                    navigate("/otherProfile", { state: searchProfile._id });
+                  }}
+                >
                   {searchProfile.avatar ? (
                     <img
                       src={searchProfile.avatar}
@@ -450,7 +466,12 @@ function Profile() {
                 <div className="post">
                   <div className="post-details">
                     <div className="post-details-left">
-                      <img loading="lazy" id="post-avatar" src={user.avatar} alt="" />
+                      <img
+                        loading="lazy"
+                        id="post-avatar"
+                        src={user.avatar}
+                        alt=""
+                      />
                       <div>
                         <h3>{user.name}</h3>
                         <p>@{user.username}</p>
@@ -491,8 +512,7 @@ function Profile() {
                         <button
                           id="delete-btn"
                           onClick={() => {
-                            setIdToDel(userPost._id);
-                            deletePostRequest();
+                            deletePostRequest(userPost._id);
                           }}
                         >
                           <i class="fa-solid fa-trash"></i>
@@ -501,9 +521,24 @@ function Profile() {
                     </div>
                   </div>
                   <div className="post-content">
-                    <p>{userPost.content}</p>
+                    <p>
+                      {userPost.content.split(" ").map((word, index) =>
+                        word.startsWith("#") ? (
+                          <span key={index} style={{ color: "skyblue" }}>
+                            {word}{" "}
+                          </span>
+                        ) : (
+                          word + " "
+                        )
+                      )}
+                    </p>
                   </div>
-                  <img id="postImage" loading="lazy" src={userPost.image} alt="" />
+                  <img
+                    id="postImage"
+                    loading="lazy"
+                    src={userPost.image}
+                    alt=""
+                  />
                 </div>
               );
             })}
@@ -519,7 +554,12 @@ function Profile() {
                   navigate("/otherProfile", { state: suggestion._id });
                 }}
               >
-                <img loading="lazy" src={suggestion.avatar} alt="img" id="suggestImage" />
+                <img
+                  loading="lazy"
+                  src={suggestion.avatar}
+                  alt="img"
+                  id="suggestImage"
+                />
                 <div className="suggestDetail">
                   <p id="suggestName">{suggestion.name}</p>
                   <p id="suggestUsername">@{suggestion.username}</p>

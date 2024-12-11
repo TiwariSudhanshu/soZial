@@ -272,7 +272,7 @@ function EditProfile() {
           />
         </div>
         {loader ? (
-          <div className="loader"></div>
+          <div className="loader" id="changeloader"></div>
         ) : (
           <button className="changeButton">Change</button>
         )}
