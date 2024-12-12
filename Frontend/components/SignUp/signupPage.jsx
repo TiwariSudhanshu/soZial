@@ -10,9 +10,8 @@ function SignupPage() {
     email: "",
     mobileNo: "",
     password: "",
-    confirmpassword: ""
+    confirmpassword: "",
   });
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,16 +23,14 @@ function SignupPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const { email, mobileNo, password, confirmpassword } = formData;
-    if(mobileNo.length!=10){
-      toast.error("Please enter correct mobile No")
+    if (mobileNo.length != 10) {
+      toast.error("Please enter correct mobile No");
     }
-    if(password == confirmpassword){
-      navigate("/info", { state: { email, mobileNo, password } });
+    if (password == confirmpassword) {
+      navigate("/register", { state: { email, mobileNo, password } });
+    } else {
+      toast.error("Password mismatch");
     }
-    else{
-      toast.error("Password mismatch")
-    }
-    
   };
 
   return (
@@ -42,7 +39,7 @@ function SignupPage() {
         <div className="right">
           <form onSubmit={handleSubmit}>
             <div className="r1">
-              <h2>SignUp</h2> 
+              <h2>SignUp</h2>
               <p>Join us today !</p>
             </div>
             <div className="r2">
@@ -94,14 +91,13 @@ function SignupPage() {
                   placeholder="Enter your password again"
                 />
               </div>
-              
             </div>
             <div className="r3">
               <button id="sup-btn" type="submit">
                 Sign Up
               </button>
               <p>
-                Have an acoount ? <a href="/">Sign in</a>
+                Have an acoount ? <a href="/login">Sign in</a>
               </p>
             </div>
           </form>

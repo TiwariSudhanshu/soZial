@@ -1,63 +1,46 @@
 import React, { useState } from "react";
-import "./loginPage.css";
 import { toast } from "react-toastify";
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+import "./loginPage.css";
+import { loginUser } from "../api/login.api.jsx";
 
 function LoginPage() {
-
+  // State variables
   const navigate = useNavigate();
-
   const [loader, setLoader] = useState(false);
-
   const [formData, setFormData] = useState({
     email: "",
-    password: ""
-  })
+    password: "",
+  });
+
+  // Handle functions
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
   };
 
-  const handleSubmit = async(e)=>{
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoader(true);
     try {
-      const response = await fetch('/api/v1/user/login',
-        {
-          method: 'post',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            email: formData.email,
-            password: formData.password
-          }),
-          credentials: 'include'
-        }
-      )
-
-      const data = await response.json();
-      if(response.ok){
-        toast.success("Logged in Successfully")
-          localStorage.setItem('user', JSON.stringify(data))
-          navigate("/profile");
-      }else{
-        toast.error("Login failed");
-      }
+      const data = await loginUser(formData.email, formData.password);
+        toast.success("Logged in Successfully");
+        localStorage.setItem("user", JSON.stringify(data));
+        navigate("/");
     } catch (error) {
-      toast.error("Unexpected error from server")
-      console.log("Error",error)
-    } finally{
-      setLoader(false)
+      toast.error("Unexpected error from server");
+      console.log("Error", error);
+    } finally {
+      setLoader(false);
     }
-  }
+  };
 
   return (
     <>
-        <div className="main-box">
-      {loader ? (
-        <div className="loader"></div> // Corrected line
-      ) : (
+      <div className="main-box">
+        {loader ? (
+          <div className="loader"></div>
+        ) : (
           <form onSubmit={handleSubmit}>
             <div className="x1">
               <h2>Login</h2>
@@ -88,17 +71,18 @@ function LoginPage() {
               </div>
             </div>
             <div className="x3">
-              <button id="loginButton" type="submit">Login</button>
+              <button id="loginButton" type="submit">
+                Login
+              </button>
               <p>
-                New User? <a href="/register">Sign Up</a>
+                New User? <a href="/signup">Sign Up</a>
               </p>
             </div>
           </form>
-      )}
+        )}
       </div>
     </>
   );
-  
 }
 
 export default LoginPage;

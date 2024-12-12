@@ -8,19 +8,19 @@ import OtherProfile from "../components/Profile/otherProfile";
 import EditProfile from "../components/Profile/editProfile";
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/login",
     element: <LoginPage />,
   },
   {
-    path: "/register",
+    path: "/signup",
     element: <SignupPage />,
   },
   {
-    path: "/info",
+    path: "/register",
     element: <Info />,
   },
   {
-    path: "/profile",
+    path: "/",
     element: <Profile />,
   },
   {

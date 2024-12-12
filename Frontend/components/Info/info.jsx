@@ -3,13 +3,17 @@ import "./info.css";
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { registerUser } from "../api/register.api";
 
 function Info() {
-  const location = useLocation();
-  const { email, mobileNo, password } = location.state || {};
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  // State variables
+  const { email, mobileNo, password } = location.state || {};
   const [loader, setLoader] = useState(false);
+  const [imagePreview, setImagePreview] = useState("");
 
   const [formData, setFormData] = useState({
     email: email || "",
@@ -28,8 +32,8 @@ function Info() {
     linkedin: "",
   });
 
-  const [imagePreview, setImagePreview] = useState("");
 
+  // Handle Changes
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
@@ -47,33 +51,18 @@ function Info() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoader(true)
-    const dataToSend = new FormData();
-    for (const key in formData) {
-      dataToSend.append(key, formData[key]);
-    }
-    try {
-      const response = await fetch(
-        "/api/v1/user/register",
-        {
-          method: "POST",
-          body: dataToSend,
-        }
-      );
+    setLoader(true);
 
-      const data = await response.json();
-      if (response.ok) {
-        toast.success("Registered successfully!");
-        navigate("/");
-      } else {
-        toast.error(data.message || "Failed registration");
-      }
-    } catch (error) {
-      toast.error("Error occurred during registration");
-      console.log("Error", error);
-    }finally{
-      setLoader(false);
+    const response = await registerUser(formData);
+
+    if (response.success) {
+      toast.success("Registered successfully!");
+      navigate("/login");
+    } else {
+      toast.error(response.message);
     }
+
+    setLoader(false);
   };
 
   return (
