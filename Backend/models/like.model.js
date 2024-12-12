@@ -1,5 +1,4 @@
-import { Schema, Model } from "mongoose";
-import { User } from "./user.model";
+import { Schema, model} from "mongoose";
 
 const likeSchema = Schema({
     likeCount:{
@@ -16,4 +15,4 @@ const likeSchema = Schema({
       }
 });
 
-export const Likes = Model( Likes,"likeSchema")
+export const Likes = model( 'Likes',likeSchema)

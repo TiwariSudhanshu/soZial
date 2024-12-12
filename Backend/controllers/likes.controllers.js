@@ -2,7 +2,7 @@ import {asyncHandler} from "../utils/asyncHandler.js";
 import {ApiError} from "../utils/ApiError.js";
 import {ApiResponse} from "../utils/ApiResponse.js";
 import {Post} from "../models/post.model.js";
-import {Likes} from "../models/like.model";
+import {Likes} from "../models/like.model.js";
 
 export const like = asyncHandler(async (req, res) => {
   try {
