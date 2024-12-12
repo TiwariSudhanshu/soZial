@@ -12,7 +12,8 @@ const postSchema = Schema({
         default: Date.now
     },
     likes:{
-        type: Array
+        type: Schema.Types.ObjectId,
+        ref: "Likes"
     }
 
 },{timestamps:true});
