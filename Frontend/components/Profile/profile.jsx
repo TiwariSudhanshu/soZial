@@ -26,10 +26,14 @@ function Profile() {
 
   const [users, setUsers] = useState([]);
   const [loader, setLoader] = useState(false);
-  const user = userData?.data?.loggedInUser;
+  const user = userData?.data?.loggedInUser || userData?.data ;
   if (!user) {
+    console.log("User :", user)
+    console.log("UserData :", userData)
+    console.log("UserData.data :", userData.data)
+    console.log("User :", userData.data.loggedInUser)
     return (
-      <div style={styles.container}>
+      <div>
         <h2>User Information</h2>
         <p>No user data available.</p>
       </div>
@@ -522,7 +526,7 @@ function Profile() {
                   </div>
                   <div className="post-content">
                     <p>
-                      {userPost.content.split(" ").map((word, index) =>
+                      {userPost.content?.split(" ").map((word, index) =>
                         word.startsWith("#") ? (
                           <span key={index} style={{ color: "skyblue" }}>
                             {word}{" "}

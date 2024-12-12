@@ -294,7 +294,17 @@ function OtherProfile() {
                   </div>
                 </div>
                 <div className="post-content">
-                  <p>{userPost.content}</p>
+                <p>
+                      {userPost.content?.split(" ").map((word, index) =>
+                        word.startsWith("#") ? (
+                          <span key={index} style={{ color: "skyblue" }}>
+                            {word}{" "}
+                          </span>
+                        ) : (
+                          word + " "
+                        )
+                      )}
+                    </p>
                 </div>
                 <img loading="lazy" id="postImage" src={userPost.image} alt="" />
               </div>

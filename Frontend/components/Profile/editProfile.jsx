@@ -77,9 +77,10 @@ function EditProfile() {
         body: dataToSend,
         credentials: "include",
       });
-
+      const data = await response.json();
       if (response.ok) {
         toast.success("User Info edited");
+        localStorage.setItem('user', JSON.stringify(data))
         navigate("/profile");
       } else {
         toast.error("User info not edited");

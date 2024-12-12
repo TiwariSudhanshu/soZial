@@ -71,7 +71,11 @@ export const changeInfo = asyncHandler(async (req, res) => {
 
     await user.save();
 
-    res.status(200).json(new ApiResponse(200, user, 'User Info edited'));
+    const newUserData = await User.findById(user._id).select(
+      "-password -refreshToken" )
+      .populate("posts");
+      
+    res.status(200).json(new ApiResponse(200, newUserData, 'User Info edited'));
   } catch (error) {
     console.log(error);
     throw new ApiError(500, 'Error');
