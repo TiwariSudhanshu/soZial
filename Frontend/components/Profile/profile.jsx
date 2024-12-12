@@ -4,13 +4,16 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 function Profile() {
+
+  
+
+  // Get user
   const navigate = useNavigate();
   const userData = JSON.parse(localStorage.getItem("user"));
-  const [previewImage, setPreviewImage] = useState(null);
 
   useEffect(() => {
     if (!userData) {
-      navigate("/");
+      navigate("/login");
     }
   }, [userData, navigate]);
 
@@ -18,20 +21,8 @@ function Profile() {
     return null;
   }
   
-
-  const [formData, setFormData] = useState({
-    postContent: "",
-    postImage: "",
-  });
-
-  const [users, setUsers] = useState([]);
-  const [loader, setLoader] = useState(false);
   const user = userData?.data?.loggedInUser || userData?.data ;
   if (!user) {
-    console.log("User :", user)
-    console.log("UserData :", userData)
-    console.log("UserData.data :", userData.data)
-    console.log("User :", userData.data.loggedInUser)
     return (
       <div>
         <h2>User Information</h2>
@@ -42,8 +33,20 @@ function Profile() {
 
   const userId = user._id;
 
-  const [posts, setPosts] = useState(user.posts);
 
+  // State variables
+
+  const [formData, setFormData] = useState({
+    postContent: "",
+    postImage: "",
+  });
+
+  const [users, setUsers] = useState([]);
+  const [previewImage, setPreviewImage] = useState(null);
+  const [posts, setPosts] = useState(user.posts);
+  const [loader, setLoader] = useState(false);
+  const [logoutLoader, setLogoutLoader] = useState(false);
+  
   // Format Date
 
   const formatDate = (dateString) => {
@@ -52,7 +55,7 @@ function Profile() {
     return date.toLocaleString("en-US", options);
   };
 
-  const [logoutLoader, setLogoutLoader] = useState(false);
+  
   // Logout user
   const logoutUser = async () => {
     setLogoutLoader(true);
@@ -68,7 +71,7 @@ function Profile() {
       if (response.ok) {
         toast("Logged out");
         localStorage.removeItem("user");
-        navigate("/");
+        navigate("/login");
       }
     } catch (error) {
       toast.error("Failed to logout");
@@ -77,7 +80,7 @@ function Profile() {
     }
   };
 
-  // Add new Post
+  // Handle Change Functions
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
@@ -291,7 +294,7 @@ function Profile() {
               <i
                 class="fa-solid fa-user"
                 onClick={() => {
-                  navigate("/profile");
+                  navigate("/");
                 }}
               ></i>
               <span>Profile</span>
@@ -418,7 +421,7 @@ function Profile() {
                 <div
                   className="searchedUser"
                   onClick={() => {
-                    navigate("/otherProfile", { state: searchProfile._id });
+                    navigate(`/${searchProfile.username }`);
                   }}
                 >
                   {searchProfile.avatar ? (
@@ -555,7 +558,7 @@ function Profile() {
                 className="suggest"
                 key={suggestion._id}
                 onClick={() => {
-                  navigate("/otherProfile", { state: suggestion._id });
+                  navigate(`/${suggestion.username}`);
                 }}
               >
                 <img

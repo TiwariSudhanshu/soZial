@@ -1,13 +1,12 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import "./profile.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 
 function OtherProfile() {
   const navigate = useNavigate();
-  const location = useLocation();
   const [loader, setLoader] = useState(false);
 
   const [profile, setProfile] = useState("");
@@ -24,20 +23,21 @@ function OtherProfile() {
     }
   };
 
-  const id = location.state;
+  const param = useParams();
+  const username = param.username;
 
   useEffect(() => {
     const findProfile = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3000/api/v1/profiles/profile",
+          "http://localhost:3000/api/v1/profiles/fetch",
           {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              id: id,
+              username
             }),
           }
         );
@@ -55,10 +55,10 @@ function OtherProfile() {
         toast.error("Failed to fetch the profile");
       }
     };
-    if (id) {
+    if (username) {
       findProfile();
     }
-  }, [id]);
+  }, [username]);
 
   const profileId = profile._id;
 
@@ -155,7 +155,7 @@ function OtherProfile() {
       <div className="sidebar">
         <p id="logo">Profiler</p>
         <div className="tabs">
-          <button onClick={()=>{navigate("/profile")}}>
+          <button onClick={()=>{navigate("/")}}>
             <i class="fa-solid fa-house"></i>
             <span> Home</span>
           </button>
@@ -165,7 +165,7 @@ function OtherProfile() {
           </button>
           <button
             onClick={() => {
-              navigate("/profile");
+              navigate("/");
             }}
           >
             <i class="fa-solid fa-user"></i>
@@ -220,7 +220,7 @@ function OtherProfile() {
             <div className="loader"></div> // This can be a spinner or loading animation
           ) : (
             searchProfile && (
-              <div className="searchedUser"  onClick={()=>{navigate("/otherProfile", { state: searchProfile._id })}}>
+              <div className="searchedUser"  onClick={()=>{navigate(`/${searchProfile.username }`);}}>
                 {searchProfile.avatar ? (
                   <img
                     src={searchProfile.avatar}
@@ -319,7 +319,7 @@ function OtherProfile() {
               className="suggest"
               key={suggestion._id}
               onClick={() => {
-                navigate("/otherProfile", { state: suggestion._id });
+                navigate(`/${suggestion.username}`)
               }}
             >
               <img loading="lazy" src={suggestion.avatar} alt="img" id="suggestImage" />

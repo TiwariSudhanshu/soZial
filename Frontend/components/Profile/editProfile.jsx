@@ -4,13 +4,14 @@ import "./editProfile.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Link, NavLink } from "react-router-dom";
+import { editUserInfo, fetchUser, changePassword } from "../api/edit.api";
 
 function EditProfile() {
+
+  // State variables
   const [loader, setLoader] = useState(false);
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
-  const location = useLocation();
-  const userId = location.state;
   const [avatar, setAvatar] = useState(null);
   const [avatarPreview, setAvatarPreview] = useState("");
   const [coverImagePreview, setCoverImagePreview] = useState("");
@@ -26,19 +27,22 @@ function EditProfile() {
   });
 
   const [passData, setPassData] = useState({
-    oldPass: '',
-    newPass: '',
-    confirmPass: ''
-  })
+    oldPass: "",
+    newPass: "",
+    confirmPass: "",
+  });
 
+  // Handle changes function
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
   };
-  const handlePassChange = (e)=>{
+
+  const handlePassChange = (e) => {
     const { id, value } = e.target;
     setPassData({ ...passData, [id]: value });
-  }
+  };
+
   const handleFileChange = (e) => {
     const { id, files } = e.target;
     if (files.length > 0) {
@@ -48,12 +52,10 @@ function EditProfile() {
         const imageUrl = URL.createObjectURL(file);
         setAvatarPreview(imageUrl);
       } else if (id === "coverImage") {
-        // Update formData to include the file
         setFormData((prevData) => ({
           ...prevData,
           coverImage: file,
         }));
-        // Create a preview URL for the cover image
         const coverUrl = URL.createObjectURL(file);
         setCoverImagePreview(coverUrl);
       }
@@ -72,91 +74,57 @@ function EditProfile() {
     }
 
     try {
-      const response = await fetch("/api/v1/user/edit/change", {
-        method: "post",
-        body: dataToSend,
-        credentials: "include",
-      });
-      const data = await response.json();
-      if (response.ok) {
-        toast.success("User Info edited");
-        localStorage.setItem('user', JSON.stringify(data))
-        navigate("/profile");
-      } else {
-        toast.error("User info not edited");
-      }
+      const data = await editUserInfo(dataToSend);
+      toast.success("User Info edited");
+      localStorage.setItem("user", JSON.stringify(data));
+      navigate("/");
     } catch (error) {
-      toast.error("Error in editing");
-      console.log("Error in change : ", error);
+      toast.error("User info not edited");
+      console.log("Error in change: ", error);
     } finally {
       setLoader(false);
     }
   };
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchAndSetUser = async () => {
       try {
-        const response = await fetch("/api/v1/user/edit", {
-          method: "get",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
+        const data = await fetchUser();
+        setUser(data.data);
+        setFormData({
+          name: data.data.name,
+          username: data.data.username,
+          bio: data.data.bio,
+          mobileNo: data.data.mobileNo,
+          email: data.data.email,
+          avatar: null,
+          coverImage: null,
         });
-        const data = await response.json();
-        if (response.ok) {
-          setUser(data.data);
-          setFormData({
-            name: data.data.name,
-            username: data.data.username,
-            bio: data.data.bio,
-            mobileNo: data.data.mobileNo,
-            email: data.data.email,
-            avatar: null,
-            coverImage: null,
-          });
-        }
       } catch (error) {
         toast.error("Some Error");
-        console.log("Error in api", error);
+        console.log("Error in fetchUser: ", error);
       }
     };
 
-    fetchUser();
+    fetchAndSetUser();
   }, []);
-  const [passLoader, setPassLoader] = useState(false)
-  const handlePasswordChange = async(e)=>{
+
+  const [passLoader, setPassLoader] = useState(false);
+
+  const handlePasswordChange = async (e) => {
     e.preventDefault();
-    setPassLoader(true)
+    setPassLoader(true);
     try {
-      const response = await fetch("http://localhost:3000/api/v1/user/edit/changePassword", {
-        method: "post",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(
-          {
-            oldPass: passData.oldPass,
-            newPass: passData.newPass,
-            confirmPass: passData.confirmPass
-          }
-        ),
-        credentials: "include",
-      })
-      console.log(response)
-      if(response.ok){
-        toast.success("Password changed")
-        navigate("/profile")
-      } else{
-        toast.error("Error in response")
-      }
+      await changePassword(passData);
+      toast.success("Password changed");
+      navigate("/");
     } catch (error) {
-      toast.error("Error")
-      console.log("Error in password change : ", error)
-    } finally{
-      setPassLoader(false)
+      toast.error("Error in response");
+      console.log("Error in changePassword: ", error);
+    } finally {
+      setPassLoader(false);
     }
-  }
+  };
 
   if (!user) {
     return (
@@ -165,7 +133,6 @@ function EditProfile() {
       </div>
     );
   }
-
   return (
     <div className="profilePage" id="profilePage">
       <div className="sidebar">
@@ -181,7 +148,7 @@ function EditProfile() {
           </button>
           <button
             onClick={() => {
-              navigate("/profile");
+              navigate("/");
             }}
           >
             <i className="fa-solid fa-user"></i>
@@ -194,182 +161,197 @@ function EditProfile() {
         </div>
       </div>
       <div className="menubar">
-        <NavLink id="menubar-link" onClick={()=>{setPageToggle(true)}} >Edit profile Info</NavLink>
-        <NavLink id="menubar-link" onClick={()=>{setPageToggle(false)}}>Change password</NavLink>
+        <NavLink
+          id="menubar-link"
+          onClick={() => {
+            setPageToggle(true);
+          }}
+        >
+          Edit profile Info
+        </NavLink>
+        <NavLink
+          id="menubar-link"
+          onClick={() => {
+            setPageToggle(false);
+          }}
+        >
+          Change password
+        </NavLink>
       </div>
       <div className="center">
-  {pageToggle ? (
-    <div className="edit-center">
-      <h1>Edit Profile</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="change">
-          <label htmlFor="avatar" id="avatar-label">
-            <i className="fa-solid fa-pen"></i>
-          </label>
-          {avatarPreview ? (
-            <img
-              src={avatarPreview}
-              alt="Avatar Preview"
-              className="avatar-preview"
-            />
-          ) : (
-            <img
-              src={user.avatar}
-              alt="Default Avatar"
-              className="avatar-preview"
-            />
-          )}
-          <input
-            type="file"
-            id="avatar"
-            onChange={handleFileChange}
-            accept="image/*"
-            style={{ display: "none" }}
-          />
-        </div>
-        <div className="change">
-          <label htmlFor="name">Name</label>
-          <input
-            type="text"
-            name="name"
-            id="name"
-            placeholder="Name"
-            value={formData.name}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="change">
-          <label htmlFor="username">Username</label>
-          <input
-            type="text"
-            name="username"
-            id="username"
-            placeholder="Username"
-            value={formData.username}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="change">
-          <label htmlFor="bio">Bio</label>
-          <input
-            type="text"
-            name="bio"
-            id="bio"
-            placeholder="Bio"
-            value={formData.bio}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="change">
-          <label htmlFor="coverImage">Cover Image:</label>
-          <input
-            type="file"
-            id="coverImage"
-            name="coverImage"
-            onChange={handleFileChange}
-          />
-          {coverImagePreview ? (
-            <div
-              className="coverImage"
-              style={{
-                backgroundImage: `url(${coverImagePreview})`,
-                width: "100%",
-                height: "100px",
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-              }}
-            ></div>
-          ) : user?.coverImage ? (
-            <div
-              className="coverImage"
-              style={{
-                backgroundImage: `url(${user.coverImage})`,
-                width: "100%",
-                height: "100px",
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-              }}
-            ></div>
-          ) : null}
-        </div>
-        <div className="change">
-          <label htmlFor="mobileNo">Mobile No</label>
-          <input
-            type="text"
-            name="mobileNo"
-            id="mobileNo"
-            placeholder="Mobile No"
-            value={formData.mobileNo}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="change">
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleChange}
-          />
-        </div>
-        {loader ? (
-          <div className="loader" id="changeloader"></div>
+        {pageToggle ? (
+          <div className="edit-center">
+            <h1>Edit Profile</h1>
+            <form onSubmit={handleSubmit}>
+              <div className="change">
+                <label htmlFor="avatar" id="avatar-label">
+                  <i className="fa-solid fa-pen"></i>
+                </label>
+                {avatarPreview ? (
+                  <img
+                    src={avatarPreview}
+                    alt="Avatar Preview"
+                    className="avatar-preview"
+                  />
+                ) : (
+                  <img
+                    src={user.avatar}
+                    alt="Default Avatar"
+                    className="avatar-preview"
+                  />
+                )}
+                <input
+                  type="file"
+                  id="avatar"
+                  onChange={handleFileChange}
+                  accept="image/*"
+                  style={{ display: "none" }}
+                />
+              </div>
+              <div className="change">
+                <label htmlFor="name">Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  id="name"
+                  placeholder="Name"
+                  value={formData.name}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="change">
+                <label htmlFor="username">Username</label>
+                <input
+                  type="text"
+                  name="username"
+                  id="username"
+                  placeholder="Username"
+                  value={formData.username}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="change">
+                <label htmlFor="bio">Bio</label>
+                <input
+                  type="text"
+                  name="bio"
+                  id="bio"
+                  placeholder="Bio"
+                  value={formData.bio}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="change">
+                <label htmlFor="coverImage">Cover Image:</label>
+                <input
+                  type="file"
+                  id="coverImage"
+                  name="coverImage"
+                  onChange={handleFileChange}
+                />
+                {coverImagePreview ? (
+                  <div
+                    className="coverImage"
+                    style={{
+                      backgroundImage: `url(${coverImagePreview})`,
+                      width: "100%",
+                      height: "100px",
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                    }}
+                  ></div>
+                ) : user?.coverImage ? (
+                  <div
+                    className="coverImage"
+                    style={{
+                      backgroundImage: `url(${user.coverImage})`,
+                      width: "100%",
+                      height: "100px",
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                    }}
+                  ></div>
+                ) : null}
+              </div>
+              <div className="change">
+                <label htmlFor="mobileNo">Mobile No</label>
+                <input
+                  type="text"
+                  name="mobileNo"
+                  id="mobileNo"
+                  placeholder="Mobile No"
+                  value={formData.mobileNo}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="change">
+                <label htmlFor="email">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="Email"
+                  value={formData.email}
+                  onChange={handleChange}
+                />
+              </div>
+              {loader ? (
+                <div className="loader" id="changeloader"></div>
+              ) : (
+                <button className="changeButton">Change</button>
+              )}
+            </form>
+          </div>
         ) : (
-          <button className="changeButton">Change</button>
+          <div className="pass-center edit-center">
+            <h1>Change Password</h1>
+            <form onSubmit={handlePasswordChange}>
+              <div className="change">
+                <label htmlFor="current-password">Current Password</label>
+                <input
+                  type="password"
+                  id="oldPass"
+                  placeholder="Current Password"
+                  className="password-input"
+                  value={passData.oldPass}
+                  onChange={handlePassChange}
+                />
+              </div>
+              <div className="change">
+                <label htmlFor="new-password">New Password</label>
+                <input
+                  type="password"
+                  id="newPass"
+                  placeholder="New Password"
+                  className="password-input"
+                  value={passData.newPass}
+                  onChange={handlePassChange}
+                  autoComplete="new-password"
+                />
+              </div>
+              <div className="change">
+                <label htmlFor="confirm-password">Confirm Password</label>
+                <input
+                  type="password"
+                  id="confirmPass"
+                  placeholder="Confirm Password"
+                  className="password-input"
+                  autoComplete="new-password"
+                  value={passData.confirmPass}
+                  onChange={handlePassChange}
+                />
+              </div>
+              {passLoader ? (
+                <div className="loader"></div>
+              ) : (
+                <button type="submit" className="changeButton">
+                  Change
+                </button>
+              )}
+            </form>
+          </div>
         )}
-      </form>
-    </div>
-  ) : (
-    <div className="pass-center edit-center">
-      <h1>Change Password</h1>
-      <form onSubmit={handlePasswordChange}>
-        <div className="change">
-          <label htmlFor="current-password">Current Password</label>
-          <input
-            type="password"
-            id="oldPass"
-            placeholder="Current Password"
-            className="password-input"
-            value={passData.oldPass}
-            onChange={handlePassChange}
-          />
-        </div>
-        <div className="change">
-          <label htmlFor="new-password">New Password</label>
-          <input
-            type="password"
-            id="newPass"
-            placeholder="New Password"
-            className="password-input"
-            value={passData.newPass}
-            onChange={handlePassChange}
-           autoComplete="new-password"
-          />
-        </div>
-        <div className="change">
-          <label htmlFor="confirm-password">Confirm Password</label>
-          <input
-            type="password"
-            id="confirmPass"
-            placeholder="Confirm Password"
-            className="password-input"
-            autoComplete="new-password"
-            value={passData.confirmPass}
-            onChange={handlePassChange}
-          />
-        </div>
-        {passLoader ? (
-          <div className="loader"></div>
-        ) : (
-          <button type="submit" className="changeButton">Change</button>
-        )}
-      </form>
-    </div>
-  )}
-</div>
-
+      </div>
     </div>
   );
 }
