@@ -36,25 +36,51 @@ export const like = asyncHandler(async (req, res) => {
           (id) => id.toString() !== user._id.toString()
         );
         like.likeCount -= 1;
-        if (likeCount === 0) {
+        if (like.likeCount === 0) {
           await Likes.deleteOne({_id: like._id});
           post.likes = null;
         } else {
           await like.save();
         }
+        const likeCount = like.likeCount;
         await post.save();
-        return res.status(200).json(new ApiResponse(200, "Disliked"));
+        return res.status(200).json(new ApiResponse(200, { liked: false, likeCount: likeCount }, "Disliked"));
       }
       like.users.push(user._id);
       like.likeCount += 1;
     }
 
     await like.save();
+    const likeCount = like.likeCount;
     post.likes = like._id;
     await post.save();
 
-    res.status(200).json(new ApiResponse(200, "Liked"));
+    res.status(200).json(new ApiResponse(200, { liked: true, likeCount: likeCount }, "Liked"));
   } catch (error) {
     console.log("Error in liking : ", error);
   }
 });
+
+export const fetchInitalStatus = asyncHandler( async(req,res)=>{
+  try {
+    const {postId} = req.body;
+    const post = await Post.findById(postId);
+    
+    if(!post){
+      throw new ApiError(400, "Post not found")
+    }
+    // console.log(post)
+    const likeId = post.likes;
+    // console.log(likes.likeCount)
+
+    const like = await Likes.findById(likeId);
+    console.log("Like :",like)
+    res.status(200).json(
+      new ApiResponse(200, like, "Like fetched")
+    )
+  } catch (error) {
+    console.log("Error in fetching like : ", error)
+    throw new ApiError(400, "Error")
+  }
+
+})

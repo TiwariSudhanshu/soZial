@@ -74,18 +74,14 @@ const userSchema = mongoose.Schema(
     coverImage:{
       type: String,
     },
-    fb: {
-      type: String,
-      index: true,
-    },
-    ig: {
-      type: String,
-      index: true,
-    },
-    lkin: {
-      type: String,
-      index: true,
-    },
+    followings:[{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    }],
+    followers:[{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    }],
     refreshToken: {
       type: String,
     },
