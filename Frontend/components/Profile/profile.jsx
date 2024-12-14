@@ -5,15 +5,13 @@ import { toast } from "react-toastify";
 
 function Profile() {
 
-  
-
   // Get user
   const navigate = useNavigate();
   const userData = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
     if (!userData) {
-      navigate("/login");
+      navigate("/");
     }
   }, [userData, navigate]);
 
@@ -71,7 +69,7 @@ function Profile() {
       if (response.ok) {
         toast("Logged out");
         localStorage.removeItem("user");
-        navigate("/login");
+        navigate("/");
       }
     } catch (error) {
       toast.error("Failed to logout");
@@ -160,6 +158,71 @@ function Profile() {
     };
     fetchUsers();
   }, []);
+
+  // Like Dislike Post
+  /*
+  const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0)
+  const likeFunction = async(postId)=>{
+    try {
+        const response = await fetch ("/api/v1/user/like",{
+            method: 'post',
+            headers:{
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                postId
+            }),
+            credentials: 'include'
+        })
+
+        if(response.ok){
+          const data = await response.json();
+          setLiked(data.data.liked)
+          setLikeCount(data.data.likeCount)
+        }else{
+          toast.error("Error in response")
+        }
+    } catch (error) {
+        toast.error("Error", error)
+    }
+}
+
+
+  const fetchLikeStatus = async(postId)=>{    try {
+      const response = await fetch("api/v1/user/fetchLike",{
+        method: 'post',
+        headers:{
+          'Content-Type': 'application/json'
+        },
+        body:JSON.stringify({
+          postId
+        })
+      })
+      
+      if(response.ok){
+        const data = await response.json();
+        console.log(data.data)
+        return data.data;
+      }else{
+        toast.error("Error in response of fetching like statsus")
+        return;
+      }
+    } catch (error) {
+      toast.error("Error in fetching likes");
+      console.log("Error :", error);
+    }
+  }
+
+  function fetchLikeCount(postId){
+      const likeData =  fetchLikeStatus(postId)
+      return likeData.likeCount;
+  }
+      */
+
+
+
+ 
 
   // Buttons sidebar
   const [dots, setDots] = useState(false);
@@ -294,7 +357,7 @@ function Profile() {
               <i
                 class="fa-solid fa-user"
                 onClick={() => {
-                  navigate("/");
+                  navigate("/profile");
                 }}
               ></i>
               <span>Profile</span>
@@ -488,17 +551,19 @@ function Profile() {
                       </p>
                     </div>
                     <div className="post-details-right">
+                    {
+                      
+                    }
                       <i
-                        class="fa-regular fa-heart"
-                        style={{
-                          color: postLikeIds.includes(userPost._id)
-                            ? "red"
-                            : isLightMode
-                            ? "black"
-                            : "white",
-                        }}
-                        onClick={() => toggleLikePost(userPost._id)}
-                      ></i>
+                        className={
+                          // liked ? 
+                          // "fa-solid fa-heart" :
+                           "fa-regular fa-heart"
+                          }
+                        // onClick={() => likeFunction(userPost._id)}
+                      > &nbsp; &nbsp; 
+                      {/* {fetchLikeCount(userPost._id)} */}
+                      </i>
 
                       <i
                         class="fa-solid fa-ellipsis-vertical"

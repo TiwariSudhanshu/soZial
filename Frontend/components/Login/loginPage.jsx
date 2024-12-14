@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import "./loginPage.css";
-import { loginUser } from "../api/login.api.jsx";
+import { loginUser } from "../api/login.api.js";
 
 function LoginPage() {
   // State variables
@@ -26,7 +26,7 @@ function LoginPage() {
       const data = await loginUser(formData.email, formData.password);
         toast.success("Logged in Successfully");
         localStorage.setItem("user", JSON.stringify(data));
-        navigate("/");
+        navigate("/profile");
     } catch (error) {
       toast.error("Unexpected error from server");
       console.log("Error", error);

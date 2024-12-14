@@ -131,6 +131,36 @@ function OtherProfile() {
     };
     fetchUsers();
   }, []);
+  
+
+  // Follow api
+
+  const [followed, setFollowed] = useState(false);
+  const [followings, setFollowings] = useState(0)
+  const [followers, setFollowers] = useState(0)
+
+   const handleFollow = async()=>{
+     try {
+       const response = await fetch("/api/v1/user/follow",{
+         method:'post',
+         headers:{
+           'Content-Type':'application/json'
+         },
+         body:JSON.stringify({
+         followingId: profile._id
+         })
+       })
+       if(response.ok){
+         toast.success("Followed")
+         setFollowed(!followed)
+       }else{
+         toast.error("Error in following")
+       }
+     } catch (error) {
+      console.log("Error :", error)
+      toast.error("Error in following in catch block")
+     }
+    }
 
   // Date
   const formatDate = (dateString) => {
@@ -138,6 +168,9 @@ function OtherProfile() {
     const options = { month: "short", day: "numeric" };
     return date.toLocaleString("en-US", options);
   };
+
+
+  
   const [isLightMode, setIsLightMode] = useState(false);
   const toggleMode = () => {
     const rootElement = document.documentElement;
@@ -149,13 +182,12 @@ function OtherProfile() {
   function toggleMore() {
     setMore(!more);
   }
-  console.log(posts);
   return (
     <div className="profilePage" id="profilePage">
       <div className="sidebar">
         <p id="logo">Profiler</p>
         <div className="tabs">
-          <button onClick={()=>{navigate("/")}}>
+          <button onClick={()=>{navigate("/profile")}}>
             <i class="fa-solid fa-house"></i>
             <span> Home</span>
           </button>
@@ -165,7 +197,7 @@ function OtherProfile() {
           </button>
           <button
             onClick={() => {
-              navigate("/");
+              navigate("/profile");
             }}
           >
             <i class="fa-solid fa-user"></i>
@@ -254,9 +286,16 @@ function OtherProfile() {
           <p id="username">@{profile.username}</p>
           <p id="bio">{profile.bio}</p>
           <div className="connections">
-            <span id="following-count">93 followings</span> &nbsp;&nbsp;&nbsp;
-            <span id="follower-count">122 followers</span>
+            <span id="following-count">{followings} Followings</span> &nbsp;&nbsp;&nbsp;
+            <span id="follower-count">{followers} Followers</span>
           </div>
+          {
+            followed?(
+              <button id="follow-btn">Following</button>
+            ):(
+              <button id="follow-btn" onClick={()=>{handleFollow()}}>Follow</button>
+            )
+          }
           <br />
           <br />
         </div>

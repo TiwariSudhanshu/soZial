@@ -35,6 +35,14 @@ body {
   height: 100%;
 }
 
+/* Icon styling */
+.liked-Icon{
+  color: red
+}
+.unliked-Icon{
+  color: var(--text-color)
+}
+
 .profilePage {
   display: flex;
   justify-content: center;
@@ -224,6 +232,26 @@ body {
   right: -20vmax;
 
 }
+#follow-btn{
+  position: absolute;
+  right: 5vmax;
+  top: 20vmax;
+  padding: 0.5vmax 2vmax;
+  cursor: pointer;
+  border-radius: 20px;
+  background-color: rgba(29, 155, 240, 1);
+  color: white;
+}
+/* #un-follow-btn{
+  position: absolute;
+  right: 5vmax;
+  top: 20vmax;
+  padding: 0.5vmax 2vmax;
+  cursor: pointer;
+  border-radius: 20px;
+  background-color: grey;
+  color: black;
+} */
 
 .cover-image {
   height: 12vmax;
