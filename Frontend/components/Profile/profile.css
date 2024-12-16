@@ -242,6 +242,14 @@ body {
   background-color: rgba(29, 155, 240, 1);
   color: white;
 }
+#suggestion-follow-btn{
+  padding: 0.5vmax;
+  cursor: pointer;
+  border-radius: 20px;
+  background-color: rgba(29, 155, 240, 1);
+  color: white;
+  margin-left: 1vmax;
+}
 /* #un-follow-btn{
   position: absolute;
   right: 5vmax;
@@ -382,7 +390,8 @@ body {
 }
 
 .postModel,
-.searchModel {
+.searchModel,
+.followModel {
   background-color: var(--bg-color);
   color: var(--text-color);
   z-index: 999;
@@ -417,6 +426,31 @@ body {
   transform: scale(1.2);
   background-color: red;
   color: white;
+}
+.oneFollow{
+  margin-bottom: 1vmax;
+  width: 100%;
+}
+.follow-item{
+  display: flex;
+  align-items: center;
+  margin-bottom: 1vmax;
+}
+.followBox{
+  display: flex;
+  flex-direction: column;
+  overflow: scroll;
+  width: 100%;
+ 
+}
+.followBox::-webkit-scrollbar {
+  display: none; 
+}
+#followCountButton{
+  cursor: pointer;
+  border: none;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 .searchModel {
   height: 30vmax;

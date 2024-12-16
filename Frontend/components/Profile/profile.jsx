@@ -44,7 +44,10 @@ function Profile() {
   const [posts, setPosts] = useState(user.posts);
   const [loader, setLoader] = useState(false);
   const [logoutLoader, setLogoutLoader] = useState(false);
-  
+  const [followModel, setFollowModel] = useState(false)
+  const [followingInModel, setFollowingInModel] = useState(true);
+  const [followingData, setFollowingData] = useState([])
+  const [followerData, setFollowerData] = useState([])
   // Format Date
 
   const formatDate = (dateString) => {
@@ -52,8 +55,57 @@ function Profile() {
     const options = { month: "short", day: "numeric" };
     return date.toLocaleString("en-US", options);
   };
-
   
+  // Follow
+
+  const [followed , setFollowed] = useState(false)
+  const [followings , setFollowings] = useState(0)
+  const [followers , setFollowers] = useState(0)
+
+  const getFollowDetails = async(profileId)=>{
+        try {
+            const response = await fetch("/api/v1/user/followStatus",{
+              method:'post',
+              headers:{
+                'Content-Type':'application/json'
+              },
+              body:JSON.stringify({
+              profileId
+              })
+            }              
+            )   
+            if(response.ok){
+              const data = await response.json();
+              setFollowings(data.data.followingCount)
+              setFollowers(data.data.followerCount)
+              setFollowed(data.data.followStatus)
+              setFollowingData(data.data.followings)
+              setFollowerData(data.data.followers)
+  
+            }else{
+              toast.error("Error in fetching follow details")
+            }
+        } catch (error) {
+          console.log("Error : ", error)
+          toast.error("Error in fetching follow details in catch block")
+        }
+        }
+
+        useEffect(()=>{
+          getFollowDetails(user._id)
+        },[])
+  
+        const handleFollowButtonClick = (p)=>{
+          if(p==1){
+            setFollowingInModel(false)
+          }
+
+          if(p==0){
+            setFollowingInModel(true)
+          }
+
+          openFollowDialog();
+        }
   // Logout user
   const logoutUser = async () => {
     setLogoutLoader(true);
@@ -266,6 +318,12 @@ function Profile() {
     setIsSearchDialogOpen(false);
   };
 
+  const openFollowDialog = ()=>{
+    setFollowModel(true)
+  }
+  const closeFollowDialog = ()=>{
+    setFollowModel(false)
+  }
   // Search User Profile
 
   const [searchUsername, setSearchUsername] = useState("");
@@ -505,7 +563,56 @@ function Profile() {
             )}
           </div>
         </form>
+        <form>
+        <div className="followModel"
+         style={{ display: followModel? "flex" : "none" }}>
+          <button id="closeDialog" onClick={closeFollowDialog}>
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+           {
+            followingInModel?(
+              <>
+              <h2>Followers</h2>
+              <div className="followBox">
+  {followerData.map((follower, index) => (
+    <button id="followCountButton"   onClick={() => {
+      navigate(`/${follower.username}`);
+    }}
+  >
+    <div key={index} className="follow-item" >
+      <img src={follower.avatar} alt="" id="suggestImage" />
+      <p>{follower.name}</p>
+    </div>
+  </button>
+    
+  ))}
+</div>
+                
+                </>
+            ):(
+              <>
+              <h2>Followings</h2>
+              <div className="followBox">
+  {followingData.map((following, index) => (
+     <button id="followCountButton"   onClick={() => {
+      navigate(`/${following.username}`);
+    }}
+  >
+    <div key={index} className="follow-item">
+            <img src={following.avatar} alt="" id="suggestImage" />
+      <p>{following.name}</p>
+    </div>
+    </button>
+  ))}
+</div>
+              </>
+              
+            )
+           }
+        </div>
 
+        </form>
+        
         <div className="center">
           <div className="head">
             <span>{user.name}</span>
@@ -520,8 +627,12 @@ function Profile() {
             <p id="username">@{user.username}</p>
             <p id="bio">{user.bio}</p>
             <div className="connections">
-              <span id="following-count">0 followings</span> &nbsp;&nbsp;&nbsp;
-              <span id="follower-count">0 followers</span>
+            <button onClick={()=>{handleFollowButtonClick(1)}} id="followCountButton">
+      <span id="following-count">{followings} followings</span>&nbsp;&nbsp;&nbsp;
+    </button>
+    <button onClick={()=>{handleFollowButtonClick(0)}} id="followCountButton">
+      <span id="follower-count">{followers} followers</span>
+    </button>
             </div>
             <br />
             <br />
@@ -636,6 +747,9 @@ function Profile() {
                   <p id="suggestName">{suggestion.name}</p>
                   <p id="suggestUsername">@{suggestion.username}</p>
                 </div>
+                {/* <button 
+                // id="suggestion-follow-btn"
+                >Follow</button> */}
               </div>
             ))}
           </div>

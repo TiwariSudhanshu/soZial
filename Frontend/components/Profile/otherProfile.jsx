@@ -13,7 +13,10 @@ function OtherProfile() {
   const [posts, setPosts] = useState([]);
 
   const [postLikeIds, setPostLikeIds] = useState([]);
-
+   const [followModel, setFollowModel] = useState(false)
+    const [followingInModel, setFollowingInModel] = useState(true);
+    const [followingData, setFollowingData] = useState([])
+    const [followerData, setFollowerData] = useState([])
   // Function to handle likes
   const toggleLikePost = (postId) => {
     if (postLikeIds.includes(postId)) {
@@ -161,6 +164,75 @@ function OtherProfile() {
       toast.error("Error in following in catch block")
      }
     }
+    const getFollowDetails = async(profileId)=>{
+      try {
+          const response = await fetch("/api/v1/user/followStatus",{
+            method:'post',
+            headers:{
+              'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+            profileId
+            })
+          }
+            
+          )
+  
+          if(response.ok){
+            const data = await response.json();
+            setFollowings(data.data.followingCount)
+            setFollowers(data.data.followerCount)
+            setFollowed(data.data.followStatus)
+            setFollowingData(data.data.followings)
+              setFollowerData(data.data.followers)
+          }else{
+            toast.error("Error in fetching follow details")
+          }
+      } catch (error) {
+        console.log("Error : ", error)
+        toast.error("Error in fetching follow details in catch block")
+      }
+      }
+      
+      const handleUnfollow = async()=>{
+        try {
+          const response = await fetch("/api/v1/user/unfollow",{
+            method:'post',
+            headers:{
+              'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+            followingId: profile._id
+            })
+          })
+          if(response.ok){
+            toast.success("UnFollowed")
+            setFollowed(!followed)
+          }else{
+            toast.error("Error in unfollowing")
+          }
+        } catch (error) {
+         console.log("Error :", error)
+         toast.error("Error in unfollowing in catch block")
+        }
+      }
+      const handleFollowButtonClick = (p)=>{
+        if(p==1){
+          setFollowingInModel(false)
+        }
+
+        if(p==0){
+          setFollowingInModel(true)
+        }
+
+        openFollowDialog();
+      }
+
+      useEffect(()=>{
+      if (profile?._id) {
+        getFollowDetails(profile._id);
+      }
+    },[profile, followed])
 
   // Date
   const formatDate = (dateString) => {
@@ -169,7 +241,12 @@ function OtherProfile() {
     return date.toLocaleString("en-US", options);
   };
 
-
+  const openFollowDialog = ()=>{
+    setFollowModel(true)
+  }
+  const closeFollowDialog = ()=>{
+    setFollowModel(false)
+  }
   
   const [isLightMode, setIsLightMode] = useState(false);
   const toggleMode = () => {
@@ -272,6 +349,55 @@ function OtherProfile() {
           )}
         </div>
       </form>
+      <form>
+        <div className="followModel"
+         style={{ display: followModel? "flex" : "none" }}>
+          <button id="closeDialog" onClick={closeFollowDialog}>
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+           {
+            followingInModel?(
+              <>
+              <h2>Followers</h2>
+              <div className="followBox">
+  {followerData.map((follower, index) => (
+    <button id="followCountButton"   onClick={() => {
+      navigate(`/${follower.username}`);
+    }}
+  >
+    <div key={index} className="follow-item" >
+      <img src={follower.avatar} alt="" id="suggestImage" />
+      <p>{follower.name}</p>
+    </div>
+  </button>
+    
+  ))}
+</div>
+                
+                </>
+            ):(
+              <>
+              <h2>Followings</h2>
+              <div className="followBox">
+  {followingData.map((following, index) => (
+     <button id="followCountButton"   onClick={() => {
+      navigate(`/${following.username}`);
+    }}
+  >
+    <div key={index} className="follow-item">
+            <img src={following.avatar} alt="" id="suggestImage" />
+      <p>{following.name}</p>
+    </div>
+    </button>
+  ))}
+</div>
+              </>
+              
+            )
+           }
+        </div>
+
+        </form>
       <div className="center">
         <div className="head">
           <span>{profile.name}</span>
@@ -286,12 +412,16 @@ function OtherProfile() {
           <p id="username">@{profile.username}</p>
           <p id="bio">{profile.bio}</p>
           <div className="connections">
-            <span id="following-count">{followings} Followings</span> &nbsp;&nbsp;&nbsp;
-            <span id="follower-count">{followers} Followers</span>
+          <button onClick={()=>{handleFollowButtonClick(1)}} id="followCountButton">
+      <span id="following-count">{followings} followings</span>&nbsp;&nbsp;&nbsp;
+    </button>
+    <button onClick={()=>{handleFollowButtonClick(0)}} id="followCountButton">
+      <span id="follower-count">{followers} followers</span>
+    </button>
           </div>
           {
             followed?(
-              <button id="follow-btn">Following</button>
+              <button id="follow-btn" onClick={()=>{handleUnfollow()}}>Following</button>
             ):(
               <button id="follow-btn" onClick={()=>{handleFollow()}}>Follow</button>
             )
