@@ -6,7 +6,7 @@ import { suggestions } from "../controllers/suggestions.controllers.js";
 import { addNewPost, deletePost } from "../controllers/post.controllers.js";
 import { changeInfo, changePassword, fetchUser } from "../controllers/edit.controllers.js";
 import { fetchInitalStatus, like } from "../controllers/likes.controllers.js";
-import { follow } from "../controllers/follow.controllers.js";
+import { fetchFollowDetails, follow, unfollow } from "../controllers/follow.controllers.js";
 
 const router = Router();
 
@@ -32,6 +32,9 @@ router.route("/post/delete").post(verifyJWT, deletePost)
 router.route("/like").post(verifyJWT, like)
 router.route("/fetchLike").post(fetchInitalStatus);
 router.route("/follow").post(verifyJWT,follow)
+router.route("/followStatus").post(verifyJWT, fetchFollowDetails)
+router.route("/unfollow").post(verifyJWT, unfollow)
+
 router.route('/edit').get(verifyJWT, fetchUser)
 router.route("/edit/change").post(verifyJWT,upload.fields([
     {
