@@ -48,6 +48,7 @@ function Profile() {
   const [followingInModel, setFollowingInModel] = useState(true);
   const [followingData, setFollowingData] = useState([])
   const [followerData, setFollowerData] = useState([])
+  const [postPopupId, setPostPopupId] = useState()
   // Format Date
 
   const formatDate = (dateString) => {
@@ -212,71 +213,13 @@ function Profile() {
   }, []);
 
   // Like Dislike Post
-  /*
-  const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(0)
-  const likeFunction = async(postId)=>{
-    try {
-        const response = await fetch ("/api/v1/user/like",{
-            method: 'post',
-            headers:{
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                postId
-            }),
-            credentials: 'include'
-        })
-
-        if(response.ok){
-          const data = await response.json();
-          setLiked(data.data.liked)
-          setLikeCount(data.data.likeCount)
-        }else{
-          toast.error("Error in response")
-        }
-    } catch (error) {
-        toast.error("Error", error)
-    }
-}
 
 
-  const fetchLikeStatus = async(postId)=>{    try {
-      const response = await fetch("api/v1/user/fetchLike",{
-        method: 'post',
-        headers:{
-          'Content-Type': 'application/json'
-        },
-        body:JSON.stringify({
-          postId
-        })
-      })
-      
-      if(response.ok){
-        const data = await response.json();
-        console.log(data.data)
-        return data.data;
-      }else{
-        toast.error("Error in response of fetching like statsus")
-        return;
-      }
-    } catch (error) {
-      toast.error("Error in fetching likes");
-      console.log("Error :", error);
-    }
-  }
-
-  function fetchLikeCount(postId){
-      const likeData =  fetchLikeStatus(postId)
-      return likeData.likeCount;
-  }
-      */
-
-
-
- 
 
   // Buttons sidebar
+  
+  
+  
   const [dots, setDots] = useState(false);
 
   function toggleDots() {
@@ -385,18 +328,75 @@ function Profile() {
     }
   };
 
-  const [postPopupId, setPostPopupId] = useState(null);
-  const [postLikeIds, setPostLikeIds] = useState([]);
 
-  // Function to handle likes
-  const toggleLikePost = (postId) => {
-    if (postLikeIds.includes(postId)) {
-      setPostLikeIds(postLikeIds.filter((id) => id !== postId));
-    } else {
-      setPostLikeIds([...postLikeIds, postId]);
+
+ 
+  // Post Like
+
+  const [liked, setLiked] = useState(false)
+  const [allPostData, setAllPostData] = useState([])
+  const [currentPostData, setCurrentPostData] = useState()
+   
+  const likeFunction = async(postId)=>{
+    try {
+        const response = await fetch ("/api/v1/user/like",{
+            method: 'post',
+            headers:{
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                postId
+            }),
+            credentials: 'include'
+        })
+
+        if(response.ok){
+          toast.success("liked")
+        }else{
+          toast.error("Error in response")
+        }
+    } catch (error) {
+        toast.error("Error", error)
     }
-  };
+}
 
+  const getPostsLikeStatus = async(userId)=>{
+    try {
+      const response = await fetch("/api/v1/user/likeStatus",{
+        method: 'post',
+        headers:{
+          'Content-Type': 'application/json'
+        },
+        body:JSON.stringify({
+          userId
+        }),
+        credentials: 'include'
+      })
+
+      if(response.ok){
+        toast.success("Fetched like status for posts")
+        const data = await response.json();
+        setAllPostData(data.data)
+
+      }else{
+        toast.error("Error in response")
+        
+      }
+    } catch (error) {
+      console.log("Error in fetching like status : ", error)
+      toast.error("Error in fetching like Status")
+      
+    }
+  }
+  const [lengthOfLikeInPost, setLengthOfLikeInPost] = useState(0)
+
+  function handleLikeDisplay(postId){
+    setCurrentPostData(allPostData.find(obj => obj.id === postId ))   
+  }
+  useEffect(()=>{
+    getPostsLikeStatus(user._id)
+  },[])
+  
   return (
     <>
       <div className="profilePage" id="profilePage">
@@ -662,20 +662,17 @@ function Profile() {
                       </p>
                     </div>
                     <div className="post-details-right">
-                    {
-                      
-                    }
+                     
                       <i
                         className={
-                          // liked ? 
-                          // "fa-solid fa-heart" :
+                          liked ? 
+                          "fa-solid fa-heart" :
                            "fa-regular fa-heart"
                           }
-                        // onClick={() => likeFunction(userPost._id)}
+                        onClick={() => likeFunction(userPost._id)}
                       > &nbsp; &nbsp; 
-                      {/* {fetchLikeCount(userPost._id)} */}
                       </i>
-
+                      {userPost.likes.length}
                       <i
                         class="fa-solid fa-ellipsis-vertical"
                         id="post-popup-dots"

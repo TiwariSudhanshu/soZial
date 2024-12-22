@@ -60,6 +60,7 @@ function OtherProfile() {
     };
     if (username) {
       findProfile();
+     
     }
   }, [username]);
 
@@ -432,38 +433,44 @@ function OtherProfile() {
         <hr />
         <h2>Posts</h2>
         {posts
-          .slice()
-          .sort((a, b) => new Date(b.date) - new Date(a.date))
-          .map((userPost) => {
-            return (
-              <div className="post">
-                <div className="post-details">
-                  <div className="post-details-left">
-                    <img loading="lazy" id="post-avatar" src={profile.avatar} alt="" />
-                    <div>
-                      <h3>{profile.name}</h3>
-                      <p>@{profile.username}</p>
+            .slice()
+            .sort((a, b) => new Date(b.date) - new Date(a.date))
+            .map((userPost) => {
+              return (
+                <div className="post">
+                  <div className="post-details">
+                    <div className="post-details-left">
+                      <img
+                        loading="lazy"
+                        id="post-avatar"
+                        src={profile.avatar}
+                        alt=""
+                      />
+                      <div>
+                        <h3>{profile.name}</h3>
+                        <p>@{profile.username}</p>
+                      </div>
+                      <p id="dateOfPost">
+                        &nbsp;&nbsp;&nbsp;.{formatDate(userPost.date)}{" "}
+                      </p>
                     </div>
-                    <p id="dateOfPost">
-                      &nbsp;&nbsp;&nbsp;.{formatDate(userPost.date)}{" "}
-                    </p>
+                    <div className="post-details-right">
+                     
+                      <i
+                        className={
+                          // liked ? 
+                          // "fa-solid fa-heart" :
+                           "fa-regular fa-heart"
+                          }
+                        onClick={() => likeFunction(userPost._id)}
+                      > &nbsp; &nbsp; 
+                      </i>
+                      {/* {userPost.likes.length} */}
+                      
+                    </div>
                   </div>
-                  <div className="post-details-right">
-                    <i
-                      class="fa-regular fa-heart"
-                      style={{
-                        color: postLikeIds.includes(userPost._id)
-                          ? "red"
-                          : isLightMode
-                          ? "black"
-                          : "white",
-                      }}
-                      onClick={() => toggleLikePost(userPost._id)}
-                    ></i>
-                  </div>
-                </div>
-                <div className="post-content">
-                <p>
+                  <div className="post-content">
+                    <p>
                       {userPost.content?.split(" ").map((word, index) =>
                         word.startsWith("#") ? (
                           <span key={index} style={{ color: "skyblue" }}>
@@ -474,11 +481,16 @@ function OtherProfile() {
                         )
                       )}
                     </p>
+                  </div>
+                  <img
+                    id="postImage"
+                    loading="lazy"
+                    src={userPost.image}
+                    alt=""
+                  />
                 </div>
-                <img loading="lazy" id="postImage" src={userPost.image} alt="" />
-              </div>
-            );
-          })}
+              );
+            })}
       </div>
       <div className="rightbar">
         <h2>Suggestions</h2>
