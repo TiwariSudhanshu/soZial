@@ -32,7 +32,7 @@ export const findUserByUsername = asyncHandler(async(req,res)=>{
   try {
     const {username} = req.body;
   
-    const user = await User.findOne({username:username})
+    const user = await User.findOne({username:username}).populate("posts")
   
     if(!user){
       throw new ApiError(400, "User not found");

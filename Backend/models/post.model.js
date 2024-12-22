@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-
+import mongoose from "mongoose";
 const postSchema = Schema({
     content:{
         type: String
@@ -11,10 +11,10 @@ const postSchema = Schema({
         type: Date,
         default: Date.now
     },
-    // likes:{
-    //     type: Schema.Types.ObjectId,
-    //     ref: "Likes"
-    // }
+    likes:[{
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User"
+        }]
 
 },{timestamps:true});
 
