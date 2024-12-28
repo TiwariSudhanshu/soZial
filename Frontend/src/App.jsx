@@ -1,11 +1,12 @@
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
-
-import LoginPage from "../components/Login/loginPage";
-import Info from "../components/Info/info";
-import SignupPage from "../components/SignUp/signupPage";
-import Profile from "../components/Profile/profile";
-import OtherProfile from "../components/Profile/otherProfile";
-import EditProfile from "../components/Profile/editProfile";
+import { createBrowserRouter } from 'react-router-dom';
+import { RouterProvider } from 'react-router-dom';
+import SignupPage from './pages/SignupPage';
+import Info from './pages/Info';
+import Profile from './pages/Profile';
+import LoginPage from './pages/LoginPage';
+import EditProfile from './pages/EditProfile';
+import AddPost from './pages/AddPost';
+import OtherProfile from './pages/otherProfile';
 const router = createBrowserRouter([
   {
     path: "/",
@@ -21,7 +22,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/profile",
-    element: <Profile />,
+    element: <Profile />
+  },
+  {
+    path: "/add",
+    element: <AddPost/>
   },
   {
     path: "/:username",
@@ -41,4 +46,4 @@ function App() {
   );
 }
 
-export default App;
+export default App
