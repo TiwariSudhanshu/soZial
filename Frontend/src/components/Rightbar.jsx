@@ -3,11 +3,19 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import SearchIcon from '@mui/icons-material/Search';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import { useDispatch, useSelector } from "react-redux";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import { toggleDarkMode } from "../../app/userSlice";
 import '../index.css'
 
 const Rightbar = () => {
   // Search Profile
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+   const darkMode = useSelector((state) => state.user.darkMode);
+   const toggleTheme = ()=>{
+      dispatch(toggleDarkMode())
+     }
    const [searchUsername, setSearchUsername] = useState("");
    const [loader, setLoader] = useState(false)
   
@@ -146,9 +154,15 @@ const Rightbar = () => {
        
         <hr />
       {/* Bottom Icon */}
-
+      
+      <button
+          onClick={toggleTheme}
+          className={`px-4 py-2 rounded ml-[40%] `}
+        >
+          <DarkModeIcon />
+        </button>
     </div>
-
+        
     </div>
   );
 };

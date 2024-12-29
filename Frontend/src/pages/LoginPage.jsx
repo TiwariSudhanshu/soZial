@@ -3,8 +3,8 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../api/login.api.js";
-import { useDispatch } from "react-redux";
-import { setPosts } from "../../app/userSlice.js";
+import { useDispatch, useSelector } from "react-redux";
+import { setPosts, toggleDarkMode } from "../../app/userSlice.js";
 
 
 const LoginPage = () => {
@@ -13,14 +13,10 @@ const LoginPage = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const navigate = useNavigate();
   const dispatch = useDispatch();
-   const [darkMode, setDarkMode] = useState(() => JSON.parse(localStorage.getItem('theme')) || false);
-    const toggleTheme = () => {
-      setDarkMode(!darkMode);
-    };
-    useEffect(() => {
-      localStorage.setItem("theme", darkMode);
-    }, [darkMode]);
-    
+  const darkMode = useSelector((state) => state.user.darkMode);
+  const toggleTheme = ()=>{
+     dispatch(toggleDarkMode())
+    }
 
   const handleChange = (e) => {
     const { id, value } = e.target;

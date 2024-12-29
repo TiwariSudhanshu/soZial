@@ -3,25 +3,19 @@ import BookmarkIcon from "@mui/icons-material/Bookmark";
 import TurnedInNotIcon from "@mui/icons-material/TurnedInNot";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
-import DarkModeIcon from "@mui/icons-material/DarkMode";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+// import { useDispatch, useSelector } from "react-redux";
+import { toggleDarkMode } from "../../app/userSlice";
 
 const MainContent = () => {
   const [popupVisible, setPopupVisible] = useState(false);
   const [activeTab, setActiveTab] = useState("followers");
   const navigate = useNavigate();
   const userData = JSON.parse(localStorage.getItem("user"));
-  const [darkMode, setDarkMode] = useState(
-    () => JSON.parse(localStorage.getItem("theme")) || false
-  );
-  const toggleTheme = () => {
-    setDarkMode(!darkMode);
-  };
-  useEffect(() => {
-    localStorage.setItem("theme", darkMode);
-  }, [darkMode]);
+//  const dispatch = useDispatch();
+   const darkMode = useSelector((state) => state.user.darkMode);
   
   useEffect(() => {
     if (!userData) navigate("/");
@@ -121,18 +115,11 @@ const MainContent = () => {
       id="main-content"
     >
       {/* Theme Toggle */}
+      
       <div className="p-4 flex items-center justify-between">
         <h1 className="font-bold text-xl">{user.name}</h1>
-        <button
-          onClick={toggleTheme}
-          className={`px-4 py-2 rounded ${
-            darkMode ? "bg-gray-800 text-white" : "bg-gray-200 text-gray-800"
-          }`}
-        >
-          <DarkModeIcon />
-        </button>
+       
       </div>
-
       {/* Profile Section */}
       <div>
       <div

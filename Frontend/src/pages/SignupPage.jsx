@@ -2,15 +2,15 @@ import React, { useState, useEffect } from "react";
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleDarkMode } from "../../app/userSlice";
 
 const SignupPage = () => {
-  const [darkMode, setDarkMode] = useState(() => JSON.parse(localStorage.getItem('theme')) || false);
-  const toggleTheme = () => {
-    setDarkMode(!darkMode);
-  };
-  useEffect(() => {
-    localStorage.setItem("theme", darkMode);
-  }, [darkMode]);
+  const dispatch = useDispatch();
+  const darkMode = useSelector((state) => state.user.darkMode);
+  const toggleTheme = ()=>{
+     dispatch(toggleDarkMode())
+    }
   
   const navigate = useNavigate();
 
