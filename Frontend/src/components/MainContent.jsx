@@ -242,7 +242,20 @@ const MainContent = () => {
               </div>
              
             </div>
-            {post.content && <p className="mb-3">{post.content}</p>}
+            {post.content && (
+                  <p className="mb-3">
+                    {" "}
+                    {post.content?.split(" ").map((word, index) =>
+                      word.startsWith("#") ? (
+                        <span key={index} style={{ color: "skyblue" }}>
+                          {word}{" "}
+                        </span>
+                      ) : (
+                        word + " "
+                      )
+                    )}
+                  </p>
+                )}
             {post.image && (
               <img
                 src={post.image}

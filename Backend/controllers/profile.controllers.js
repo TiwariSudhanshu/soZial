@@ -30,6 +30,9 @@ export const findUserById = asyncHandler(async(req, res)=>{
 
 export const findUserByUsername = asyncHandler(async(req,res)=>{
   try {
+    if(req.body.username === '' || req.body === null){
+     return res.status(200).json(new ApiResponse, null, "Serach cleared" )
+    }
     const {username} = req.body;
   
     const user = await User.findOne({username:username}).populate("posts")
