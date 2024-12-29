@@ -3,6 +3,8 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../api/login.api.js";
+import { useDispatch } from "react-redux";
+import { setPosts } from "../../app/userSlice.js";
 
 
 const LoginPage = () => {
@@ -10,6 +12,7 @@ const LoginPage = () => {
   const [loader, setLoader] = useState(false);
   const [formData, setFormData] = useState({ email: "", password: "" });
   const navigate = useNavigate();
+  const dispatch = useDispatch();
    const [darkMode, setDarkMode] = useState(() => JSON.parse(localStorage.getItem('theme')) || false);
     const toggleTheme = () => {
       setDarkMode(!darkMode);
@@ -31,6 +34,7 @@ const LoginPage = () => {
       const data = await loginUser(formData.email, formData.password);
       toast.success("Logged in Successfully");
       localStorage.setItem("user", JSON.stringify(data));
+      dispatch(setPosts(data.data.loggedInUser.posts))
       navigate("/profile");
     } catch (error) {
       toast.error("Unexpected error from server");

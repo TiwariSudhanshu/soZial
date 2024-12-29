@@ -6,6 +6,7 @@ import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 const MainContent = () => {
   const [popupVisible, setPopupVisible] = useState(false);
@@ -31,8 +32,10 @@ const MainContent = () => {
   const user = userData?.data?.loggedInUser || userData?.data;
   if (!user) return <div>No user data available.</div>;
 
+
   const userId = user._id;
-  const [posts, setPosts] = useState(user.posts);
+  // const [posts, setPosts] = useState(user.posts);
+  const [posts, setPosts] = useState(useSelector((state) => state.user.userPost))
   const [followed, setFollowed] = useState(false);
   const [followings, setFollowings] = useState(0);
   const [followers, setFollowers] = useState(0);

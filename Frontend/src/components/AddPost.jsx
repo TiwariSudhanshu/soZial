@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import '../index.css'
+import { useDispatch } from "react-redux";
+import { addPost } from "../../app/userSlice";
 
 const AddPostComponent = ({ setPosts, setIsDialogOpen, isDialogOpen }) => {
   const [imagePreview, setImagePreview] = useState(null);
@@ -11,7 +13,7 @@ const AddPostComponent = ({ setPosts, setIsDialogOpen, isDialogOpen }) => {
     postContent: "",
     postImage: "",
   });
-
+  const dispatch = useDispatch()
   const handleChange = (e) => {
     setFormData({ ...formData, postContent: e.target.value });
   };
@@ -48,12 +50,11 @@ const AddPostComponent = ({ setPosts, setIsDialogOpen, isDialogOpen }) => {
       const data = await response.json();
       if (response.ok) {
         toast.success("Post Added");
-        // setPosts((prevPosts) => [data.data, ...prevPosts]);
+        dispatch(addPost(data.data))
         setFormData({ postContent: "", postImage: "" });
         setImagePreview(null);
         navigate("/profile")
         
-        // setIsDialogOpen(!isDialogOpen);
       } else {
         toast.error(data.message || "Failed to add post");
       }
