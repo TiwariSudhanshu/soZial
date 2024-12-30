@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import TurnedInNotIcon from "@mui/icons-material/TurnedInNot";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
-import DarkModeIcon from "@mui/icons-material/DarkMode";
+import { useSelector } from "react-redux";
 import Sidebar from "../components/Sidebar";
 import Rightbar from "../components/Rightbar";
 import {  useParams } from "react-router-dom";
@@ -16,13 +16,7 @@ function OtherProfile() {
   const username = param.username;
   const [followingData, setFollowingData] = useState([]);
   const [followerData, setFollowerData] = useState([]);
-  const [darkMode, setDarkMode] = useState(() => JSON.parse(localStorage.getItem('theme')) || false);
-   const toggleTheme = () => {
-     setDarkMode(!darkMode);
-   };
-   useEffect(() => {
-     localStorage.setItem("theme", darkMode);
-   }, [darkMode]);
+  const darkMode = useSelector((state) => state.user.darkMode);
   useEffect(() => {
     const findProfile = async () => {
       try {
@@ -60,6 +54,31 @@ function OtherProfile() {
     const options = { month: "short", day: "numeric" };
     return date.toLocaleString("en-US", options);
   };
+
+  // Bookmarking
+
+  const bookmark = async(postId)=>{
+    try {
+      const response = await fetch("/api/v1/user/bookmark",{
+        method: 'post',
+        headers:{
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          postId
+        }),
+        credentials: "include"
+      })
+      if(response.ok){
+        toast.success("Bookmarked")
+      }else{
+        toast.error("Failed to bookmark")
+      }
+    } catch (error) {
+      console.log("Error in bookmarking :", error)
+      toast.error("Error in bookmarking")
+    }
+  }
 
   // Follow
 
@@ -181,14 +200,7 @@ function OtherProfile() {
         {/* Theme Toggle Button */}
         <div className="p-4 flex items-center justify-between">
         <h1 className="font-bold text-xl">{profile.name}</h1>
-        <button
-          onClick={toggleTheme}
-          className={`px-4 py-2 rounded ${
-            darkMode ? "bg-gray-800 text-white" : "bg-gray-200 text-gray-800"
-          }`}
-        >
-          <DarkModeIcon />
-        </button>
+        
       </div>
         {/* Profile Section */}
         <div>
@@ -349,7 +361,7 @@ function OtherProfile() {
                 <ThumbUpOffAltIcon />
               </button>
 
-              <button>
+              <button onClick={()=>{bookmark(post._id)}}>
                 <TurnedInNotIcon />
               </button>
               </div>

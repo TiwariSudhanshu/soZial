@@ -6,7 +6,9 @@ import Profile from './pages/Profile';
 import LoginPage from './pages/LoginPage';
 import EditProfile from './pages/EditProfile';
 import AddPost from './pages/AddPost';
-import OtherProfile from './pages/otherProfile';
+import OtherProfile from './pages/OtherProfile';
+import ChatPage from './pages/ChatPage';
+import BookmarkPage from './pages/BookmarkPage';
 const router = createBrowserRouter([
   {
     path: "/",
@@ -33,8 +35,16 @@ const router = createBrowserRouter([
     element: <OtherProfile/>
   },
   {
+    path: "/bookmark",
+    element: <BookmarkPage/>
+  },
+  {
     path: "/edit",
     element: <EditProfile/>
+  },
+  {
+    path: "/chat",
+    element: <ChatPage/>
   }
 ]);
 

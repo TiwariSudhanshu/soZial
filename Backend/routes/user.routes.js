@@ -7,6 +7,7 @@ import { addNewPost, deletePost } from "../controllers/post.controllers.js";
 import { changeInfo, changePassword, fetchUser } from "../controllers/edit.controllers.js";
 import {  like, likeStatus } from "../controllers/likes.controllers.js";
 import { fetchFollowDetails, follow, unfollow } from "../controllers/follow.controllers.js";
+import { bookmark, getAllBookMark } from "../controllers/bookmark.controllers.js";
 
 const router = Router();
 
@@ -34,7 +35,8 @@ router.route("/likeStatus").post(likeStatus);
 router.route("/follow").post(verifyJWT,follow)
 router.route("/followStatus").post(verifyJWT, fetchFollowDetails)
 router.route("/unfollow").post(verifyJWT, unfollow)
-
+router.route("/bookmark").post(verifyJWT, bookmark)
+router.route("/getAllBookmarks").get(verifyJWT, getAllBookMark)
 router.route('/edit').get(verifyJWT, fetchUser)
 router.route("/edit/change").post(verifyJWT,upload.fields([
     {

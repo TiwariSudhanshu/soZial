@@ -6,15 +6,13 @@ import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
-// import { useDispatch, useSelector } from "react-redux";
-import { toggleDarkMode } from "../../app/userSlice";
+
 
 const MainContent = () => {
   const [popupVisible, setPopupVisible] = useState(false);
   const [activeTab, setActiveTab] = useState("followers");
   const navigate = useNavigate();
   const userData = JSON.parse(localStorage.getItem("user"));
-//  const dispatch = useDispatch();
    const darkMode = useSelector((state) => state.user.darkMode);
   
   useEffect(() => {
@@ -81,6 +79,32 @@ const MainContent = () => {
   useEffect(() => {
     if (userId) getFollowDetails(userId);
   }, [userId, followed]);
+  
+
+  // Bookmark
+  
+    const bookmark = async(postId)=>{
+      try {
+        const response = await fetch("/api/v1/user/bookmark",{
+          method: 'post',
+          headers:{
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            postId
+          }),
+          credentials: "include"
+        })
+        if(response.ok){
+          toast.success("Bookmarked")
+        }else{
+          toast.error("Failed to bookmark")
+        }
+      } catch (error) {
+        console.log("Error in bookmarking :", error)
+        toast.error("Error in bookmarking")
+      }
+    }
 
   const renderPopupContent = () => {
     const data = activeTab === "followers" ? followerData : followingData;
@@ -261,7 +285,7 @@ const MainContent = () => {
               <button onClick={() => deletePostRequest(post._id)}>
                 <DeleteIcon />
               </button>
-              <button>
+              <button onClick={()=>{bookmark(post._id)}}>
                 <TurnedInNotIcon />
               </button>
               </div>

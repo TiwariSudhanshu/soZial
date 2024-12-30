@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FiHome, FiEdit, FiPlusSquare, FiLogOut } from "react-icons/fi";
+import { FiMessageCircle } from "react-icons/fi";
 import { FaBookmark } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -46,15 +47,19 @@ const Sidebar = () => {
         <button onClick={()=>{navigate("/profile")}} className="p-3 hover:bg-gray-700 rounded-lg w-full flex justify-center">
           <FiHome size={24} />
         </button>
+        <button onClick={()=>{navigate("/chat")}}  className="p-3 hover:bg-gray-700 rounded-lg w-full flex justify-center">
+          <FiMessageCircle size={24} />
+        </button>
         <button onClick={()=>{navigate("/edit")}} className="p-3 hover:bg-gray-700 rounded-lg w-full flex justify-center">
           <FiEdit size={24} />
         </button>
         <button onClick={()=>{navigate("/add")}} className="p-3 hover:bg-gray-700 rounded-lg w-full flex justify-center">
           <FiPlusSquare size={24} />
         </button>
-        <button className="p-3 hover:bg-gray-700 rounded-lg w-full flex justify-center">
+        <button onClick={()=>{navigate("/bookmark")}} className="p-3 hover:bg-gray-700 rounded-lg w-full flex justify-center">
           <FaBookmark size={24} />
         </button>
+        
       </div>
 
       {/* Divider */}
