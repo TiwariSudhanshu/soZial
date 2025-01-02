@@ -2,11 +2,14 @@ import React from "react";
 import { useState, useEffect } from "react";
 import TurnedInNotIcon from "@mui/icons-material/TurnedInNot";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import { useSelector } from "react-redux";
 import Sidebar from "../components/Sidebar";
 import Rightbar from "../components/Rightbar";
 import {  useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import TurnedInIcon from '@mui/icons-material/TurnedIn';
+
 function OtherProfile() {
   const [profile, setProfile] = useState("");
   const [posts, setPosts] = useState([]);
@@ -54,6 +57,28 @@ function OtherProfile() {
     const options = { month: "short", day: "numeric" };
     return date.toLocaleString("en-US", options);
   };
+    const handleLike = async(postId)=>{
+     try {
+       const response = await fetch('/api/v1/user/like',{
+         method: 'post',
+         headers:{
+           'Content-Type': 'application/json'
+         },
+         body: JSON.stringify({
+           postId
+         })
+       })
+       if(response.ok){
+         toast.success('liked')
+       }else{
+         toast.error("Error in liking")
+       }
+     } catch (error) {
+      console.log("Error :", error)
+      toast.error("Error")
+     }
+    }
+  
 
   // Bookmarking
 
@@ -320,7 +345,7 @@ function OtherProfile() {
             .sort((a, b) => new Date(b.date) - new Date(a.date))
             .map((post) => (
               <div key={post._id} className="mb-6 pb-6 border-b">
-                <div className="flex items-center space-x-4 mb-2">
+                <div className="flex items-center space-x-4 mb-2 relative">
                   <img
                     src={profile.avatar}
                     alt="User Avatar"
@@ -330,14 +355,19 @@ function OtherProfile() {
                     <h4 className="text-lg font-bold">{profile.name}</h4>
                     <p>{profile.username}</p>
                   </div>
-                  <p id="dateOfPost">
-                    &nbsp;&nbsp;&nbsp;.{formatDate(post.date)}{" "}
-                  </p>
+            
+                  {/* Bookmark button in the top-right corner */}
+                  <button
+                    onClick={() => bookmark(post._id)}
+                    className="absolute top-0 right-0 p-2"
+                  >
+                    {profile.bookmark.includes(post._id)?(<TurnedInIcon />):(<TurnedInNotIcon />)}
+                  </button>
                 </div>
+            
                 {post.content && (
                   <p className="mb-3">
-                    {" "}
-                    {post.content?.split(" ").map((word, index) =>
+                    {post.content.split(" ").map((word, index) =>
                       word.startsWith("#") ? (
                         <span key={index} style={{ color: "skyblue" }}>
                           {word}{" "}
@@ -348,6 +378,7 @@ function OtherProfile() {
                     )}
                   </p>
                 )}
+            
                 {post.image && (
                   <img
                     src={post.image}
@@ -355,23 +386,25 @@ function OtherProfile() {
                     className="w-full rounded-lg mb-3"
                   />
                 )}
-                 <div className="flex justify-between space-x-4">
-              <div className="flex justify-between space-x-4">
-              <button>
-                <ThumbUpOffAltIcon />
-              </button>
-
-              <button onClick={()=>{bookmark(post._id)}}>
-                <TurnedInNotIcon />
-              </button>
+            
+                <div className="flex justify-between items-center ml-2">
+                  {/* Likes and Like Button */}
+                  <div className="flex items-center space-x-2">
+                    <span className="font-bold text-xl">{post.likes.length}</span>
+                    <button onClick={() => handleLike(post._id)}>
+                    {post.likes.includes(profile._id)?<ThumbUpAltIcon />:<ThumbUpOffAltIcon />}
+                    </button>
+                  </div>
+            
+                  {/* Post Date in Bottom-Right Corner */}
+                  <p className="text-sm text-gray-500">
+                    {new Date(post.date).toLocaleDateString()}
+                  </p>
+                </div>
               </div>
-          
-              <p className="text-sm text-gray-500">
-                {new Date(post.date).toLocaleDateString()}
-              </p>
-            </div>
-              </div>
-            ))}
+            ))
+            
+            }
         </div>
       </div>
       <Rightbar />

@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import '../index.css'
 
+
 const Sidebar = () => {
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ const Sidebar = () => {
     <div id='sidebar' className="h-screen w-20 bg-gray-800 text-white flex flex-col fixed left-0">
       {/* Logo at the top */}
       <div id="logo" className="p-4 flex items-center justify-center border-b border-gray-700">
-        <h1 className="text-2xl font-bold">L</h1>
+        <h1 className="text-2xl font-bold">P</h1>
       </div>
 
       {/* Navigation Icons */}

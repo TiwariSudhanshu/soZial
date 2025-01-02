@@ -3,9 +3,12 @@ import BookmarkIcon from "@mui/icons-material/Bookmark";
 import TurnedInNotIcon from "@mui/icons-material/TurnedInNot";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+import TurnedInIcon from '@mui/icons-material/TurnedIn';
+
 
 
 const MainContent = () => {
@@ -52,6 +55,28 @@ const MainContent = () => {
       console.error("Error in deleting post:", error);
     }
   };
+
+  const handleLike = async(postId)=>{
+   try {
+     const response = await fetch('/api/v1/user/like',{
+       method: 'post',
+       headers:{
+         'Content-Type': 'application/json'
+       },
+       body: JSON.stringify({
+         postId
+       })
+     })
+     if(response.ok){
+       toast.success('liked')
+     }else{
+       toast.error("Error in liking")
+     }
+   } catch (error) {
+    console.log("Error :", error)
+    toast.error("Error")
+   }
+  }
 
   const getFollowDetails = async (profileId) => {
     try {
@@ -244,61 +269,75 @@ const MainContent = () => {
         .sort((a, b) => new Date(b.date) - new Date(a.date))
         .map((post) => (
           <div key={post._id} className="mb-6 pb-6 border-b">
-            <div className="flex items-center space-x-4 mb-2">
+            <div className="flex items-center space-x-4 mb-2 relative">
               <img
                 src={user.avatar}
-                alt="Avatar"
+                alt="User Avatar"
                 className="w-12 h-12 rounded-full"
               />
               <div>
                 <h4 className="text-lg font-bold">{user.name}</h4>
-                <p>@{user.username}</p>
+                <p>{user.username}</p>
               </div>
-             
+        
+              {/* Bookmark button in the top-right corner */}
+              <button
+                onClick={() => bookmark(post._id)}
+                className="absolute top-0 right-0 p-2"
+              >
+                {user.bookmark.includes(post._id)?(<TurnedInIcon />):(<TurnedInNotIcon />)}
+                
+              </button>
             </div>
+        
             {post.content && (
-                  <p className="mb-3">
-                    {" "}
-                    {post.content?.split(" ").map((word, index) =>
-                      word.startsWith("#") ? (
-                        <span key={index} style={{ color: "skyblue" }}>
-                          {word}{" "}
-                        </span>
-                      ) : (
-                        word + " "
-                      )
-                    )}
-                  </p>
+              <p className="mb-3">
+                {post.content.split(" ").map((word, index) =>
+                  word.startsWith("#") ? (
+                    <span key={index} style={{ color: "skyblue" }}>
+                      {word}{" "}
+                    </span>
+                  ) : (
+                    word + " "
+                  )
                 )}
+              </p>
+            )}
+        
             {post.image && (
               <img
                 src={post.image}
-                alt="Post"
+                alt="Post Content"
                 className="w-full rounded-lg mb-3"
               />
             )}
-            <div className="flex justify-between space-x-4">
-              <div className="flex justify-between space-x-4">
-              <button>
-                <ThumbUpOffAltIcon />
-              </button>
-              <button onClick={() => deletePostRequest(post._id)}>
+        
+            <div className="flex justify-between items-center ml-2">
+              {/* Likes and Like Button */}
+              <div className="flex items-center space-x-2">
+                <span className="font-bold text-xl">{post.likes.length}</span>
+                <button onClick={() => handleLike(post._id)}>
+                  {post.likes.includes(user._id)?<ThumbUpAltIcon />:<ThumbUpOffAltIcon />}
+                </button>
+                <button className="font-[2px]" onClick={() => deletePostRequest(post._id)}>
                 <DeleteIcon />
               </button>
-              <button onClick={()=>{bookmark(post._id)}}>
-                <TurnedInNotIcon />
-              </button>
               </div>
-          
+            
+        
+              {/* Post Date in Bottom-Right Corner */}
               <p className="text-sm text-gray-500">
                 {new Date(post.date).toLocaleDateString()}
               </p>
             </div>
           </div>
-        ))}
+        ))
+        }
       </div>
     </div>
   );
 };
 
 export default MainContent;
+
+             

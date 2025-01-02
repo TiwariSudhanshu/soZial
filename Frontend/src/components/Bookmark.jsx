@@ -60,13 +60,16 @@ const Bookmark = () => {
       </header>
       <main className="p-6">
         {posts.map((post) => (
-          <div key={post._id} className="mb-6 pb-6 border-b">
+          <div key={post._id} className="mb-6 pb-6 border-b relative">
             <div className="flex items-center space-x-4 mb-2">
               <img src={post.avatar} alt="Avatar" className="w-12 h-12 rounded-full" />
               <div>
                 <h4 className="text-lg font-bold">{post.name}</h4>
                 <p>@{post.username}</p>
               </div>
+              <button className="absolute top-0 right-0 p-2" onClick={()=>{bookmark(post.id)}}>
+                <BookmarkIcon />
+              </button>
             </div>
             {post.content && (
               <p className="mb-3">
@@ -87,9 +90,7 @@ const Bookmark = () => {
                 <button>
                   <ThumbUpOffAltIcon />
                 </button>
-                <button onClick={()=>{bookmark(post.id)}}>
-                <BookmarkIcon />
-              </button>
+              
               </div>
               <p className="text-sm text-gray-500">
                 {new Date(post.date).toLocaleDateString()}
