@@ -43,6 +43,10 @@
         width: 100%;
         margin-left: 0;
     }
+    #bookmark-box{
+      width: 100%;
+      margin-left: 0;
+    }
 }
 
 .loader {

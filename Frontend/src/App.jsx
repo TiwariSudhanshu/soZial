@@ -9,6 +9,7 @@ import AddPost from './pages/AddPost';
 import OtherProfile from './pages/OtherProfile';
 import ChatPage from './pages/ChatPage';
 import BookmarkPage from './pages/BookmarkPage';
+
 const router = createBrowserRouter([
   {
     path: "/",

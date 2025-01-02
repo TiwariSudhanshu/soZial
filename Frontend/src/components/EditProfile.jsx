@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { Link, NavLink } from "react-router-dom";
 import { editUserInfo, fetchUser, changePassword } from "../api/edit.api";
 import '../index.css'
+import { useSelector } from "react-redux";
 
 const EditProfileComponent = () => {
   const [activeSection, setActiveSection] = useState("profile");
@@ -15,6 +16,8 @@ const EditProfileComponent = () => {
     const [avatarPreview, setAvatarPreview] = useState("");
     const [coverImagePreview, setCoverImagePreview] = useState("");
     const [pageToggle, setPageToggle] = useState(true);
+     const darkMode = useSelector((state) => state.user.darkMode);
+
     const [formData, setFormData] = useState({
       name: "",
       username: "",

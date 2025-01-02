@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
-import DeleteIcon from "@mui/icons-material/Delete";
-import TurnedInNotIcon from "@mui/icons-material/TurnedInNot";
+import BookmarkIcon from '@mui/icons-material/Bookmark';
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 const Bookmark = () => {
-    const darkMode = useSelector((state) => state.user.darkMode);
-
+    const darkMode = useSelector((state) => state.user.darkMode); 
     const [posts, setPosts] = useState([])
       const bookmark = async(postId)=>{
           try {
@@ -22,7 +20,7 @@ const Bookmark = () => {
               credentials: "include"
             })
             if(response.ok){
-              toast.success("Bookmarked")
+              toast.success("UnBookmarked")
             }else{
               toast.error("Failed to bookmark")
             }
@@ -54,7 +52,6 @@ const Bookmark = () => {
     },[])
 
 
-  console.log(posts)
 
   return (
     <div className={darkMode ? "bg-gray-900 text-white min-h-screen" : "bg-gray-100 text-black min-h-screen"}>
@@ -90,11 +87,8 @@ const Bookmark = () => {
                 <button>
                   <ThumbUpOffAltIcon />
                 </button>
-                {/* <button onClick={() => deletePostRequest(post._id)}>
-                  <DeleteIcon />
-                </button> */}
                 <button onClick={()=>{bookmark(post.id)}}>
-                <TurnedInNotIcon />
+                <BookmarkIcon />
               </button>
               </div>
               <p className="text-sm text-gray-500">

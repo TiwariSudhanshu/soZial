@@ -22,4 +22,4 @@ import profileRouter from "./routes/profile.routes.js"
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/profiles", profileRouter)
 
-export {app};
+export default app;
