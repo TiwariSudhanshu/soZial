@@ -9,7 +9,7 @@ const Bookmark = () => {
     const [posts, setPosts] = useState([])
       const bookmark = async(postId)=>{
           try {
-            const response = await fetch("/api/v1/user/bookmark",{
+            const response = await fetch("/api/v1/post/bookmark",{
               method: 'post',
               headers:{
                 'Content-Type': 'application/json'
@@ -31,7 +31,7 @@ const Bookmark = () => {
         }
     const getBookMarks = async()=>{
      try {
-       const response = await fetch("/api/v1/user/getAllBookmarks",{
+       const response = await fetch("/api/v1/post/getAllBookmarks",{
          method:'get'
        })
        if(response.ok){

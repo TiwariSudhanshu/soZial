@@ -59,7 +59,7 @@ function OtherProfile() {
   };
     const handleLike = async(postId)=>{
      try {
-       const response = await fetch('/api/v1/user/like',{
+       const response = await fetch('/api/v1/post/like',{
          method: 'post',
          headers:{
            'Content-Type': 'application/json'
@@ -84,7 +84,7 @@ function OtherProfile() {
 
   const bookmark = async(postId)=>{
     try {
-      const response = await fetch("/api/v1/user/bookmark",{
+      const response = await fetch("/api/v1/post/bookmark",{
         method: 'post',
         headers:{
           'Content-Type': 'application/json'

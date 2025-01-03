@@ -42,7 +42,7 @@ const AddPostComponent = ({ setPosts, setIsDialogOpen, isDialogOpen }) => {
     formDataToSend.append("postContent", formData.postContent);
     formDataToSend.append("postImage", formData.postImage);
     try {
-      const response = await fetch("/api/v1/user/post", {
+      const response = await fetch("/api/v1/post/add", {
         method: "POST",
         body: formDataToSend,
         credentials: "include",
