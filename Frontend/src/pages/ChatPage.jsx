@@ -6,11 +6,12 @@ import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import SearchIcon from "@mui/icons-material/Search";
 import { io } from "socket.io-client";
+import '../index.css'
+
 
 const socket = io.connect("http://localhost:3000", {
   withCredentials: true,
 });
-
 function ChatPage() {
   const darkMode = useSelector((state) => state.user.darkMode);
   const [activeChat, setActiveChat] = useState(null);
@@ -21,12 +22,88 @@ function ChatPage() {
   const [message, setMessage] = useState("");
   const [chat, setChat] = useState([]);
   const [toId, setToId] = useState("");
+  const [prevChat, setPrevChat] = useState([]);
+
+  const getPrevChat = async () => {
+    try {
+      const response = await fetch('/api/v1/message/get', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from: userId,
+          to: toId,
+        }),
+      });
+  
+      // Parsing JSON response
+      const data = await response.json();
+  
+      if (response.ok) {
+        if (data.data === null || !data.data.messages) {
+          setPrevChat([]);
+        } else {
+          setPrevChat(data.data.messages);
+        }
+        // toast.success("Fetched previous chat") 
+      } else {
+        // toast.error("Error in fetching chat");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      // toast.error("An error occurred while fetching chats.");
+    }
+  };
+  
+
+  useEffect(()=>{
+    getPrevChat()
+  },[activeChat])
 
   useEffect(() => {
     socket.on("recieve", (data) => {
       setChat((prevChat) => [...prevChat, data]);
     });
+    return () => {
+      socket.off("recieve");
+    };
   }, []);
+
+  const saveMessage = async(message)=>{
+   try {
+     const response = await fetch('/api/v1/message/new',{
+       method: 'post',
+       headers:{
+         'Content-Type': 'application/json'
+       },
+       body: JSON.stringify({
+         to: toId,
+         from: userId,
+         message: message
+       })
+     })
+     if(response.ok){
+       toast.success("Success in saving message")
+     }else{
+       toast.error("Error in saving message")
+     }
+   } catch (error) {
+    console.log("Error :", error)
+    toast.error("Error in saving message")
+   }
+  }
+ 
+  const TimeDisplay = (timeStamp)=>{
+    const date = new Date(timeStamp);
+    // Format the time to AM/PM
+    const formattedTime = date.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    });
+    return formattedTime;
+  }
 
   const handleSend = (e) => {
     // e.preventDefault();
@@ -35,6 +112,7 @@ function ChatPage() {
       message: message,
       id: toId,
     };
+    saveMessage(message);
     socket.emit("message", data);
     setMessage("");
   };
@@ -95,12 +173,11 @@ function ChatPage() {
     }
   };
 
-
   return (
     <>
       <div className="flex">
         <Sidebar />
-        <div
+        <div id="main-chat-box"
           className={`min-h-screen w-[100%] flex ml-[5%] ${
             darkMode
               ? "bg-gradient-to-br from-gray-800 via-gray-900 to-black text-gray-100"
@@ -120,6 +197,7 @@ function ChatPage() {
             >
               Chat
             </h2>
+            {/* Search Input */}
             <div className="p-4 border-b border-gray-700">
               <div className="relative">
                 <input
@@ -141,6 +219,7 @@ function ChatPage() {
               </div>
             </div>
   
+            {/* Search Results or Suggestions */}
             {loader ? (
               <div className="loader ml-[50%]"></div>
             ) : (
@@ -152,7 +231,7 @@ function ChatPage() {
                   <div
                     onClick={() => {
                       setActiveChat(searchProfile);
-                      setChat([])
+                      setChat([]);
                       setToId(searchProfile._id);
                     }}
                     className="flex border-b border-gray-700 mb-10 items-center space-x-4 p-2 hover:bg-gray-700 rounded-lg cursor-pointer mt-2"
@@ -162,7 +241,7 @@ function ChatPage() {
                       alt="avatar"
                       className="w-10 h-10 rounded-full"
                     />
-                    <div>
+                    <div id="chatProfile-details">
                       <p className="font-medium">{searchProfile.name}</p>
                       <p className="text-sm text-gray-400">
                         {searchProfile.username}
@@ -178,7 +257,7 @@ function ChatPage() {
                 key={index}
                 onClick={() => {
                   setActiveChat(suggestion);
-                  setChat([])
+                  setChat([]);
                   setToId(suggestion._id);
                 }}
                 className={`flex items-center space-x-4 p-2 rounded-lg cursor-pointer ${
@@ -192,7 +271,7 @@ function ChatPage() {
                   alt="avatar"
                   className="w-10 h-10 rounded-full"
                 />
-                <div>
+                <div id="chatProfile-details">
                   <p className="font-medium">{suggestion.name}</p>
                   <p
                     className={`text-sm ${
@@ -234,36 +313,57 @@ function ChatPage() {
                 </div>
   
                 {/* Chat Messages */}
-                <div className="flex-1 p-4 overflow-y-auto">
-                  {chat.map((message) => {
-                    return (
-                      <div
-                        className="message"
-                        style={{
-                          alignSelf:
-                            message.sender === "You"
-                              ? "flex-end"
-                              : "flex-start",
-                          backgroundColor:
-                            message.sender === "You" ? "#d1f7c4" : "#f1f1f1",
-                          color: message.sender === "You" ? "#333" : "#555",
-                          padding: "10px",
-                          borderRadius: "10px",
-                          maxWidth: "fit-content",
-                          marginBottom: "10px",
-                          marginLeft: message.sender === "You" ? "auto" : "0",
-                          marginRight: message.sender === "You" ? "0" : "auto",
-                          boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.2)",
-                        }}
-                      >
-                        <p style={{ margin: 0 }}>{message.message}</p>
-                      </div>
-                    );
-                  })}
+                <div
+                  className="chat-div flex-1 p-4 overflow-y-scroll"
+                  style={{
+                    maxHeight: "calc(100vh - 200px)",
+                     // Adjust for header & input
+                  }}
+                >
+                  {prevChat.map((message, index) => (
+  <div
+    key={index}
+    className={`message flex flex-col ${
+      message.from === userId ? "items-end" : "items-start"
+    } mb-6`}
+  >
+    <div
+      className={`p-2 rounded-lg shadow-md max-w-fit ${
+        message.from === userId
+          ? "bg-green-100 text-gray-800"
+          : "bg-gray-100 text-gray-600"
+      }`}
+    >
+      <p className="m-0">{message.content}</p>
+    </div>
+    <p className="text-[10px] text-gray-500 mt-1">{TimeDisplay(message.timeStamp)}</p>
+  </div>
+))}
+
+{chat.map((message, index) => (
+  <div
+    key={index}
+    className={`message flex flex-col ${
+      message.sender === "You" ? "items-end" : "items-start"
+    } mb-6`}
+  >
+    <div
+      className={`p-2 rounded-lg shadow-md max-w-fit ${
+        message.sender === "You"
+          ? "bg-green-100 text-gray-800"
+          : "bg-gray-100 text-gray-600"
+      }`}
+    >
+      <p className="m-0">{message.message}</p>
+    </div>
+    <p className="text-[10px] text-gray-500 mt-1">{TimeDisplay(Date.now())}</p>
+  </div>
+))}
+
                 </div>
   
                 {/* Chat Input */}
-                <div
+                <div id="chatInput"
                   className={`flex items-center p-4 border-t ${
                     darkMode ? "border-gray-700" : "border-indigo-300"
                   }`}
@@ -307,6 +407,7 @@ function ChatPage() {
       </div>
     </>
   );
+  
   
 }
 

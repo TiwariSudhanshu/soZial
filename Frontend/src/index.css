@@ -47,6 +47,19 @@
       width: 100%;
       margin-left: 0;
     }
+    #main-chat-box{
+      margin-left: 0%;
+    }
+    #chatProfile-details{
+      display: none;
+    }
+    #chatInput{
+      margin-bottom: 25%;
+    }
+    #chatInput button{
+      transform: scale(0.7);
+      margin-left: -0.05vmax;
+    }
 }
 
 .loader {
@@ -122,3 +135,8 @@
       box-shadow: .2em -.2em 0 0 currentcolor;
     }
   }
+
+
+  .chat-div::-webkit-scrollbar {
+    display: none; /* WebKit browsers (Chrome, Safari, Edge) */
+}

@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/ApiError.js";
-import cookie from "cookie"; // Import 'cookie' module
+import cookie from "cookie"; 
 
 export const authenticate = (socket, next) => {
   // Get cookies from the socket handshake headers

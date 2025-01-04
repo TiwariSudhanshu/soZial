@@ -26,7 +26,7 @@ io.on('connection', (socket)=>{
   socket.on('message', (data)=>{
     io.to(data.id).emit('recieve',  {
       message: data.message,
-      sender: socket.id, // Optional: Include the sender ID
+      sender: socket.id, 
     })
     socket.emit('recieve', {
       message: data.message,
