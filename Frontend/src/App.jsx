@@ -9,6 +9,7 @@ import AddPost from './pages/AddPost';
 import OtherProfile from './pages/OtherProfile';
 import ChatPage from './pages/ChatPage';
 import BookmarkPage from './pages/BookmarkPage';
+import Chat from './components/Chat';
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,9 @@ const router = createBrowserRouter([
   {
     path: "/chat",
     element: <ChatPage/>
+  },{
+    path:"/chat/:username",
+    element: <Chat/>
   }
 ]);
 

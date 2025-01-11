@@ -50,15 +50,19 @@
     #main-chat-box{
       margin-left: 0%;
     }
-    #chatProfile-details{
-      display: none;
-    }
     #chatInput{
       margin-bottom: 25%;
     }
     #chatInput button{
       transform: scale(0.7);
       margin-left: -0.05vmax;
+    }
+    #chat-screen{
+      margin-left: 0;
+      width: 100%;
+    }
+    #chat-rightbar{
+      display: none;
     }
 }
 

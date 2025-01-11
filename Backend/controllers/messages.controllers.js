@@ -59,7 +59,6 @@ export const getChat = asyncHandler(async(req,res)=>{
                 }
             ]
         }).populate('messages')
-        console.log(chat)
         if (!chat) {
             return res.status(200).json(new ApiResponse(200, null, "Chat not found"));
           }
@@ -72,4 +71,36 @@ export const getChat = asyncHandler(async(req,res)=>{
         console.log("Error in getting chat  :", error)
         throw new ApiError(500, "Server error while getting chat ")
     }
+})
+
+export const clearChat = asyncHandler(async(req,res)=>{
+  try {
+    const {to, from} = req.body;
+    if (!to || !from) {
+        throw new ApiError(400, "Both 'to' and 'from' fields are required.");
+      }
+    const chat = await Chat.findOne({
+        $or: [
+            {
+                $and:[{user1:to},{user2:from}]
+            },
+            {
+                $and:[{user2:to},{user1:from}]
+            }
+        ]
+    })
+    if (!chat) {
+        return res.status(200).json(new ApiResponse(200, null, "Chat not found"));
+      }
+
+      await Chat.deleteOne({_id: chat._id})
+
+    res.status(200).json(
+        new ApiResponse(200, chat, "Chat cleared")
+    )
+
+} catch (error) {
+    console.log("Error in clearing chat  :", error)
+    throw new ApiError(500, "Server error while clearing chat ")
+}
 })

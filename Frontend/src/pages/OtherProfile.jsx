@@ -20,6 +20,9 @@ function OtherProfile() {
   const [followingData, setFollowingData] = useState([]);
   const [followerData, setFollowerData] = useState([]);
   const darkMode = useSelector((state) => state.user.darkMode);
+  const userData = JSON.parse(localStorage.getItem("user"));
+  const user = userData?.data?.loggedInUser || userData?.data;
+
   useEffect(() => {
     const findProfile = async () => {
       try {
@@ -361,7 +364,7 @@ function OtherProfile() {
                     onClick={() => bookmark(post._id)}
                     className="absolute top-0 right-0 p-2"
                   >
-                    {profile.bookmark.includes(post._id)?(<TurnedInIcon />):(<TurnedInNotIcon />)}
+                    {profile.bookmark.includes(user._id)?(<TurnedInIcon />):(<TurnedInNotIcon />)}
                   </button>
                 </div>
             
@@ -392,7 +395,7 @@ function OtherProfile() {
                   <div className="flex items-center space-x-2">
                     <span className="font-bold text-xl">{post.likes.length}</span>
                     <button onClick={() => handleLike(post._id)}>
-                    {post.likes.includes(profile._id)?<ThumbUpAltIcon />:<ThumbUpOffAltIcon />}
+                    {post.likes.includes(user._id)?<ThumbUpAltIcon />:<ThumbUpOffAltIcon />}
                     </button>
                   </div>
             
