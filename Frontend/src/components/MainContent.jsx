@@ -36,7 +36,41 @@ const MainContent = () => {
   const [followers, setFollowers] = useState(0);
   const [followingData, setFollowingData] = useState([]);
   const [followerData, setFollowerData] = useState([]);
+    const [postStatus, setPostStatus] = useState([]);
+  
 
+const getPostStatus = async(id)=>{
+    try {
+      const response = await fetch('/api/v1/post/postStatus',{
+        method: 'post',
+        headers:{
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          userId: id,
+          profileId: id
+        })
+      })
+      
+      if(response.ok){
+        const data = await response.json();
+        setPostStatus(data.data);
+        toast.success("Fetched status successfully")
+      }else{
+        toast.error("Error in response")
+      }
+    } catch (error) {
+      console.log("Error in getting post status :", error)
+      toast.error("Error");
+      
+    }
+  }
+
+  useEffect(()=>{
+    if(userId){
+      getPostStatus(userId);   
+    }
+  },[userId])
   const deletePostRequest = async (id) => {
     try {
       const response = await fetch("/api/v1/post/delete", {
@@ -68,6 +102,17 @@ const MainContent = () => {
        })
      })
      if(response.ok){
+      setPostStatus((prevStatus) =>
+        prevStatus.map((status) =>
+          status.postId === postId
+            ? {
+                ...status,
+                isLiked: !status.isLiked,
+                likeCount: status.isLiked ? status.likeCount - 1 : status.likeCount + 1, // Toggle likeCount
+              }
+            : status
+        )
+      );
        toast.success('liked')
      }else{
        toast.error("Error in liking")
@@ -121,6 +166,13 @@ const MainContent = () => {
           credentials: "include"
         })
         if(response.ok){
+          setPostStatus((prevStatus) =>
+            prevStatus.map((status) =>
+              status.postId === postId
+                ? { ...status, isBookmarked: !status.isBookmarked }
+                : status
+            )
+          );
           toast.success("Bookmarked")
         }else{
           toast.error("Failed to bookmark")
@@ -267,8 +319,10 @@ const MainContent = () => {
         <h3 className="text-2xl font-semibold mb-6 border-b pb-2">Posts</h3>
         {posts.slice()
         .sort((a, b) => new Date(b.date) - new Date(a.date))
-        .map((post) => (
-          <div key={post._id} className="mb-6 pb-6 border-b">
+        .map((post) => {
+          const status = postStatus?.find((status) => status.postId === post._id);
+          return(
+<div key={post._id} className="mb-6 pb-6 border-b">
             <div className="flex items-center space-x-4 mb-2 relative">
               <img
                 src={user.avatar}
@@ -285,8 +339,9 @@ const MainContent = () => {
                 onClick={() => bookmark(post._id)}
                 className="absolute top-0 right-0 p-2"
               >
-                {user.bookmark.includes(post._id)?(<TurnedInIcon />):(<TurnedInNotIcon />)}
-                
+                {/* {user.bookmark.includes(post._id)?(<TurnedInIcon />):(<TurnedInNotIcon />)} */}
+                {status?.isBookmarked?(<TurnedInIcon />):(<TurnedInNotIcon />)}
+
               </button>
             </div>
         
@@ -315,9 +370,11 @@ const MainContent = () => {
             <div className="flex justify-between items-center ml-2">
               {/* Likes and Like Button */}
               <div className="flex items-center space-x-2">
-                <span className="font-bold text-xl">{post.likes.length}</span>
+                <span className="font-bold text-xl">{status?.likeCount}</span>
                 <button onClick={() => handleLike(post._id)}>
-                  {post.likes.includes(user._id)?<ThumbUpAltIcon />:<ThumbUpOffAltIcon />}
+                  {/* {post.likes.includes(user._id)?<ThumbUpAltIcon />:<ThumbUpOffAltIcon />} */}
+                  { status?.isLiked?<ThumbUpAltIcon />:<ThumbUpOffAltIcon />}
+
                 </button>
                 <button className="font-[2px]" onClick={() => deletePostRequest(post._id)}>
                 <DeleteIcon />
@@ -331,7 +388,9 @@ const MainContent = () => {
               </p>
             </div>
           </div>
-        ))
+          )
+          
+})
         }
       </div>
     </div>

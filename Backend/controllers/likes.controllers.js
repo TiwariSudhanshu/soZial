@@ -37,26 +37,57 @@ export const like = asyncHandler(async (req, res) => {
   }
 });
 
-export const likeStatus = asyncHandler(async(req,res)=>{
-  try {
-    const {userId} = req.body;
-    const user = await User.findById(userId).populate({
-      path: "posts",
-      select: '_id likes'
-    })
+// export const likeStatus = asyncHandler(async(req,res)=>{
+//   try {
+//     const {userId} = req.body;
+//     const user = await User.findById(userId).populate({
+//       path: "posts",
+//       select: '_id likes'
+//     })
 
-    if(!user){
-      throw new ApiError(400, "User not found")
+//     if(!user){
+//       throw new ApiError(400, "User not found")
+//     }
+
+//     const posts = user.posts
+
+//     res.status(200).json(
+//       new ApiResponse(200, posts, "Post fetched")
+//     )
+
+//   } catch (error) {
+//      console.log("Error in fetching like : ", error);
+//     throw new ApiError(500, "Error in fetching like")
+//   }
+// })
+
+export const postStatus = asyncHandler(async(req,res)=>{
+  try {
+    const {profileId, userId} = req.body;
+
+    if (!profileId) {
+      throw new ApiError(400, "No profile found");
     }
 
-    const posts = user.posts
+   const responseData = []
 
-    res.status(200).json(
-      new ApiResponse(200, posts, "Post fetched")
-    )
+   const allPosts = await User.findById(profileId).populate('posts').select('posts').lean();
+   const posts = allPosts ? allPosts.posts : [];
+   const user = await User.findById(userId);
+   posts.forEach((post)=>{
+    const isLiked = post.likes?.some((likeId) => String(likeId) === String(userId)) || false; 
+    const isBookmarked = user.bookmark?.includes(post._id) || false;
+    responseData.push({
+      postId: post._id,
+      isLiked,
+      isBookmarked,
+      likeCount: post.likes.length
+    });
+   })
 
+    res.status(200).json(new ApiResponse(200, responseData, "Fetched posts"));
   } catch (error) {
-     console.log("Error in fetching like : ", error);
-    throw new ApiError(500, "Error in fetching like")
+    console.log("Error in fetching post status : ", error);
+    throw new ApiError(500, "Error in fetch post status")
   }
 })

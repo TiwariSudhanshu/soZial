@@ -12,9 +12,6 @@ import '../index.css'
 import { useNavigate } from "react-router-dom";
 
 
-// const socket = io.connect("http://localhost:3000", {
-//   withCredentials: true,
-// });
 function ChatPage() {
   const darkMode = useSelector((state) => state.user.darkMode);
   const [followingData, setFollowingData] = useState([]);

@@ -23,6 +23,8 @@ function OtherProfile() {
   const userData = JSON.parse(localStorage.getItem("user"));
   const user = userData?.data?.loggedInUser || userData?.data;
 
+  const [postStatus, setPostStatus] = useState([]);
+
   useEffect(() => {
     const findProfile = async () => {
       try {
@@ -55,6 +57,40 @@ function OtherProfile() {
   }, [username]);
 
   const profileId = profile._id;
+  // Post status
+
+  const getPostStatus = async(id)=>{
+    try {
+      const response = await fetch('/api/v1/post/postStatus',{
+        method: 'post',
+        headers:{
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          userId: user._id,
+          profileId: id
+        })
+      })
+      
+      if(response.ok){
+        const data = await response.json();
+        setPostStatus(data.data);
+        toast.success("Fetched status successfully")
+      }else{
+        toast.error("Error in response")
+      }
+    } catch (error) {
+      console.log("Error in getting post status :", error)
+      toast.error("Error");
+      
+    }
+  }
+
+  useEffect(()=>{
+    if(profileId){
+      getPostStatus(profileId);   
+    }
+  },[profileId])
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const options = { month: "short", day: "numeric" };
@@ -72,6 +108,17 @@ function OtherProfile() {
          })
        })
        if(response.ok){
+        setPostStatus((prevStatus) =>
+          prevStatus.map((status) =>
+            status.postId === postId
+              ? {
+                  ...status,
+                  isLiked: !status.isLiked,
+                  likeCount: status.isLiked ? status.likeCount - 1 : status.likeCount + 1, // Toggle likeCount
+                }
+              : status
+          )
+        );
          toast.success('liked')
        }else{
          toast.error("Error in liking")
@@ -98,7 +145,15 @@ function OtherProfile() {
         credentials: "include"
       })
       if(response.ok){
+        setPostStatus((prevStatus) =>
+          prevStatus.map((status) =>
+            status.postId === postId
+              ? { ...status, isBookmarked: !status.isBookmarked }
+              : status
+          )
+        );
         toast.success("Bookmarked")
+
       }else{
         toast.error("Failed to bookmark")
       }
@@ -107,6 +162,7 @@ function OtherProfile() {
       toast.error("Error in bookmarking")
     }
   }
+  
 
   // Follow
 
@@ -216,9 +272,10 @@ function OtherProfile() {
       </div>
     );
   };
-
   return (
-    <div className="flex"  id='main-box'>
+    <div className={`flex ${
+      darkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-800"
+    }`}  id='main-box'>
       <Sidebar />
       <div  id="main-content"
         className={`ml-[8%] mr-[23%] flex-1 ${
@@ -346,8 +403,10 @@ function OtherProfile() {
           {posts
             .slice()
             .sort((a, b) => new Date(b.date) - new Date(a.date))
-            .map((post) => (
-              <div key={post._id} className="mb-6 pb-6 border-b">
+            .map((post) => {
+              const status = postStatus?.find((status) => status.postId === post._id);
+              return(
+                <div key={post._id} className="mb-6 pb-6 border-b">
                 <div className="flex items-center space-x-4 mb-2 relative">
                   <img
                     src={profile.avatar}
@@ -364,7 +423,8 @@ function OtherProfile() {
                     onClick={() => bookmark(post._id)}
                     className="absolute top-0 right-0 p-2"
                   >
-                    {profile.bookmark.includes(user._id)?(<TurnedInIcon />):(<TurnedInNotIcon />)}
+                    {/* {profile.bookmark.includes(user._id)?(<TurnedInIcon />):(<TurnedInNotIcon />)} */}
+                    {status?.isBookmarked?(<TurnedInIcon />):(<TurnedInNotIcon />)}
                   </button>
                 </div>
             
@@ -393,10 +453,10 @@ function OtherProfile() {
                 <div className="flex justify-between items-center ml-2">
                   {/* Likes and Like Button */}
                   <div className="flex items-center space-x-2">
-                    <span className="font-bold text-xl">{post.likes.length}</span>
+                    <span className="font-bold text-xl">{status?.likeCount}</span>
                     <button onClick={() => handleLike(post._id)}>
-                    {post.likes.includes(user._id)?<ThumbUpAltIcon />:<ThumbUpOffAltIcon />}
-                    </button>
+                    { status?.isLiked?<ThumbUpAltIcon />:<ThumbUpOffAltIcon />}
+                    </button>                                                                      
                   </div>
             
                   {/* Post Date in Bottom-Right Corner */}
@@ -405,7 +465,8 @@ function OtherProfile() {
                   </p>
                 </div>
               </div>
-            ))
+              )
+            } )
             
             }
         </div>

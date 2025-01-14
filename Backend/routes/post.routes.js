@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { addNewPost, deletePost } from "../controllers/post.controllers.js";
 import { bookmark, getAllBookMark } from "../controllers/bookmark.controllers.js";
-import {  like, likeStatus } from "../controllers/likes.controllers.js";
+import {  like, postStatus } from "../controllers/likes.controllers.js";
 import { verifyJWT } from "../middleware/auth.middleware.js";
 import { upload } from "../middleware/multer.middleware.js";
 
@@ -18,6 +18,7 @@ router.route("/bookmark").post(verifyJWT, bookmark)
 router.route("/getAllBookmarks").get(verifyJWT, getAllBookMark)
 router.route("/delete").post(verifyJWT, deletePost)
 router.route("/like").post(verifyJWT, like)
-router.route("/likeStatus").post(likeStatus);
+// router.route("/likeStatus").post(likeStatus);
+router.route("/postStatus").post(postStatus)
 
 export default router;

@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import '../index.css'
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addPost } from "../../app/userSlice";
 
 const AddPostComponent = ({ setPosts, setIsDialogOpen, isDialogOpen }) => {
   const [imagePreview, setImagePreview] = useState(null);
   const [loader, setLoader] = useState(false);
   const navigate = useNavigate();
+  const darkMode = useSelector((state) => state.user.darkMode);
   const [formData, setFormData] = useState({
     postContent: "",
     postImage: "",
@@ -67,10 +68,15 @@ const AddPostComponent = ({ setPosts, setIsDialogOpen, isDialogOpen }) => {
   };
 
   return loader ? (
-    <div className="loader absolute top-[50%] left-[50%]">
-    </div>
+    <div className="loader absolute top-[50%] left-[50%]"></div>
   ) : (
-    <div className="w-full max-w-2xl mx-auto p-6 bg-white dark:bg-gray-900 rounded-lg shadow-md text-gray-800 dark:text-gray-200">
+    <div
+      className={`w-full max-w-2xl min-h-screen mx-auto p-6 rounded-lg shadow-md ${
+        darkMode
+          ? "bg-gray-900 text-gray-200"
+          : "bg-white text-gray-800"
+      }`}
+    >
       <h2 className="text-2xl font-bold mb-4 text-center">Create a New Post</h2>
       <div className="mb-4">
         <textarea
@@ -78,23 +84,41 @@ const AddPostComponent = ({ setPosts, setIsDialogOpen, isDialogOpen }) => {
           onChange={handleChange}
           value={formData.postContent}
           placeholder="What's on your mind?"
-          className="w-full p-3 rounded-lg border bg-gray-100 dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 resize-none"
+          className={`w-full p-3 rounded-lg border resize-none focus:ring-2 focus:ring-blue-500 ${
+            darkMode
+              ? "bg-gray-800 text-gray-200 border-gray-700"
+              : "bg-gray-100 text-gray-800 border-gray-300"
+          }`}
           aria-label="Post Content"
         ></textarea>
       </div>
       <div className="mb-4">
-        <label className="block text-sm font-medium mb-2">Upload Image</label>
+        <label
+          className={`block text-sm font-medium mb-2 ${
+            darkMode ? "text-gray-200" : "text-gray-800"
+          }`}
+        >
+          Upload Image
+        </label>
         <input
           type="file"
           accept="image/*"
           onChange={handleImageChange}
-          className="text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg"
+          className={`text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg ${
+            darkMode ? "file:bg-gray-700 text-gray-200" : "file:bg-gray-300"
+          }`}
           aria-label="Upload Image"
         />
       </div>
       {imagePreview && (
         <div className="mb-4">
-          <p className="text-sm font-medium mb-2">Image Preview:</p>
+          <p
+            className={`text-sm font-medium mb-2 ${
+              darkMode ? "text-gray-200" : "text-gray-800"
+            }`}
+          >
+            Image Preview:
+          </p>
           <img
             src={imagePreview}
             alt="Selected"
@@ -104,12 +128,17 @@ const AddPostComponent = ({ setPosts, setIsDialogOpen, isDialogOpen }) => {
       )}
       <button
         onClick={addNewPost}
-        className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg"
+        className={`w-full py-2 px-4 font-semibold rounded-lg ${
+          darkMode
+            ? "bg-blue-700 hover:bg-blue-800 text-gray-200"
+            : "bg-blue-600 hover:bg-blue-700 text-white"
+        }`}
       >
         Post
       </button>
     </div>
   );
+  
 };
 
 export default AddPostComponent;

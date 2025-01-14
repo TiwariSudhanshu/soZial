@@ -5,12 +5,10 @@ import Rightbar from "../components/Rightbar"
 import { useState, useEffect, useRef } from "react";
 import SendIcon from "@mui/icons-material/Send";
 import { useSelector } from "react-redux";
+import socket from "../../app/socket";
 import { toast } from "react-toastify";
-import SearchIcon from "@mui/icons-material/Search";
-import { io } from "socket.io-client";
 import '../index.css'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-const socket = io("http://localhost:3000", { withCredentials: true });
 function Chat() {
   const username = useParams();
     const darkMode = useSelector((state) => state.user.darkMode);
@@ -30,31 +28,13 @@ function Chat() {
           }
         }, [chat, prevChat]);
         useEffect(() => {
-      
-          socket.on("connect", () => {
-            console.log("Connected to socket server");
-            // Optionally, send user data to the server
-            socket.emit("join", { userId });
-          });
-      
-          // socket.on("disconnect", () => {
-          //   console.log("Disconnected from socket server");
-          // });
-      
-          return () => {
-            if (socket) {
-              socket.disconnect(); // Clean up socket connection on unmount
-            }
-          };
-        }, [userId]);
-        useEffect(() => {
           socket.on("recieve", (data) => {
             setChat((prevChat) => [...prevChat, data]);
           });
           return () => {
             socket.off("recieve");
           };
-        }, []);
+        },[navigate]);
         
         const getActiveChat = async()=>{
             try {
@@ -296,6 +276,11 @@ function Chat() {
                 placeholder="Type a message..."
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSend(); 
+                  }
+                }}
                 className={`flex-1 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 ${
                   darkMode
                     ? "bg-gray-800 border-gray-600 focus:ring-purple-500"
