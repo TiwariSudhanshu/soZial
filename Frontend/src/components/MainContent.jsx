@@ -55,7 +55,7 @@ const getPostStatus = async(id)=>{
       if(response.ok){
         const data = await response.json();
         setPostStatus(data.data);
-        toast.success("Fetched status successfully")
+        // toast.success("Fetched status successfully")
       }else{
         toast.error("Error in response")
       }
@@ -113,7 +113,7 @@ const getPostStatus = async(id)=>{
             : status
         )
       );
-       toast.success('liked')
+      //  toast.success('liked')
      }else{
        toast.error("Error in liking")
      }
@@ -173,7 +173,7 @@ const getPostStatus = async(id)=>{
                 : status
             )
           );
-          toast.success("Bookmarked")
+          // toast.success("Bookmarked")
         }else{
           toast.error("Failed to bookmark")
         }

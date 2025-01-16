@@ -48,9 +48,12 @@ const Sidebar = () => {
         <button onClick={()=>{navigate("/profile")}} className="p-3 hover:bg-gray-700 rounded-lg w-full flex justify-center">
           <FiHome size={24} />
         </button>
-        <button onClick={()=>{navigate("/chat")}}  className="p-3 hover:bg-gray-700 rounded-lg w-full flex justify-center">
+        {/* <button onClick={()=>{navigate("/chat")}}  className="p-3 hover:bg-gray-700 rounded-lg w-full flex justify-center">
           <FiMessageCircle size={24} />
-        </button>
+        </button> */}
+        <a href="/chat"  className="p-3 hover:bg-gray-700 rounded-lg w-full flex justify-center">
+          <FiMessageCircle size={24} />
+        </a>
         <button onClick={()=>{navigate("/edit")}} className="p-3 hover:bg-gray-700 rounded-lg w-full flex justify-center">
           <FiEdit size={24} />
         </button>

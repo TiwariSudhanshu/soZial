@@ -34,7 +34,15 @@ function Chat() {
           return () => {
             socket.off("recieve");
           };
-        },[navigate]);
+        },[]);
+        useEffect(() => {
+          if (performance.getEntriesByType("navigation")[0]?.type === "reload") {
+            // Skip reload if the page was already reloaded
+            return;
+          }
+          window.location.reload();
+        }, []);
+        
         
         const getActiveChat = async()=>{
             try {
@@ -105,13 +113,16 @@ function Chat() {
         
           const handleSend = (e) => {
             // e.preventDefault();
-            const data = {
-              message: message,
-              id: toId,
-            };
-            saveMessage(message);
-            socket.emit("message", data);
-            setMessage("");
+           
+  if (message.trim() !== "") { 
+    const data = {
+      message: message,
+      id: toId,
+    };
+    saveMessage(message);
+    socket.emit("message", data);
+    setMessage(""); 
+  }
           };
           const saveMessage = async(message)=>{
              try {

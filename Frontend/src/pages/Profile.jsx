@@ -5,15 +5,19 @@ import MainContent from '../components/MainContent'
 import '../index.css'
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import socket from '../../app/socket'
+// import socket from '../../app/socket'
+import { useLocation } from 'react-router-dom'
+import { io } from "socket.io-client";
 
+const socket = io("http://localhost:3000", { withCredentials: true });
 function Profile() {
   const darkMode = useSelector((state) => state.user.darkMode);
   const userData = JSON.parse(localStorage.getItem("user"));
   const user = userData?.data?.loggedInUser || userData?.data;
   const userId = user._id;
+  const location = useLocation();
   useEffect(() => {
-      
+   
     socket.on("connect", () => {
       console.log("Connected to socket server");
       // Optionally, send user data to the server
@@ -29,7 +33,7 @@ function Profile() {
         socket.disconnect(); // Clean up socket connection on unmount
       }
     };
-  }, [userId]);
+  }, []);
 
   return (
     <div className={`flex ${

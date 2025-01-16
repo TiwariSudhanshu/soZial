@@ -75,7 +75,7 @@ function OtherProfile() {
       if(response.ok){
         const data = await response.json();
         setPostStatus(data.data);
-        toast.success("Fetched status successfully")
+        // toast.success("Fetched status successfully")
       }else{
         toast.error("Error in response")
       }
@@ -119,7 +119,7 @@ function OtherProfile() {
               : status
           )
         );
-         toast.success('liked')
+        //  toast.success('liked')
        }else{
          toast.error("Error in liking")
        }
@@ -152,7 +152,7 @@ function OtherProfile() {
               : status
           )
         );
-        toast.success("Bookmarked")
+        // toast.success("Bookmarked")
 
       }else{
         toast.error("Failed to bookmark")
@@ -182,7 +182,7 @@ function OtherProfile() {
         }),
       });
       if (response.ok) {
-        toast.success("Followed");
+        // toast.success("Followed");
         setFollowed(!followed);
       } else {
         toast.error("Error in following");
@@ -237,7 +237,7 @@ function OtherProfile() {
         }),
       });
       if (response.ok) {
-        toast.success("UnFollowed");
+        // toast.success("UnFollowed");
         setFollowed(!followed);
       } else {
         toast.error("Error in unfollowing");
