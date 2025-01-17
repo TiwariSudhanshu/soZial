@@ -6,10 +6,17 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import '../index.css'
 
-
 const Sidebar = () => {
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
+
+  // Scroll to top function
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
 
   // Logout user
   const [logoutLoader, setLogoutLoader] = useState(false);
@@ -45,25 +52,37 @@ const Sidebar = () => {
 
       {/* Navigation Icons */}
       <div id="nav-side" className="flex-1 flex flex-col items-center mt-6 space-y-8">
-        <button onClick={()=>{navigate("/profile")}} className="p-3 hover:bg-gray-700 rounded-lg w-full flex justify-center">
+        <button
+          onClick={() => { navigate("/profile"); scrollToTop(); }}
+          className="p-3 hover:bg-gray-700 rounded-lg w-full flex justify-center"
+        >
           <FiHome size={24} />
         </button>
-        {/* <button onClick={()=>{navigate("/chat")}}  className="p-3 hover:bg-gray-700 rounded-lg w-full flex justify-center">
-          <FiMessageCircle size={24} />
-        </button> */}
-        <a href="/chat"  className="p-3 hover:bg-gray-700 rounded-lg w-full flex justify-center">
+        <a
+          href="/chat"
+          onClick={scrollToTop}
+          className="p-3 hover:bg-gray-700 rounded-lg w-full flex justify-center"
+        >
           <FiMessageCircle size={24} />
         </a>
-        <button onClick={()=>{navigate("/edit")}} className="p-3 hover:bg-gray-700 rounded-lg w-full flex justify-center">
+        <button
+          onClick={() => { navigate("/edit"); scrollToTop(); }}
+          className="p-3 hover:bg-gray-700 rounded-lg w-full flex justify-center"
+        >
           <FiEdit size={24} />
         </button>
-        <button onClick={()=>{navigate("/add")}} className="p-3 hover:bg-gray-700 rounded-lg w-full flex justify-center">
+        <button
+          onClick={() => { navigate("/add"); scrollToTop(); }}
+          className="p-3 hover:bg-gray-700 rounded-lg w-full flex justify-center"
+        >
           <FiPlusSquare size={24} />
         </button>
-        <button onClick={()=>{navigate("/bookmark")}} className="p-3 hover:bg-gray-700 rounded-lg w-full flex justify-center">
+        <button
+          onClick={() => { navigate("/bookmark"); scrollToTop(); }}
+          className="p-3 hover:bg-gray-700 rounded-lg w-full flex justify-center"
+        >
           <FaBookmark size={24} />
         </button>
-        
       </div>
 
       {/* Divider */}
@@ -93,7 +112,7 @@ const Sidebar = () => {
                 Cancel
               </button>
               <button
-                onClick={() =>logoutUser()}
+                onClick={() => logoutUser()}
                 className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
               >
                 Logout

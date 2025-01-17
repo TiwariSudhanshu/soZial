@@ -264,7 +264,7 @@ function OtherProfile() {
               className="w-10 h-10 rounded-full"
             />
             <div>
-              <p className="font-medium">{user.name}</p>
+              <p className="font-medium text-black">{user.name}</p>
               <p className="text-sm text-gray-500">{user.username}</p>
             </div>
           </div>
@@ -311,26 +311,27 @@ function OtherProfile() {
                 <p>@{profile.username}</p>
               </div>
               {followed ? (
-                <button
-                  className="bg-gradient-to-r from-green-400 via-teal-500 to-blue-500 text-white px-6 py-2 rounded-full shadow-md hover:shadow-lg transform transition-transform hover:scale-105"
-                  id="follow-btn"
-                  onClick={() => {
-                    handleUnfollow();
-                  }}
-                >
-                  Following
-                </button>
-              ) : (
-                <button
-                  className="bg-indigo-600 text-white px-6 py-2 rounded-full shadow-md hover:bg-blue-500 transform transition-transform hover:scale-105"
-                  id="follow-btn"
-                  onClick={() => {
-                    handleFollow();
-                  }}
-                >
-                  Follow
-                </button>
-              )}
+ <button
+ className="bg-gray-400 text-white px-6 py-2 rounded-full shadow-md hover:bg-gray-500 transform transition-transform hover:scale-105"
+ id="follow-btn"
+ onClick={() => {
+   handleUnfollow();
+ }}
+>
+ Following
+</button>
+) : (
+  <button
+    className="bg-indigo-600 text-white px-6 py-2 rounded-full shadow-md hover:bg-blue-500 transform transition-transform hover:scale-105"
+    id="follow-btn"
+    onClick={() => {
+      handleFollow();
+    }}
+  >
+    Follow
+  </button>
+)}
+
             </div>
 
             <div className="mt-2 flex space-x-6">
@@ -356,43 +357,42 @@ function OtherProfile() {
           </div>
         </div>
         {popupVisible && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white w-96 p-6 rounded-lg shadow-lg">
-              <div className="flex justify-between items-center mb-4">
-                <div className="flex space-x-4">
-                  <button
-                    onClick={() => setActiveTab("followers")}
-                    className={`text-lg font-bold ${
-                      activeTab === "followers"
-                        ? "border-b-2 border-blue-500 text-blue-600"
-                        : "text-gray-500"
-                    }`}
-                  >
-                    Followers
-                  </button>
-                  <button
-                    onClick={() => setActiveTab("following")}
-                    className={`text-lg font-bold ${
-                      activeTab === "following"
-                        ? "border-b-2 border-blue-500 text-blue-600"
-                        : "text-gray-500"
-                    }`}
-                  >
-                    Following
-                  </button>
-                </div>
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white w-96 p-6 rounded-lg shadow-lg h-96 overflow-scroll" id="scroll-div">
+            <div className="flex justify-between items-center mb-4">
+              <div className="flex space-x-4">
                 <button
-                  onClick={() => setPopupVisible(false)}
-                  className="text-gray-600 hover:text-gray-800"
+                  onClick={() => setActiveTab("followers")}
+                  className={`text-lg font-bold ${
+                    activeTab === "followers"
+                      ? "border-b-2 border-blue-500 text-blue-600"
+                      : "text-gray-500"
+                  }`}
                 >
-                  Close
+                  Followers
+                </button>
+                <button
+                  onClick={() => setActiveTab("following")}
+                  className={`text-lg font-bold ${
+                    activeTab === "following"
+                      ? "border-b-2 border-blue-500 text-blue-600"
+                      : "text-gray-500"
+                  }`}
+                >
+                  Following
                 </button>
               </div>
-              {renderPopupContent()}
+              <button
+                onClick={() => setPopupVisible(false)}
+                className="text-gray-600 hover:text-gray-800"
+              >
+                Close
+              </button>
             </div>
+            <div className="h-full">{renderPopupContent()}</div>
           </div>
-        )}
-
+        </div>
+      )}
         {/* Posts Section */}
         <div
           className={`mt-10 p-6 ${

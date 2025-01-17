@@ -49,7 +49,7 @@ export const registerUser = asyncHandler(async (req, res) => {
 
   // Check if user with the same username, email, or mobile number already exists
   const existedUser = await User.findOne({
-    $or: [{username}, {email}, {mobileNo}],
+    $or: [{username}, {email}],
   });
                   
   if (existedUser) {

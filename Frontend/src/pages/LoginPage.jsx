@@ -85,9 +85,6 @@ const LoginPage = () => {
           : "bg-gradient-to-r from-purple-100 via-indigo-200 to-purple-300"
       }`}
     >
-      {loader ? (
-        <div className="loader"></div>
-      ) : (
         <div
           className={`${
             darkMode
@@ -157,7 +154,11 @@ const LoginPage = () => {
                 } focus:outline-none focus:ring-2`}
               />
             </div>
-            <button
+            <div className="flex items-center justify-center">
+              {loader?(<>
+              <div className="loader"></div>
+              </>):(<>
+                <button
               type="submit"
               className={`w-full py-3 text-lg font-semibold rounded-lg transition-all duration-300 ${
                 darkMode
@@ -167,6 +168,9 @@ const LoginPage = () => {
             >
               Log In
             </button>
+              </>)}
+            </div>
+            
           </form>
           <div className="flex items-center my-6">
             <hr className="w-full border-gray-300" />
@@ -205,7 +209,7 @@ const LoginPage = () => {
             </p>
           </div>
         </div>
-      )}
+      
     </div>
   );
 };

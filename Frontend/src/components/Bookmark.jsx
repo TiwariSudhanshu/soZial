@@ -59,7 +59,8 @@ const Bookmark = () => {
         <h1 className="text-2xl font-bold">Bookmarks</h1>
       </header>
       <main className="p-6">
-        {posts.map((post) => (
+        {posts.sort((a, b) => new Date(b.date) - new Date(a.date))
+        .map((post) => (
           <div key={post._id} className="mb-6 pb-6 border-b relative">
             <div className="flex items-center space-x-4 mb-2">
               <img src={post.avatar} alt="Avatar" className="w-12 h-12 rounded-full" />

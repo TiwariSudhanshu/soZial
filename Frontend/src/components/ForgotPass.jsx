@@ -39,6 +39,7 @@ function ForgotPass() {
 
 //   APIs
   const forgotPassword = async(email, newPass, confirmPass)=>{
+    setLoader(true);
    try {
      const response = await fetch('api/v1/verify/forgotPass',{
        method: 'post',
@@ -61,10 +62,13 @@ function ForgotPass() {
    } catch (error) {
     console.log("Error in changing password", error);
     toast.error("Error");
+   }finally{
+    setLoader(false)
    }
   }
 
   const sendMail = async (email) => {
+    setLoader(true);
       try {
         const response = await fetch("/api/v1/verify/sendOTP", {
           method: "post",
@@ -84,6 +88,8 @@ function ForgotPass() {
       } catch (error) {
         console.log("Error :", error);
         toast.error("Error");
+      }finally{
+        setLoader(false)
       }
     };
   
@@ -181,10 +187,16 @@ function ForgotPass() {
                 }`}
               />
             </div>
+           <div className="flex justify-center items-center">
+           {loader?(<>
+            <div className="loader"></div>
+            </>):(<>
             <button onClick={()=>{forgotPassword(email, newPassData.newPass, newPassData.confirmPass)}}
              className="w-full py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-500 transition-all duration-300">
               Change Password
             </button>
+            </>)}
+           </div>
           </>
         ) : (
           <>
@@ -212,67 +224,70 @@ function ForgotPass() {
                 }`}
               />
             </div>
-            <button
+           <div className="flex justify-center items-center"> {loader?(<>
+            <div className="loader"></div>
+            </>):(
+              <>
+                <button
               className="w-full py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-500 transition-all duration-300"
               onClick={async()=>{
                 await sendMail(email);
                 setModalOpen(true);
               }}
-            >{loader?(
-                <>
-                <div className="loader"></div>
-                </>
-            ):(
-                <>
-                Send OTP
-                </>
-            )}
-              
+            >          
+                Send OTP           
             </button>
+              </>
+            )}</div>
+          
           </>
         )}
       </div>
 
       {modalOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
-          onClick={() => setModalOpen(false)}
-        >
-          <div
-            className={`${
-              darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-900"
-            } p-8 rounded-lg shadow-lg w-1/3`}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h2 className="text-2xl mb-4">Verify OTP</h2>
-            <div className="flex space-x-2 mb-4">
-              {[...Array(6)].map((_, index) => (
-                <input
-                  key={index}
-                  type="text"
-                  maxLength="1"
-                  className="w-12 h-12 text-center text-xl text-black border border-gray-300 rounded-lg"
-                  value={otp[index]}
-                  onChange={(e) => handleOtpChange(e, index)}
-                  ref={(el) => (otpRefs.current[index] = el)}
-                />
-              ))}
-            </div>
-            <button
-              className="mt-4 w-full py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-500"
-              onClick={(e) => verifyOTP(e, otp)}
-            >
-              Verify
-            </button>
-            <button
-              className="mt-4 w-full py-2 bg-gray-500 text-white rounded-lg"
-              onClick={() => setModalOpen(false)}
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
+  <div
+    className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+    onClick={() => setModalOpen(false)}
+  >
+    <div
+      className={`${
+        darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-900"
+      } p-8 rounded-lg shadow-lg w-11/12 sm:w-1/3`}
+      onClick={(e) => e.stopPropagation()}
+    >
+      <h2 className="text-2xl mb-4">Verify OTP</h2>
+      <div className="flex space-x-2 mb-4 justify-center">
+        {[...Array(6)].map((_, index) => (
+          <input
+            key={index}
+            type="number"
+            maxLength="1"
+            className="w-12 h-12 text-center text-xl text-black border border-gray-300 rounded-lg"
+            value={otp[index]}
+            onChange={(e) => handleOtpChange(e, index)}
+            ref={(el) => (otpRefs.current[index] = el)}
+          />
+        ))}
+      </div>
+      <div className="flex items-center justify-center">{loader?(<>
+      <div className="loader"></div>
+      </>):(<>
+        <button
+        onClick={(e) => verifyOTP(e, otp)}
+        className="mt-4 w-full py-2 bg-purple-600 text-white rounded-lg relative"
+      >Verify
+        </button>
+      </>)}</div>
+      <button
+        className="mt-4 w-full py-2 bg-gray-500 text-white rounded-lg"
+        onClick={() => setModalOpen(false)}
+      >
+        Close
+      </button>
+    </div>
+  </div>
+)}
+
     </div>
   );
 }

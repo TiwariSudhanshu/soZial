@@ -205,24 +205,20 @@ const SignupPage = () => {
               )
             )}
           </div>
-
-          <button
+           <div className="flex justify-center items-center"> {loader?(<>
+            <div className="loader"></div>
+            </>):(<>
+              <button
             type="submit"
             className={`w-full mt-6 py-3 text-lg font-semibold rounded-lg transition-all duration-300 ${
               darkMode
                 ? "bg-purple-600 text-white hover:bg-purple-500"
                 : "bg-gray-400 text-gray-900 hover:bg-gray-500"
             }`}
-            disabled={loader}
           >
-            {loader ? (
-              <div className="loader flex justify-center items-center">
-                <div className="w-6 h-6 border-4 border-t-4 border-white border-solid rounded-full animate-spin"></div>
-              </div>
-            ) : (
-              "Sign Up"
-            )}
-          </button>
+              Sign Up
+          </button></>)}</div>
+          
 
           <div className="flex items-center my-6">
             <hr className="w-full border-gray-300" />
@@ -254,59 +250,57 @@ const SignupPage = () => {
 
       {/* Modal */}
       {modalOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
-          onClick={() => setModalOpen(false)}
-        >
-          <div
-            className={`${
-              darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-900"
-            } p-8 rounded-lg shadow-lg w-1/3`}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h2 className="text-2xl mb-4">Verify OTP</h2>
+  <div
+    className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+    onClick={() => setModalOpen(false)}
+  >
+    <div
+      className={`${
+        darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-900"
+      } p-6 sm:p-8 rounded-lg shadow-lg w-11/12 sm:w-1/3`}
+      onClick={(e) => e.stopPropagation()}
+    >
+      <h2 className="text-2xl mb-4">Verify OTP</h2>
 
-            {/* OTP Input */}
-            <div className="flex space-x-2 mb-4">
-              {[...Array(6)].map((_, index) => (
-                <input
-                  key={index}
-                  type="text"
-                  maxLength="1"
-                  className="w-12 h-12 text-center text-xl text-black border border-gray-300 rounded-lg"
-                  value={otp[index]}
-                  onChange={(e) => handleOtpChange(e, index)}
-                  onFocus={(e) => e.target.select()}
-                  ref={(el) => otpRefs.current[index] = el}
-                />
-              ))}
-            </div>
+      {/* OTP Input */}
+      <div className="flex space-x-2 mb-4 justify-center">
+        {[...Array(6)].map((_, index) => (
+          <input
+            key={index}
+            type="number"
+            maxLength="1"
+            className="w-12 h-12 text-center text-xl text-black border border-gray-300 rounded-lg"
+            value={otp[index]}
+            onChange={(e) => handleOtpChange(e, index)}
+            onFocus={(e) => e.target.select()}
+            ref={(el) => otpRefs.current[index] = el}
+          />
+        ))}
+      </div>
 
-            {/* Verify Button */}
-            <button
-              onClick={(e) => verifyOTP(e, otp)}
-              className="mt-4 w-full py-2 bg-purple-600 text-white rounded-lg relative"
-              disabled={loader}
-            >
-              {loader ? (
-                <div className="loader absolute inset-0 flex justify-center items-center">
-                  <div className="w-6 h-6 border-4 border-t-4 border-white border-solid rounded-full animate-spin"></div>
-                </div>
-              ) : (
-                "Verify"
-              )}
-            </button>
+      {/* Verify Button */}
+      <div className="flex justify-center items-center">{loader?(<>
+      <div className="loader"></div>
+      </>):(<>
+        <button
+        onClick={(e) => verifyOTP(e, otp)}
+        className="mt-4 w-full py-2 bg-purple-600 text-white rounded-lg relative"
+        disabled={loader}
+      >Verify
+        </button>
+      </>)}</div>
 
-            {/* Close Button */}
-            <button
-              onClick={() => setModalOpen(false)}
-              className="mt-4 w-full py-2 bg-gray-500 text-white rounded-lg"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
+      {/* Close Button */}
+      <button
+        onClick={() => setModalOpen(false)}
+        className="mt-4 w-full py-2 bg-gray-500 text-white rounded-lg"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };

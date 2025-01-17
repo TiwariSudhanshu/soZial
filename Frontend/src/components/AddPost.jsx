@@ -67,14 +67,10 @@ const AddPostComponent = ({ setPosts, setIsDialogOpen, isDialogOpen }) => {
     }
   };
 
-  return loader ? (
-    <div className="loader absolute top-[50%] left-[50%]"></div>
-  ) : (
+  return (
     <div
       className={`w-full max-w-2xl min-h-screen mx-auto p-6 rounded-lg shadow-md ${
-        darkMode
-          ? "bg-gray-900 text-gray-200"
-          : "bg-white text-gray-800"
+        darkMode ? "bg-gray-900 text-gray-200" : "bg-white text-gray-800"
       }`}
     >
       <h2 className="text-2xl font-bold mb-4 text-center">Create a New Post</h2>
@@ -126,16 +122,22 @@ const AddPostComponent = ({ setPosts, setIsDialogOpen, isDialogOpen }) => {
           />
         </div>
       )}
-      <button
-        onClick={addNewPost}
-        className={`w-full py-2 px-4 font-semibold rounded-lg ${
-          darkMode
-            ? "bg-blue-700 hover:bg-blue-800 text-gray-200"
-            : "bg-blue-600 hover:bg-blue-700 text-white"
-        }`}
-      >
-        Post
-      </button>
+      <div className="flex justify-center items-center">
+        {loader ? (
+          <div className="loader"></div>
+        ) : (
+          <button
+            onClick={addNewPost}
+            className={`w-full py-2 px-4 font-semibold rounded-lg ${
+              darkMode
+                ? "bg-blue-700 hover:bg-blue-800 text-gray-200"
+                : "bg-blue-600 hover:bg-blue-700 text-white"
+            }`}
+          >
+            Post
+          </button>
+        )}
+      </div>
     </div>
   );
   

@@ -144,3 +144,6 @@
   .chat-div::-webkit-scrollbar {
     display: none; /* WebKit browsers (Chrome, Safari, Edge) */
 }
+#scroll-div::-webkit-scrollbar {
+  display: none; /* WebKit browsers (Chrome, Safari, Edge) */
+}
