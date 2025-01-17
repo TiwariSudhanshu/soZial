@@ -40,6 +40,43 @@ const LoginPage = () => {
     }
   };
 
+
+  const verifyOTP = async (e, userOTP) => {
+      e.preventDefault();
+      setLoader(true);
+      try {
+        setLoader(true);
+        const response = await fetch("/api/v1/verify/verifyOTP", {
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userOTP: userOTP.join(""),
+          }),
+        });
+        const data = await response.json();
+        if (response.ok) {
+          if (data.data) {
+            toast.success("Email Verified");
+            setIsVerified(true);
+            navigate("/register", {
+              state: { email: formData.email, mobileNo: formData.mobileNo, password: formData.password }
+            });
+          } else {
+            toast.error("Incorrect OTP");
+          }
+        } else {
+          toast.error("Failed in verification of otp ");
+        }
+      } catch (error) {
+        console.log("Error :", error);
+        toast.error("Error");
+      } finally {
+        setLoader(false);
+      }
+    };
+
   return (
     <div
       className={`flex items-center justify-center h-screen ${
@@ -144,7 +181,7 @@ const LoginPage = () => {
           </div>
           <div className="flex flex-col items-center space-y-4">
             <a
-              href="/forgot-password"
+              href="/forgot"
               className={`text-lg ${
                 darkMode
                   ? "text-purple-500 hover:text-purple-400"

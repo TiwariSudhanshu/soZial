@@ -10,6 +10,7 @@ import OtherProfile from './pages/OtherProfile';
 import ChatPage from './pages/ChatPage';
 import BookmarkPage from './pages/BookmarkPage';
 import Chat from './components/Chat';
+import ForgotPass from './components/ForgotPass';
 
 const router = createBrowserRouter([
   {
@@ -50,6 +51,9 @@ const router = createBrowserRouter([
   },{
     path:"/chat/:username",
     element: <Chat/>
+  },{
+    path: '/forgot',
+    element: <ForgotPass/>
   }
 ]);
 

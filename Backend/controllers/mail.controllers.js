@@ -2,6 +2,7 @@ import nodemailer from "nodemailer";
 import {asyncHandler} from "../utils/asyncHandler.js";
 import {ApiError} from "../utils/ApiError.js";
 import {ApiResponse} from "../utils/ApiResponse.js";
+import { User } from "../models/user.model.js";
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -66,5 +67,36 @@ export const verifyOTP = asyncHandler(async(req, res)=>{
         console.log("Error :", error);
         throw new ApiError(500, "Server error in sending Mail");
         
+    }
+})
+
+export const forgotPass = asyncHandler(async(req,res)=>{
+   try {
+      const { email, newPass, confirmPass} = req.body;
+      if  (!email || !newPass || !confirmPass) {
+        return res.status(400).json({ message: "All fields are required" });
+    }
+    
+      const user = await User.findOne({email})
+  
+      if (!user) {
+        throw new ApiError(400, "User not found");
+      }
+    
+      
+  
+    
+      if(newPass != confirmPass){
+        throw new ApiError(400, "Confirm password does not matches the new password")
+      }
+    
+      user.password = newPass;
+      await user.save();
+    
+      res.status(200).json(
+        new ApiResponse(200, "Password Changed")
+      )
+    } catch (error) {
+      console.log("Error in changing password ", error)
     }
 })
