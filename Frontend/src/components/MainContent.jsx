@@ -2,13 +2,12 @@ import React, { useState, useEffect } from "react";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import TurnedInNotIcon from "@mui/icons-material/TurnedInNot";
 import DeleteIcon from "@mui/icons-material/Delete";
-import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
-import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import TurnedInIcon from "@mui/icons-material/TurnedIn";
-
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 const MainContent = () => {
   const [popupVisible, setPopupVisible] = useState(false);
   const [activeTab, setActiveTab] = useState("followers");
@@ -236,7 +235,7 @@ const MainContent = () => {
               className="w-32 h-32 rounded-full border-4 border-white"
             />
           </div>
-          <div className="mt-4 flex justify-between">
+          <div className="mt-4 flex justify-between mb-2">
             <div>
               <h2 className="text-3xl font-bold">{user.name}</h2>
               <p>@{user.username}</p>
@@ -367,6 +366,7 @@ const MainContent = () => {
                     src={post.image}
                     alt="Post Content"
                     className="w-full rounded-lg mb-3"
+                    onDoubleClick={() => handleLike(post._id)}
                   />
                 )}
 
@@ -379,9 +379,9 @@ const MainContent = () => {
                     <button onClick={() => handleLike(post._id)}>
                       {/* {post.likes.includes(user._id)?<ThumbUpAltIcon />:<ThumbUpOffAltIcon />} */}
                       {status?.isLiked ? (
-                        <ThumbUpAltIcon />
+                        <FavoriteIcon style={{color:'red'}}/>
                       ) : (
-                        <ThumbUpOffAltIcon />
+                        <FavoriteBorderIcon/>
                       )}
                     </button>
                     <button

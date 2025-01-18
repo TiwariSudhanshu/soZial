@@ -182,14 +182,14 @@ function Chat() {
                   toast.error("Error in clearing")
                 }
               }
-             
-              if (!activeChat) return <div className="loader"></div>;
+
   return (
-    <div className={`flex ${
+    <div className={`flex min-h-screen ${
       darkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-800"
     }`} id='main-box'>
       <Sidebar/>
-      <div className="w-3/4 p-4 relative min-h-screen ml-[5vmax]" id="chat-screen">
+      {activeChat?(<>
+        <div className="w-3/4 p-4 relative min-h-screen ml-[5vmax]" id="chat-screen">
           <div className="flex flex-col h-full" >
             {/* Chat Header */}
             <div
@@ -214,19 +214,21 @@ function Chat() {
                 </p>
               </div>
               <button
-                onClick={clearChat}
-                className="absolute right-8 border p-2 rounded-md"
-              >
-                Clear chat
-              </button>
+                  onClick={clearChat}
+                  className="absolute right-8 border p-3 sm:p-2 rounded-md text-xs sm:text-sm md:text-base"
+                  >
+                   Clear chat
+                </button>
+
             </div>
 
             {/* Chat Messages */}
             <div
+              
               ref={chatContainerRef}
               className="chat-div flex-1 p-4 overflow-y-scroll"
               style={{
-                maxHeight: "calc(100vh - 200px)",
+                maxHeight: "calc(100vh - 230px)",
                 // Adjust for header & input
               }}
             >
@@ -279,7 +281,7 @@ function Chat() {
             <div
               id="chatInput"
               className={`flex items-center w-[96%] absolute bottom-2 p-4 border-t ${
-                darkMode ? "border-gray-700" : "border-indigo-300"
+                darkMode ? "border-gray-700 bg-gray-900" : "border-indigo-300"
               }`}
             >
               <input
@@ -313,6 +315,12 @@ function Chat() {
             </div>
           </div>
       </div>
+      </>):(<>
+      <div className="flex items-center justify-center">
+      <div className="loader"></div>     
+      </div>
+      </>
+    )}
       <div id="chat-rightbar">
       <Rightbar/>
       </div>

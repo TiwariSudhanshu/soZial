@@ -13,6 +13,7 @@
        width: 100%;
        height: auto;
        padding: 2vmax;
+       z-index: 999;
     }
     #rightbar{
         position: static;
@@ -51,7 +52,8 @@
       margin-left: 0%;
     }
     #chatInput{
-      margin-bottom: 25%;
+      margin-bottom: 20%;
+      z-index: 100;
     }
     #chatInput button{
       transform: scale(0.7);
@@ -61,6 +63,10 @@
       margin-left: 0;
       width: 100%;
     }
+    #chat-button{
+      margin-top: 0px;
+    }
+
     #chat-rightbar{
       display: none;
     }
@@ -142,8 +148,10 @@
 
 
   .chat-div::-webkit-scrollbar {
-    display: none; /* WebKit browsers (Chrome, Safari, Edge) */
+    display: none; 
 }
 #scroll-div::-webkit-scrollbar {
-  display: none; /* WebKit browsers (Chrome, Safari, Edge) */
+  display: none;
 }
+
+

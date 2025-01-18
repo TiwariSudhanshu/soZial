@@ -1,8 +1,8 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import TurnedInNotIcon from "@mui/icons-material/TurnedInNot";
-import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
-import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { useSelector } from "react-redux";
 import Sidebar from "../components/Sidebar";
 import Rightbar from "../components/Rightbar";
@@ -305,7 +305,7 @@ function OtherProfile() {
                 className="w-32 h-32 rounded-full border-4 border-white"
               />
             </div>
-            <div className="flex justify-between items-center w-full mt-4">
+            <div className="flex justify-between items-center w-full mt-4 mb-4">
               <div>
                 <h2 className="text-3xl font-bold">{profile.name}</h2>
                 <p>@{profile.username}</p>
@@ -447,6 +447,7 @@ function OtherProfile() {
                     src={post.image}
                     alt="Post Content"
                     className="w-full rounded-lg mb-3"
+                    onDoubleClick={() => handleLike(post._id)}
                   />
                 )}
             
@@ -455,7 +456,11 @@ function OtherProfile() {
                   <div className="flex items-center space-x-2">
                     <span className="font-bold text-xl">{status?.likeCount}</span>
                     <button onClick={() => handleLike(post._id)}>
-                    { status?.isLiked?<ThumbUpAltIcon />:<ThumbUpOffAltIcon />}
+                    {status?.isLiked ? (
+                        <FavoriteIcon style={{color:'red'}}/>
+                      ) : (
+                        <FavoriteBorderIcon/>
+                      )}
                     </button>                                                                      
                   </div>
             

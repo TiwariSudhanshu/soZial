@@ -47,7 +47,7 @@ const Sidebar = () => {
     <div id='sidebar' className="h-screen w-20 bg-gray-800 text-white flex flex-col fixed left-0">
       {/* Logo at the top */}
       <div id="logo" className="p-4 flex items-center justify-center border-b border-gray-700">
-        <h1 className="text-2xl font-bold">P</h1>
+        <h1 className="text-2xl font-bold">S</h1>
       </div>
 
       {/* Navigation Icons */}
@@ -61,7 +61,8 @@ const Sidebar = () => {
         <a
           href="/chat"
           onClick={scrollToTop}
-          className="p-3 hover:bg-gray-700 rounded-lg w-full flex justify-center"
+          id="chat-button"
+          className="p-3  hover:bg-gray-700 rounded-lg w-full mt-6 flex justify-center "
         >
           <FiMessageCircle size={24} />
         </a>
@@ -100,27 +101,30 @@ const Sidebar = () => {
 
       {/* Logout Modal */}
       {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white relative rounded-lg p-6 shadow-lg w-80 text-gray-800">
-            <h2 className="text-xl font-semibold mb-4">Logout</h2>
-            <p className="text-gray-600 mb-6 z-50">Are you sure you want to logout?</p>
-            <div className="flex justify-end space-x-4">
-              <button
-                onClick={() => setShowModal(false)}
-                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => logoutUser()}
-                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-              >
-                Logout
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+  <div
+    className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[999]" // Ensure high z-index
+  >
+    <div className="bg-white relative rounded-lg p-6 shadow-lg w-80 text-gray-800 z-50">
+      <h2 className="text-xl font-semibold mb-4">Logout</h2>
+      <p className="text-gray-600 mb-6">Are you sure you want to logout?</p>
+      <div className="flex justify-end space-x-4">
+        <button
+          onClick={() => setShowModal(false)}
+          className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={() => logoutUser()}
+          className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+        >
+          Logout
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };

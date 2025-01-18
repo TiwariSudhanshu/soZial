@@ -92,7 +92,7 @@ const Rightbar = () => {
             onChange={(e) => setSearchUsername(e.target.value)}
             className="w-full bg-gray-700 text-white p-2 pl-10 rounded-lg outline-none focus:bg-gray-600"
             onKeyDown={(e) => {
-              if (e.key === "Enter") searchProfileRequest();
+              if (e.key === "Enter") searchProfileRequest(e);
             }}
           />
           <button onClick={searchProfileRequest}>

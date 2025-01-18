@@ -61,8 +61,8 @@ const Bookmark = () => {
       <main className="p-6">
         {posts.sort((a, b) => new Date(b.date) - new Date(a.date))
         .map((post) => (
-          <div key={post._id} className="mb-6 pb-6 border-b relative">
-            <div className="flex items-center space-x-4 mb-2">
+          <div key={post._id} className="mb-6 pb-6 border-b ">
+            <div className="flex items-center space-x-4 mb-2 ">
               <img src={post.avatar} alt="Avatar" className="w-12 h-12 rounded-full" />
               <div>
                 <h4 className="text-lg font-bold">{post.name}</h4>
@@ -89,7 +89,7 @@ const Bookmark = () => {
             <div className="flex justify-between space-x-4">
               <div className="flex space-x-4">
                 <button>
-                  <ThumbUpOffAltIcon />
+                  
                 </button>
               
               </div>
@@ -101,7 +101,7 @@ const Bookmark = () => {
         ))}
       </main>
     </div>
-  );
+  ); 
 };
 
 export default Bookmark;

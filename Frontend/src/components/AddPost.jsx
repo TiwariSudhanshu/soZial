@@ -107,21 +107,22 @@ const AddPostComponent = ({ setPosts, setIsDialogOpen, isDialogOpen }) => {
         />
       </div>
       {imagePreview && (
-        <div className="mb-4">
-          <p
-            className={`text-sm font-medium mb-2 ${
-              darkMode ? "text-gray-200" : "text-gray-800"
-            }`}
-          >
-            Image Preview:
-          </p>
-          <img
-            src={imagePreview}
-            alt="Selected"
-            className="w-full h-64 object-cover rounded-lg border"
-          />
-        </div>
-      )}
+  <div className="mb-4">
+    <p
+      className={`text-sm font-medium mb-2 ${
+        darkMode ? "text-gray-200" : "text-gray-800"
+      }`}
+    >
+      Image Preview:
+    </p>
+    <img
+      src={imagePreview}
+      alt="Selected"
+      className="w-full h-auto object-contain rounded-lg border"
+    />
+  </div>
+)}
+
       <div className="flex justify-center items-center">
         {loader ? (
           <div className="loader"></div>

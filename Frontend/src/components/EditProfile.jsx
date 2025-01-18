@@ -130,11 +130,14 @@ const EditProfileComponent = () => {
   
     if (!user) {
       return (
-        <div className="loading-div">
-          <div className="loader absolute top-[50%] left-[50%]"></div>
+        <div
+          className={`loading-div h-screen w-full ${darkMode ? 'bg-gray-900' : 'bg-gray-100'} flex justify-center items-center`}
+        >
+          <div className="loader"></div>
         </div>
       );
     }
+    
     
     return(
       <div
@@ -274,20 +277,19 @@ const EditProfileComponent = () => {
           <div>
             <label className="block text-sm mb-1">Cover Image</label>
             {coverImagePreview ? (
-              <div
-                className="w-full h-32 object-cover rounded-lg mb-2"
-                style={{
-                  backgroundImage: `url(${coverImagePreview})`,
-                }}
-              ></div>
-            ) : user?.coverImage ? (
-              <div
-                className="w-full h-32 object-cover rounded-lg mb-2"
-                style={{
-                  backgroundImage: `url(${user.coverImage})`,
-                }}
-              ></div>
-            ) : null}
+   <img
+    src={coverImagePreview}
+    alt="Cover Preview"
+    className="w-full h-auto rounded-lg mb-2"
+    />
+  ) : user?.coverImage ? (
+  <img
+    src={user.coverImage}
+    alt="User Cover"
+    className="w-full h-auto rounded-lg mb-2"
+  />
+  ) : null}
+
             <input
               type="file"
               accept="image/*"

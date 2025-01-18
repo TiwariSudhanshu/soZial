@@ -65,8 +65,6 @@ export const changeInfo = asyncHandler(async (req, res) => {
 
     if (coverImage) {
       user.coverImage = coverImage.secure_url;
-    } else {
-      user.coverImage = null; // Set to null if no cover image is uploaded
     }
 
     await user.save();
