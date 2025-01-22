@@ -149,7 +149,7 @@ const SignupPage = () => {
           style={{
             backgroundImage: darkMode
               ? "linear-gradient(to bottom, rgba(34, 34, 34, 0.9), rgba(0, 0, 0, 0.9))"
-              : "linear-gradient(to top, rgba(211, 211, 211, 0.8), rgba(211, 211, 211, 0.9))",
+              : "linear-gradient(to top, rgba(232, 224, 255, 0.8), rgba(238, 232, 255, 0.9))",
           }}
         >
           {/* Theme Toggle Button */}
@@ -210,7 +210,7 @@ const SignupPage = () => {
             </>):(<>
               <button
             type="submit"
-            className={`w-full mt-6 py-3 text-lg font-semibold rounded-lg transition-all duration-300 ${
+            className={` bg-gradient-to-r from-indigo-400 to-indigo-600 w-full mt-6 py-3 text-lg font-semibold rounded-lg transition-all duration-300 ${
               darkMode
                 ? "bg-purple-600 text-white hover:bg-purple-500"
                 : "bg-gray-400 text-gray-900 hover:bg-gray-500"
@@ -234,7 +234,7 @@ const SignupPage = () => {
             <p className="text-lg">
               Already have an account?{" "}
               <a
-                href="/"
+                href="/login"
                 className={`font-semibold ${
                   darkMode
                     ? "text-purple-500 hover:text-purple-400"

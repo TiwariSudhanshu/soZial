@@ -3,18 +3,20 @@ import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../api/register.api";
-import DarkModeIcon from '@mui/icons-material/DarkMode';
+import DarkModeIcon from "@mui/icons-material/DarkMode";
 
 const InfoPage = () => {
   const [step, setStep] = useState(1);
-  const [darkMode, setDarkMode] = useState(() => JSON.parse(localStorage.getItem('theme')) || false);
-   const toggleTheme = () => {
-     setDarkMode(!darkMode);
-   };
-   useEffect(() => {
-     localStorage.setItem("theme", darkMode);
-   }, [darkMode]);
-   
+  const [darkMode, setDarkMode] = useState(
+    () => JSON.parse(localStorage.getItem("theme")) || false
+  );
+  const toggleTheme = () => {
+    setDarkMode(!darkMode);
+  };
+  useEffect(() => {
+    localStorage.setItem("theme", darkMode);
+  }, [darkMode]);
+
   const navigate = useNavigate();
   const location = useLocation();
   const { email, mobileNo, password } = location.state || {};
@@ -37,7 +39,6 @@ const InfoPage = () => {
   useEffect(() => {
     setStep(1);
   }, []);
-
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -102,7 +103,9 @@ const InfoPage = () => {
                   : "bg-white text-gray-900 shadow-lg"
               }`}
             >
-              <h2 className="text-2xl font-extrabold mb-6 text-center">Personal Info</h2>
+              <h2 className="text-2xl font-extrabold mb-6 text-center">
+                Personal Info
+              </h2>
               <div className="space-y-4">
                 <input
                   type="text"
@@ -175,7 +178,9 @@ const InfoPage = () => {
                   : "bg-white text-gray-900 shadow-lg"
               }`}
             >
-              <h2 className="text-2xl font-extrabold mb-6 text-center">Username & Bio</h2>
+              <h2 className="text-2xl font-extrabold mb-6 text-center">
+                Username & Bio
+              </h2>
               <div className="space-y-4">
                 <input
                   type="text"
@@ -224,7 +229,9 @@ const InfoPage = () => {
                   : "bg-white text-gray-900 shadow-lg"
               }`}
             >
-              <h2 className="text-2xl font-extrabold mb-6 text-center">Profile Picture</h2>
+              <h2 className="text-2xl font-extrabold mb-6 text-center">
+                Profile Picture
+              </h2>
               <div className="space-y-4 flex flex-col items-center">
                 <label
                   className={`w-full py-3 px-4 rounded-lg text-lg text-center cursor-pointer transition-all duration-500 ${
@@ -234,7 +241,12 @@ const InfoPage = () => {
                   }`}
                 >
                   Upload Picture
-                  <input type="file" id="avatar" onChange={handleFileChange} className="hidden" />
+                  <input
+                    type="file"
+                    id="avatar"
+                    onChange={handleFileChange}
+                    className="hidden"
+                  />
                 </label>
                 {imagePreview && (
                   <img

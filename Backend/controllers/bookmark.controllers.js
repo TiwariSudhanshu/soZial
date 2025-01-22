@@ -45,7 +45,7 @@ export const bookmark = asyncHandler(async(req, res)=>{
 
 export const getAllBookMark = asyncHandler(async(req,res)=>{
  try {
-  const userId = req.user
+  const userId = req.user;
   const user = await User.findById(userId)
    if(!user){
      throw new ApiError(400, "No user found");
@@ -55,30 +55,30 @@ export const getAllBookMark = asyncHandler(async(req,res)=>{
    const postIds = user.bookmark;
  
 
-   const bookmarks = await Promise.all(
+   const bookmarks = (await Promise.all(
     postIds.map(async (id) => {
       const post = await Post.findById(id);
-      if (!post) {
-        throw new ApiError(400, "Post not found");
+      if (post) {
+        const profile = await User.findOne({ posts: id });
+        if (!profile) {
+          throw new ApiError(400, "Profile not found");
+        }
+  
+        return {
+          name: profile.name,
+          username: profile.username,
+          avatar: profile.avatar,
+          id: post._id,
+          content: post.content,
+          image: post.image,
+          date: post.date,
+          likes: post.likes,
+        };
       }
-
-      const profile = await User.findOne({ posts: id });
-      if (!profile) {
-        throw new ApiError(400, "Profile not found");
-      }
-
-      return {
-        name: profile.name,
-        username: profile.username,
-        avatar: profile.avatar,
-        id: post._id,
-        content: post.content,
-        image: post.image,
-        date: post.date,
-        likes: post.likes,
-      };
+      return null;
     })
-  );
+  )).filter((bookmark) => bookmark !== null); 
+  
 
  
  res.status(200).json(

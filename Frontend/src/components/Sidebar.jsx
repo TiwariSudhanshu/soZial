@@ -34,7 +34,7 @@ const Sidebar = () => {
       if (response.ok) {
         toast("Logged out");
         localStorage.removeItem("user");
-        navigate("/");
+        navigate("/login");
       }
     } catch (error) {
       toast.error("Failed to logout");

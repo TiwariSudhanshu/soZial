@@ -20,7 +20,7 @@ export const registerUser = async (formData) => {
       }
     } catch (error) {
       console.error("Error during registration:", error);
-      return { success: false, message: "Error occurred during registration" };
+      return { success: false, message: "User already exist" };
     }
   };
   

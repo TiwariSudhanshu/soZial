@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import '../index.css'
+import "../index.css";
 import { useDispatch, useSelector } from "react-redux";
 import { addPost } from "../../app/userSlice";
 
@@ -14,7 +14,7 @@ const AddPostComponent = ({ setPosts, setIsDialogOpen, isDialogOpen }) => {
     postContent: "",
     postImage: "",
   });
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const handleChange = (e) => {
     setFormData({ ...formData, postContent: e.target.value });
   };
@@ -35,7 +35,7 @@ const AddPostComponent = ({ setPosts, setIsDialogOpen, isDialogOpen }) => {
 
     if (!formData.postContent.trim() && !formData.postImage) {
       toast.error("Post should not be empty");
-      
+
       return;
     }
     setLoader(true);
@@ -51,11 +51,10 @@ const AddPostComponent = ({ setPosts, setIsDialogOpen, isDialogOpen }) => {
       const data = await response.json();
       if (response.ok) {
         toast.success("Post Added");
-        dispatch(addPost(data.data))
+        dispatch(addPost(data.data));
         setFormData({ postContent: "", postImage: "" });
         setImagePreview(null);
-        navigate("/profile")
-        
+        navigate("/profile");
       } else {
         toast.error(data.message || "Failed to add post");
       }
@@ -107,21 +106,21 @@ const AddPostComponent = ({ setPosts, setIsDialogOpen, isDialogOpen }) => {
         />
       </div>
       {imagePreview && (
-  <div className="mb-4">
-    <p
-      className={`text-sm font-medium mb-2 ${
-        darkMode ? "text-gray-200" : "text-gray-800"
-      }`}
-    >
-      Image Preview:
-    </p>
-    <img
-      src={imagePreview}
-      alt="Selected"
-      className="w-full h-auto object-contain rounded-lg border"
-    />
-  </div>
-)}
+        <div className="mb-4">
+          <p
+            className={`text-sm font-medium mb-2 ${
+              darkMode ? "text-gray-200" : "text-gray-800"
+            }`}
+          >
+            Image Preview:
+          </p>
+          <img
+            src={imagePreview}
+            alt="Selected"
+            className="w-full h-auto object-contain rounded-lg border"
+          />
+        </div>
+      )}
 
       <div className="flex justify-center items-center">
         {loader ? (
@@ -141,7 +140,6 @@ const AddPostComponent = ({ setPosts, setIsDialogOpen, isDialogOpen }) => {
       </div>
     </div>
   );
-  
 };
 
 export default AddPostComponent;

@@ -4,7 +4,7 @@ const userSlice = createSlice({
     name: "userState",
     initialState: {
         userPost: [],
-        darkMode: false, 
+        darkMode: true, 
     },
     reducers: {
         addPost: (state, action) => {

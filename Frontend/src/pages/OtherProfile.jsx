@@ -1,14 +1,14 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import TurnedInNotIcon from "@mui/icons-material/TurnedInNot";
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { useSelector } from "react-redux";
 import Sidebar from "../components/Sidebar";
 import Rightbar from "../components/Rightbar";
-import {  useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import TurnedInIcon from '@mui/icons-material/TurnedIn';
+import TurnedInIcon from "@mui/icons-material/TurnedIn";
 
 function OtherProfile() {
   const [profile, setProfile] = useState("");
@@ -59,92 +59,92 @@ function OtherProfile() {
   const profileId = profile._id;
   // Post status
 
-  const getPostStatus = async(id)=>{
+  const getPostStatus = async (id) => {
     try {
-      const response = await fetch('/api/v1/post/postStatus',{
-        method: 'post',
-        headers:{
-          'Content-Type': 'application/json'
+      const response = await fetch("/api/v1/post/postStatus", {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           userId: user._id,
-          profileId: id
-        })
-      })
-      
-      if(response.ok){
+          profileId: id,
+        }),
+      });
+
+      if (response.ok) {
         const data = await response.json();
         setPostStatus(data.data);
         // toast.success("Fetched status successfully")
-      }else{
-        toast.error("Error in response")
+      } else {
+        toast.error("Error in response");
       }
     } catch (error) {
-      console.log("Error in getting post status :", error)
+      console.log("Error in getting post status :", error);
       toast.error("Error");
-      
     }
-  }
+  };
 
-  useEffect(()=>{
-    if(profileId){
-      getPostStatus(profileId);   
+  useEffect(() => {
+    if (profileId) {
+      getPostStatus(profileId);
     }
-  },[profileId])
+  }, [profileId]);
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const options = { month: "short", day: "numeric" };
     return date.toLocaleString("en-US", options);
   };
-    const handleLike = async(postId)=>{
-     try {
-       const response = await fetch('/api/v1/post/like',{
-         method: 'post',
-         headers:{
-           'Content-Type': 'application/json'
-         },
-         body: JSON.stringify({
-           postId
-         })
-       })
-       if(response.ok){
+  const handleLike = async (postId) => {
+    try {
+      const response = await fetch("/api/v1/post/like", {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          postId,
+        }),
+      });
+      if (response.ok) {
         setPostStatus((prevStatus) =>
           prevStatus.map((status) =>
             status.postId === postId
               ? {
                   ...status,
                   isLiked: !status.isLiked,
-                  likeCount: status.isLiked ? status.likeCount - 1 : status.likeCount + 1, // Toggle likeCount
+                  likeCount: status.isLiked
+                    ? status.likeCount - 1
+                    : status.likeCount + 1, // Toggle likeCount
                 }
               : status
           )
         );
         //  toast.success('liked')
-       }else{
-         toast.error("Error in liking")
-       }
-     } catch (error) {
-      console.log("Error :", error)
-      toast.error("Error")
-     }
+      } else {
+        toast.error("Error in liking");
+      }
+    } catch (error) {
+      console.log("Error :", error);
+      toast.error("Error");
     }
-  
+  };
 
   // Bookmarking
 
-  const bookmark = async(postId)=>{
+  const bookmark = async (postId) => {
     try {
-      const response = await fetch("/api/v1/post/bookmark",{
-        method: 'post',
-        headers:{
-          'Content-Type': 'application/json'
+      const response = await fetch("/api/v1/post/bookmark", {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          postId
+          postId,
         }),
-        credentials: "include"
-      })
-      if(response.ok){
+        credentials: "include",
+      });
+      if (response.ok) {
         setPostStatus((prevStatus) =>
           prevStatus.map((status) =>
             status.postId === postId
@@ -153,16 +153,14 @@ function OtherProfile() {
           )
         );
         // toast.success("Bookmarked")
-
-      }else{
-        toast.error("Failed to bookmark")
+      } else {
+        toast.error("Failed to bookmark");
       }
     } catch (error) {
-      console.log("Error in bookmarking :", error)
-      toast.error("Error in bookmarking")
+      console.log("Error in bookmarking :", error);
+      toast.error("Error in bookmarking");
     }
-  }
-  
+  };
 
   // Follow
 
@@ -273,20 +271,23 @@ function OtherProfile() {
     );
   };
   return (
-    <div className={`flex ${
-      darkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-800"
-    }`}  id='main-box'>
+    <div
+      className={`flex ${
+        darkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-800"
+      }`}
+      id="main-box"
+    >
       <Sidebar />
-      <div  id="main-content"
+      <div
+        id="main-content"
         className={`ml-[8%] mr-[23%] flex-1 ${
           darkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-800"
         }`}
       >
         {/* Theme Toggle Button */}
         <div className="p-4 flex items-center justify-between">
-        <h1 className="font-bold text-xl">{profile.name}</h1>
-        
-      </div>
+          <h1 className="font-bold text-xl">{profile.name}</h1>
+        </div>
         {/* Profile Section */}
         <div>
           <div
@@ -311,27 +312,26 @@ function OtherProfile() {
                 <p>@{profile.username}</p>
               </div>
               {followed ? (
- <button
- className="bg-gray-400 text-white px-6 py-2 rounded-full shadow-md hover:bg-gray-500 transform transition-transform hover:scale-105"
- id="follow-btn"
- onClick={() => {
-   handleUnfollow();
- }}
->
- Following
-</button>
-) : (
-  <button
-    className="bg-indigo-600 text-white px-6 py-2 rounded-full shadow-md hover:bg-blue-500 transform transition-transform hover:scale-105"
-    id="follow-btn"
-    onClick={() => {
-      handleFollow();
-    }}
-  >
-    Follow
-  </button>
-)}
-
+                <button
+                  className="bg-gray-400 text-white px-6 py-2 rounded-full shadow-md hover:bg-gray-500 transform transition-transform hover:scale-105"
+                  id="follow-btn"
+                  onClick={() => {
+                    handleUnfollow();
+                  }}
+                >
+                  Following
+                </button>
+              ) : (
+                <button
+                  className="bg-indigo-600 text-white px-6 py-2 rounded-full shadow-md hover:bg-blue-500 transform transition-transform hover:scale-105"
+                  id="follow-btn"
+                  onClick={() => {
+                    handleFollow();
+                  }}
+                >
+                  Follow
+                </button>
+              )}
             </div>
 
             <div className="mt-2 flex space-x-6">
@@ -357,42 +357,45 @@ function OtherProfile() {
           </div>
         </div>
         {popupVisible && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white w-96 p-6 rounded-lg shadow-lg h-96 overflow-scroll" id="scroll-div">
-            <div className="flex justify-between items-center mb-4">
-              <div className="flex space-x-4">
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div
+              className="bg-white w-96 p-6 rounded-lg shadow-lg h-96 overflow-scroll"
+              id="scroll-div"
+            >
+              <div className="flex justify-between items-center mb-4">
+                <div className="flex space-x-4">
+                  <button
+                    onClick={() => setActiveTab("followers")}
+                    className={`text-lg font-bold ${
+                      activeTab === "followers"
+                        ? "border-b-2 border-blue-500 text-blue-600"
+                        : "text-gray-500"
+                    }`}
+                  >
+                    Followers
+                  </button>
+                  <button
+                    onClick={() => setActiveTab("following")}
+                    className={`text-lg font-bold ${
+                      activeTab === "following"
+                        ? "border-b-2 border-blue-500 text-blue-600"
+                        : "text-gray-500"
+                    }`}
+                  >
+                    Following
+                  </button>
+                </div>
                 <button
-                  onClick={() => setActiveTab("followers")}
-                  className={`text-lg font-bold ${
-                    activeTab === "followers"
-                      ? "border-b-2 border-blue-500 text-blue-600"
-                      : "text-gray-500"
-                  }`}
+                  onClick={() => setPopupVisible(false)}
+                  className="text-gray-600 hover:text-gray-800"
                 >
-                  Followers
-                </button>
-                <button
-                  onClick={() => setActiveTab("following")}
-                  className={`text-lg font-bold ${
-                    activeTab === "following"
-                      ? "border-b-2 border-blue-500 text-blue-600"
-                      : "text-gray-500"
-                  }`}
-                >
-                  Following
+                  Close
                 </button>
               </div>
-              <button
-                onClick={() => setPopupVisible(false)}
-                className="text-gray-600 hover:text-gray-800"
-              >
-                Close
-              </button>
+              <div className="h-full">{renderPopupContent()}</div>
             </div>
-            <div className="h-full">{renderPopupContent()}</div>
           </div>
-        </div>
-      )}
+        )}
         {/* Posts Section */}
         <div
           className={`mt-10 p-6 ${
@@ -404,76 +407,78 @@ function OtherProfile() {
             .slice()
             .sort((a, b) => new Date(b.date) - new Date(a.date))
             .map((post) => {
-              const status = postStatus?.find((status) => status.postId === post._id);
-              return(
+              const status = postStatus?.find(
+                (status) => status.postId === post._id
+              );
+              return (
                 <div key={post._id} className="mb-6 pb-6 border-b">
-                <div className="flex items-center space-x-4 mb-2 relative">
-                  <img
-                    src={profile.avatar}
-                    alt="User Avatar"
-                    className="w-12 h-12 rounded-full"
-                  />
-                  <div>
-                    <h4 className="text-lg font-bold">{profile.name}</h4>
-                    <p>{profile.username}</p>
-                  </div>
-            
-                  {/* Bookmark button in the top-right corner */}
-                  <button
-                    onClick={() => bookmark(post._id)}
-                    className="absolute top-0 right-0 p-2"
-                  >
-                    {/* {profile.bookmark.includes(user._id)?(<TurnedInIcon />):(<TurnedInNotIcon />)} */}
-                    {status?.isBookmarked?(<TurnedInIcon />):(<TurnedInNotIcon />)}
-                  </button>
-                </div>
-            
-                {post.content && (
-                  <p className="mb-3">
-                    {post.content.split(" ").map((word, index) =>
-                      word.startsWith("#") ? (
-                        <span key={index} style={{ color: "skyblue" }}>
-                          {word}{" "}
-                        </span>
+                  <div className="flex items-center space-x-4 mb-2 relative">
+                    <img
+                      src={profile.avatar}
+                      alt="User Avatar"
+                      className="w-12 h-12 rounded-full"
+                    />
+                    <div>
+                      <h4 className="text-lg font-bold">{profile.name}</h4>
+                      <p>{profile.username}</p>
+                    </div>
+
+                    <button
+                      onClick={() => bookmark(post._id)}
+                      className="absolute top-0 right-0 p-2"
+                    >
+                      {status?.isBookmarked ? (
+                        <TurnedInIcon />
                       ) : (
-                        word + " "
-                      )
-                    )}
-                  </p>
-                )}
-            
-                {post.image && (
-                  <img
-                    src={post.image}
-                    alt="Post Content"
-                    className="w-full rounded-lg mb-3"
-                    onDoubleClick={() => handleLike(post._id)}
-                  />
-                )}
-            
-                <div className="flex justify-between items-center ml-2">
-                  {/* Likes and Like Button */}
-                  <div className="flex items-center space-x-2">
-                    <span className="font-bold text-xl">{status?.likeCount}</span>
-                    <button onClick={() => handleLike(post._id)}>
-                    {status?.isLiked ? (
-                        <FavoriteIcon style={{color:'red'}}/>
-                      ) : (
-                        <FavoriteBorderIcon/>
+                        <TurnedInNotIcon />
                       )}
-                    </button>                                                                      
+                    </button>
                   </div>
-            
-                  {/* Post Date in Bottom-Right Corner */}
-                  <p className="text-sm text-gray-500">
-                    {new Date(post.date).toLocaleDateString()}
-                  </p>
+
+                  {post.content && (
+                    <p className="mb-3">
+                      {post.content.split(" ").map((word, index) =>
+                        word.startsWith("#") ? (
+                          <span key={index} style={{ color: "skyblue" }}>
+                            {word}{" "}
+                          </span>
+                        ) : (
+                          word + " "
+                        )
+                      )}
+                    </p>
+                  )}
+
+                  {post.image && (
+                    <img
+                      src={post.image}
+                      alt="Post Content"
+                      className="w-full rounded-lg mb-3"
+                      onDoubleClick={() => handleLike(post._id)}
+                    />
+                  )}
+
+                  <div className="flex justify-between items-center ml-2">
+                    <div className="flex items-center space-x-2">
+                      <span className="font-bold text-xl">
+                        {status?.likeCount}
+                      </span>
+                      <button onClick={() => handleLike(post._id)}>
+                        {status?.isLiked ? (
+                          <FavoriteIcon style={{ color: "red" }} />
+                        ) : (
+                          <FavoriteBorderIcon />
+                        )}
+                      </button>
+                    </div>
+
+                    <p className="text-sm text-gray-500">
+                      {new Date(post.date).toLocaleDateString()}
+                    </p>
+                  </div>
                 </div>
-              </div>
-              )
-            } )
-            
-            }
+              );
+            })}
         </div>
       </div>
       <Rightbar />
