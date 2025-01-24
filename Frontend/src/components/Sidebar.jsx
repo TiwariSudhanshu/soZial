@@ -10,7 +10,6 @@ const Sidebar = () => {
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
 
-  // Scroll to top function
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -108,18 +107,27 @@ const Sidebar = () => {
       <h2 className="text-xl font-semibold mb-4">Logout</h2>
       <p className="text-gray-600 mb-6">Are you sure you want to logout?</p>
       <div className="flex justify-end space-x-4">
-        <button
+       {logoutLoader?
+        (
+        <>
+        <div className="loader"></div>
+        </>
+      ):
+      (
+      <>
+      <button
           onClick={() => setShowModal(false)}
           className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
         >
           Cancel
         </button>
-        <button
+       <button
           onClick={() => logoutUser()}
           className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-        >
-          Logout
-        </button>
+        > Logout
+        </button>    
+      </>)}
+       
       </div>
     </div>
   </div>

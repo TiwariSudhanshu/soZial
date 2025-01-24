@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -7,6 +6,8 @@ import { toast } from "react-toastify";
 const Bookmark = () => {
   const darkMode = useSelector((state) => state.user.darkMode);
   const [posts, setPosts] = useState([]);
+
+  // Bookmark api
   const bookmark = async (postId) => {
     try {
       const response = await fetch("/api/v1/post/bookmark", {

@@ -15,6 +15,8 @@ const AddPostComponent = ({ setPosts, setIsDialogOpen, isDialogOpen }) => {
     postImage: "",
   });
   const dispatch = useDispatch();
+
+
   const handleChange = (e) => {
     setFormData({ ...formData, postContent: e.target.value });
   };
@@ -30,6 +32,7 @@ const AddPostComponent = ({ setPosts, setIsDialogOpen, isDialogOpen }) => {
     }
   };
 
+  // Add Post Api
   const addNewPost = async (e) => {
     e.preventDefault();
 

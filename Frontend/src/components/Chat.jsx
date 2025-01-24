@@ -9,6 +9,8 @@ import socket from "../../app/socket";
 import { toast } from "react-toastify";
 import "../index.css";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+
+
 function Chat() {
   const username = useParams();
   const darkMode = useSelector((state) => state.user.darkMode);
@@ -74,7 +76,6 @@ function Chat() {
         }),
       });
 
-      // Parsing JSON response
       const data = await response.json();
 
       if (response.ok) {

@@ -14,6 +14,10 @@ createRoot(document.getElementById("root")).render(
     <App />
     </PersistGate>
     </Provider>
-    <ToastContainer />
+    <ToastContainer 
+    autoClose={2000}
+    position="top-center" 
+    toastClassName="custom-toast"
+    />
   </StrictMode>
 );

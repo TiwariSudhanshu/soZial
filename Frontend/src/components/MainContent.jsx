@@ -6,8 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import TurnedInIcon from "@mui/icons-material/TurnedIn";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 const MainContent = () => {
   const [popupVisible, setPopupVisible] = useState(false);
   const [activeTab, setActiveTab] = useState("followers");
@@ -25,6 +25,7 @@ const MainContent = () => {
   if (!user) return <div>No user data available.</div>;
 
   const userId = user._id;
+  // const [posts, setPosts] = useState(user.posts);
   const [posts, setPosts] = useState(
     useSelector((state) => state.user.userPost)
   );
@@ -105,7 +106,7 @@ const MainContent = () => {
                   isLiked: !status.isLiked,
                   likeCount: status.isLiked
                     ? status.likeCount - 1
-                    : status.likeCount + 1,
+                    : status.likeCount + 1, // Toggle likeCount
                 }
               : status
           )
@@ -269,10 +270,7 @@ const MainContent = () => {
       {/* Follow Popup */}
       {popupVisible && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div
-            className="bg-white w-96 p-6 rounded-lg shadow-lg h-96 overflow-scroll"
-            id="scroll-div"
-          >
+          <div className="bg-white w-96 p-6 rounded-lg shadow-lg h-96 overflow-scroll" id="scroll-div">
             <div className="flex justify-between items-center mb-4">
               <div className="flex space-x-4">
                 <button
@@ -379,10 +377,11 @@ const MainContent = () => {
                       {status?.likeCount}
                     </span>
                     <button onClick={() => handleLike(post._id)}>
+                      {/* {post.likes.includes(user._id)?<ThumbUpAltIcon />:<ThumbUpOffAltIcon />} */}
                       {status?.isLiked ? (
-                        <FavoriteIcon style={{ color: "red" }} />
+                        <FavoriteIcon style={{color:'red'}}/>
                       ) : (
-                        <FavoriteBorderIcon />
+                        <FavoriteBorderIcon/>
                       )}
                     </button>
                     <button
@@ -393,6 +392,7 @@ const MainContent = () => {
                     </button>
                   </div>
 
+                  {/* Post Date in Bottom-Right Corner */}
                   <p className="text-sm text-gray-500">
                     {new Date(post.date).toLocaleDateString()}
                   </p>
