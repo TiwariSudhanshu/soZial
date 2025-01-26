@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:3000", { withCredentials: true });
+const socket = io("https://sozial-server.onrender.com", { withCredentials: true });
 function Profile() {
   const darkMode = useSelector((state) => state.user.darkMode);
   const userData = JSON.parse(localStorage.getItem("user"));
