@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createHashRouter } from 'react-router-dom';
 import { RouterProvider } from 'react-router-dom';
 import SignupPage from './pages/SignupPage';
 import Info from './pages/Info';
@@ -13,7 +13,7 @@ import Chat from './components/Chat';
 import ForgotPass from './components/ForgotPass';
 import LandingPage from './pages/LandingPage';
 
-const router = createBrowserRouter([
+const router = createHashRouter([ 
   {
     path: "/login",
     element: <LoginPage />,
@@ -69,4 +69,4 @@ function App() {
   );
 }
 
-export default App
+export default App;
