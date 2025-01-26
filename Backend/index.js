@@ -14,7 +14,7 @@ const server = createServer(app)
 
 const io = new Server(server,{
   cors:{
-    origin: 'https://sozial.onrender.com/',
+    origin: 'https://sozial.onrender.com',
     credentials: true
   }
 })
