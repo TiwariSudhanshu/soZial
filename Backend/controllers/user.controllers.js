@@ -135,10 +135,12 @@ export const loginUser = asyncHandler(async (req, res) => {
     .populate("posts"); 
  
 
-  const options = {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-  };
+    const options = {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",  
+      sameSite: "None",  
+    };
+    
 
   return res
     .status(200)
