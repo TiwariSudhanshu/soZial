@@ -1,3 +1,5 @@
+import { serverLink } from "../../constants";
+
 // api.js
 export const registerUser = async (formData) => {
     const dataToSend = new FormData();
@@ -6,7 +8,7 @@ export const registerUser = async (formData) => {
     }
   
     try {
-      const response = await fetch("/api/v1/user/register", {
+      const response = await fetch(`${serverLink}/api/v1/user/register`, {
         method: "POST",
         body: dataToSend,
       });

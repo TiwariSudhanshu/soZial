@@ -1,6 +1,8 @@
+import { serverLink } from "../../constants";
+
 const loginUser = async (email, password) => {
     try {
-      const response = await fetch('/api/v1/user/login', {
+      const response = await fetch(`${serverLink}/api/v1/user/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

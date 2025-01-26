@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import "../index.css";
 import { useDispatch, useSelector } from "react-redux";
 import { addPost } from "../../app/userSlice";
+import { serverLink } from "../../constants";
 
 const AddPostComponent = ({ setPosts, setIsDialogOpen, isDialogOpen }) => {
   const [imagePreview, setImagePreview] = useState(null);
@@ -46,7 +47,7 @@ const AddPostComponent = ({ setPosts, setIsDialogOpen, isDialogOpen }) => {
     formDataToSend.append("postContent", formData.postContent);
     formDataToSend.append("postImage", formData.postImage);
     try {
-      const response = await fetch("/api/v1/post/add", {
+      const response = await fetch(`${serverLink}/api/v1/post/add`, {
         method: "POST",
         body: formDataToSend,
         credentials: "include",

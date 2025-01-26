@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { serverLink } from "../../constants";
 
 const Bookmark = () => {
   const darkMode = useSelector((state) => state.user.darkMode);
@@ -10,7 +11,7 @@ const Bookmark = () => {
   // Bookmark api
   const bookmark = async (postId) => {
     try {
-      const response = await fetch("/api/v1/post/bookmark", {
+      const response = await fetch(`${serverLink}/api/v1/post/bookmark`, {
         method: "post",
         headers: {
           "Content-Type": "application/json",
@@ -32,7 +33,7 @@ const Bookmark = () => {
   };
   const getBookMarks = async () => {
     try {
-      const response = await fetch("/api/v1/post/getAllBookmarks", {
+      const response = await fetch(`${serverLink}/api/v1/post/getAllBookmarks`, {
         method: "get",
       });
       if (response.ok) {

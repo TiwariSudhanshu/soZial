@@ -1,6 +1,8 @@
+import { serverLink } from "../../constants"
+
 const likeFunction = async(postId)=>{
     try {
-        const response = await fetch ("/api/v1/user/like",{
+        const response = await fetch (`${serverLink}/api/v1/user/like`,{
             method: 'post',
             headers:{
                 'Content-Type': 'application/json'

@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "../index.css";
-
+import { serverLink } from "../../constants";
 function ForgotPass() {
   const darkMode = useSelector((state) => state.user.darkMode);
   const [modalOpen, setModalOpen] = useState(false);
@@ -68,7 +68,7 @@ function ForgotPass() {
   const sendMail = async (email) => {
     setLoader(true);
     try {
-      const response = await fetch("/api/v1/verify/sendOTP", {
+      const response = await fetch(`${serverLink}/api/v1/verify/sendOTP`, {
         method: "post",
         headers: {
           "Content-Type": "application/json",
@@ -96,7 +96,7 @@ function ForgotPass() {
     setLoader(true);
     try {
       setLoader(true);
-      const response = await fetch("/api/v1/verify/verifyOTP", {
+      const response = await fetch(`${serverLink}/api/v1/verify/verifyOTP`, {
         method: "post",
         headers: {
           "Content-Type": "application/json",

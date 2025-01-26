@@ -1,0 +1,1 @@
+export const serverLink = "https://sozial-server.onrender.com";

@@ -7,6 +7,8 @@ import { toast } from "react-toastify";
 import SearchIcon from "@mui/icons-material/Search";
 import "../index.css";
 import { useNavigate } from "react-router-dom";
+import { serverLink } from "../../constants";
+
 
 function ChatPage() {
   const darkMode = useSelector((state) => state.user.darkMode);
@@ -19,7 +21,7 @@ function ChatPage() {
 
   const getFollowDetails = async (profileId) => {
     try {
-      const response = await fetch("/api/v1/user/followStatus", {
+      const response = await fetch(`${serverLink}/api/v1/user/followStatus`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ profileId }),
@@ -48,7 +50,7 @@ function ChatPage() {
     e.preventDefault();
     setLoader(true);
     try {
-      const response = await fetch("/api/v1/profiles/search", {
+      const response = await fetch(`${serverLink}/api/v1/profiles/search`, {
         method: "post",
         headers: {
           "Content-Type": "application/json",

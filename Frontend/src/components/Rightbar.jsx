@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import { toggleDarkMode } from "../../app/userSlice";
 import "../index.css";
+import { serverLink } from "../../constants";
+
 
 const Rightbar = () => {
   // Search Profile
@@ -27,7 +29,7 @@ const Rightbar = () => {
     e.preventDefault();
     setLoader(true);
     try {
-      const response = await fetch("/api/v1/profiles/search", {
+      const response = await fetch(`${serverLink}/api/v1/profiles/search`, {
         method: "post",
         headers: {
           "Content-Type": "application/json",
@@ -57,7 +59,7 @@ const Rightbar = () => {
   const [users, setUsers] = useState([]);
   const fetchUsers = async () => {
     try {
-      const response = await fetch("/api/v1/user/suggestions", {
+      const response = await fetch(`${serverLink}/api/v1/user/suggestions`, {
         method: "GET",
       });
       const data = await response.json();

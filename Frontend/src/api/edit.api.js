@@ -1,5 +1,6 @@
 // api.js
-const API_BASE_URL = "/api/v1/user";
+import { serverLink } from "../../constants";
+const API_BASE_URL = `${serverLink}/api/v1/user`;
 
 export const fetchUser = async () => {
   const response = await fetch(`${API_BASE_URL}/edit`, {

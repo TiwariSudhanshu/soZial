@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { loginUser } from "../api/login.api.js";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts, toggleDarkMode } from "../../app/userSlice.js";
+import { serverLink } from "../../constants";
+
 
 const LoginPage = () => {
   const [loader, setLoader] = useState(false);
@@ -44,7 +46,7 @@ const LoginPage = () => {
     setLoader(true);
     try {
       setLoader(true);
-      const response = await fetch("/api/v1/verify/verifyOTP", {
+      const response = await fetch(`${serverLink}/api/v1/verify/verifyOTP`, {
         method: "post",
         headers: {
           "Content-Type": "application/json",

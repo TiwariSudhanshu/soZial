@@ -5,6 +5,8 @@ import { FaBookmark } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import '../index.css'
+import { serverLink } from "../../constants";
+
 
 const Sidebar = () => {
   const [showModal, setShowModal] = useState(false);
@@ -22,7 +24,7 @@ const Sidebar = () => {
   const logoutUser = async () => {
     setLogoutLoader(true);
     try {
-      const response = await fetch("/api/v1/user/logout", {
+      const response = await fetch(`${serverLink}/api/v1/user/logout`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

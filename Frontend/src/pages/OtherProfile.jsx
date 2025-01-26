@@ -9,6 +9,7 @@ import Rightbar from "../components/Rightbar";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import TurnedInIcon from "@mui/icons-material/TurnedIn";
+import { serverLink } from "../../constants";
 
 function OtherProfile() {
   const [profile, setProfile] = useState("");
@@ -28,7 +29,7 @@ function OtherProfile() {
   useEffect(() => {
     const findProfile = async () => {
       try {
-        const response = await fetch("/api/v1/profiles/fetch", {
+        const response = await fetch(`${serverLink}/api/v1/profiles/fetch`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -61,7 +62,7 @@ function OtherProfile() {
 
   const getPostStatus = async (id) => {
     try {
-      const response = await fetch("/api/v1/post/postStatus", {
+      const response = await fetch(`${serverLink}/api/v1/post/postStatus`, {
         method: "post",
         headers: {
           "Content-Type": "application/json",
@@ -97,7 +98,7 @@ function OtherProfile() {
   };
   const handleLike = async (postId) => {
     try {
-      const response = await fetch("/api/v1/post/like", {
+      const response = await fetch(`${serverLink}/api/v1/post/like`, {
         method: "post",
         headers: {
           "Content-Type": "application/json",
@@ -134,7 +135,7 @@ function OtherProfile() {
 
   const bookmark = async (postId) => {
     try {
-      const response = await fetch("/api/v1/post/bookmark", {
+      const response = await fetch(`${serverLink}/api/v1/post/bookmark`, {
         method: "post",
         headers: {
           "Content-Type": "application/json",
@@ -170,7 +171,7 @@ function OtherProfile() {
 
   const handleFollow = async () => {
     try {
-      const response = await fetch("/api/v1/user/follow", {
+      const response = await fetch(`${serverLink}/api/v1/user/follow`, {
         method: "post",
         headers: {
           "Content-Type": "application/json",
@@ -192,7 +193,7 @@ function OtherProfile() {
   };
   const getFollowDetails = async (profileId) => {
     try {
-      const response = await fetch("/api/v1/user/followStatus", {
+      const response = await fetch(`${serverLink}/api/v1/user/followStatus`, {
         method: "post",
         headers: {
           "Content-Type": "application/json",
@@ -225,7 +226,7 @@ function OtherProfile() {
 
   const handleUnfollow = async () => {
     try {
-      const response = await fetch("/api/v1/user/unfollow", {
+      const response = await fetch(`${serverLink}/api/v1/user/unfollow`, {
         method: "post",
         headers: {
           "Content-Type": "application/json",

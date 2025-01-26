@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toggleDarkMode } from "../../app/userSlice";
 import "../index.css";
 import { useNavigate } from "react-router-dom";
+import { serverLink } from "../../constants";
 
 const SignupPage = () => {
   const dispatch = useDispatch();
@@ -16,7 +17,7 @@ const SignupPage = () => {
 
   const sendMail = async (email) => {
     try {
-      const response = await fetch("/api/v1/verify/sendOTP", {
+      const response = await fetch(`${serverLink}/api/v1/verify/sendOTP`, {
         method: "post",
         headers: {
           "Content-Type": "application/json",
@@ -100,7 +101,7 @@ const SignupPage = () => {
     setLoader(true);
     try {
       setLoader(true);
-      const response = await fetch("/api/v1/verify/verifyOTP", {
+      const response = await fetch(`${serverLink}/api/v1/verify/verifyOTP`, {
         method: "post",
         headers: {
           "Content-Type": "application/json",

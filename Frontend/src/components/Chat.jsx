@@ -9,7 +9,7 @@ import socket from "../../app/socket";
 import { toast } from "react-toastify";
 import "../index.css";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-
+import { serverLink } from "../../constants";
 
 function Chat() {
   const username = useParams();
@@ -41,7 +41,7 @@ function Chat() {
 
   const getActiveChat = async () => {
     try {
-      const response = await fetch("/api/v1/profiles/fetch", {
+      const response = await fetch(`${serverLink}/api/v1/profiles/fetch`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -65,7 +65,7 @@ function Chat() {
 
   const getPrevChat = async () => {
     try {
-      const response = await fetch("/api/v1/message/get", {
+      const response = await fetch(`${serverLink}/api/v1/message/get`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -118,7 +118,7 @@ function Chat() {
   };
   const saveMessage = async (message) => {
     try {
-      const response = await fetch("/api/v1/message/new", {
+      const response = await fetch(`${serverLink}/api/v1/message/new`, {
         method: "post",
         headers: {
           "Content-Type": "application/json",
@@ -152,7 +152,7 @@ function Chat() {
   };
   const clearChat = async () => {
     try {
-      const response = await fetch("/api/v1/message/clear", {
+      const response = await fetch(`${serverLink}/api/v1/message/clear`, {
         method: "post",
         headers: {
           "Content-Type": "application/json",
