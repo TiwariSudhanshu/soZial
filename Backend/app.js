@@ -6,7 +6,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: 'https://sozial.onrender.com/',
+    origin: 'https://sozial.onrender.com',
     credentials: true,
   })
 );
