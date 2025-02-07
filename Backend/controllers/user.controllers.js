@@ -136,11 +136,11 @@ export const loginUser = asyncHandler(async (req, res) => {
  
 
     const options = {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",  
-      sameSite: "None",  
+      httpOnly: true, 
+      secure: process.env.NODE_ENV === "production", 
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      domain: process.env.NODE_ENV === "production" ? ".onrender.com" : undefined 
     };
-    
 
   return res
     .status(200)
