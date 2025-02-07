@@ -134,13 +134,13 @@ export const loginUser = asyncHandler(async (req, res) => {
     "-password -refreshToken" )
     .populate("posts"); 
  
-
     const options = {
-      httpOnly: true, 
-      secure: process.env.NODE_ENV === "production", 
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      domain: process.env.NODE_ENV === "production" ? ".onrender.com" : undefined 
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // Ensure cookies are only sent over HTTPS
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // Allow cross-origin cookies in production
+      domain: process.env.NODE_ENV === "production" ? ".sozial.onrender.com" : undefined // Match your frontend domain
     };
+  
 
   return res
     .status(200)
