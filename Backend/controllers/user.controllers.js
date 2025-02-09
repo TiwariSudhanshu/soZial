@@ -133,23 +133,13 @@ export const loginUser = asyncHandler(async (req, res) => {
   const loggedInUser = await User.findById(user._id).select(
     "-password -refreshToken" )
     .populate("posts"); 
- 
-    const options = {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // Ensure cookies are only sent over HTTPS
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      domain: process.env.NODE_ENV === "production" && "sozial-server.onrender.com",
-    };
-  
 
   return res
     .status(200)
-    .cookie("accessToken", accessToken, options)
-    .cookie("refreshToken", refreshToken, options)
     .json(
       new ApiResponse(
         200,
-        {loggedInUser},
+        {loggedInUser, accessToken, refreshToken},
         "User logged in successfully"
       )
     );

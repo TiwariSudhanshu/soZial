@@ -5,7 +5,8 @@ const likeFunction = async(postId)=>{
         const response = await fetch (`${serverLink}/api/v1/user/like`,{
             method: 'post',
             headers:{
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
             },
             body: JSON.stringify({
                 postId

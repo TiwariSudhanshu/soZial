@@ -30,6 +30,8 @@ const LoginPage = () => {
       const data = await loginUser(formData.email, formData.password);
       // toast.success("Logged in Successfully");
       localStorage.setItem("user", JSON.stringify(data));
+      localStorage.setItem("accessToken", data.data.accessToken);
+      localStorage.setItem("refreshToken", data.data.refreshToken);
       dispatch(setPosts(data.data.loggedInUser.posts));
       navigate("/profile");
     } catch (error) {

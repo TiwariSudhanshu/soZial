@@ -73,7 +73,9 @@ const MainContent = () => {
     try {
       const response = await fetch(`${serverLink}/api/v1/post/delete`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+         },
         body: JSON.stringify({ id }),
         credentials: "include",
       });
@@ -94,6 +96,7 @@ const MainContent = () => {
         method: "post",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
         },
         body: JSON.stringify({
           postId,
@@ -127,7 +130,9 @@ const MainContent = () => {
     try {
       const response = await fetch(`${serverLink}/api/v1/user/followStatus`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+         },
         body: JSON.stringify({ profileId }),
       });
       if (response.ok) {
@@ -158,6 +163,7 @@ const MainContent = () => {
         method: "post",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
         },
         body: JSON.stringify({
           postId,

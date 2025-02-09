@@ -102,6 +102,7 @@ function OtherProfile() {
         method: "post",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
         },
         body: JSON.stringify({
           postId,
@@ -139,6 +140,7 @@ function OtherProfile() {
         method: "post",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
         },
         body: JSON.stringify({
           postId,
@@ -175,6 +177,7 @@ function OtherProfile() {
         method: "post",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
         },
         body: JSON.stringify({
           followingId: profile._id,
@@ -230,6 +233,7 @@ function OtherProfile() {
         method: "post",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
         },
         body: JSON.stringify({
           followingId: profile._id,

@@ -7,6 +7,7 @@ export const fetchUser = async () => {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
+      "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
     },
     credentials: "include",
   });
@@ -19,6 +20,9 @@ export const fetchUser = async () => {
 export const editUserInfo = async (dataToSend) => {
   const response = await fetch(`${API_BASE_URL}/edit/change`, {
     method: "POST",
+    headers:{
+      "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+    },
     body: dataToSend,
     credentials: "include",
   });
@@ -33,6 +37,7 @@ export const changePassword = async (passData) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
     },
     body: JSON.stringify(passData),
     credentials: "include",

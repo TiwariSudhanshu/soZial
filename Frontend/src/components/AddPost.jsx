@@ -50,6 +50,9 @@ const AddPostComponent = ({ setPosts, setIsDialogOpen, isDialogOpen }) => {
       const response = await fetch(`${serverLink}/api/v1/post/add`, {
         method: "POST",
         body: formDataToSend,
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+        },
         credentials: "include",
       });
       const data = await response.json();
