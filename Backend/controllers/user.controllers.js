@@ -137,7 +137,8 @@ export const loginUser = asyncHandler(async (req, res) => {
     const options = {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", // Ensure cookies are only sent over HTTPS
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // Allow cross-origin cookies in production
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      domain: process.env.NODE_ENV === "production" && "sozial-server.onrender.com",
     };
   
 
