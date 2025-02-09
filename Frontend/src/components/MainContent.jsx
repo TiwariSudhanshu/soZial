@@ -14,19 +14,27 @@ const MainContent = () => {
   const [popupVisible, setPopupVisible] = useState(false);
   const [activeTab, setActiveTab] = useState("followers");
   const navigate = useNavigate();
-  const userData = JSON.parse(localStorage.getItem("user"));
   const darkMode = useSelector((state) => state.user.darkMode);
 
-  useEffect(() => {
-    if (!userData) navigate("/");
-  }, [userData, navigate]);
+  // Fetch user data
+  const userData = JSON.parse(localStorage.getItem("user"));
 
-  if (!userData) return null;
+  useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken");
+    const refreshToken = localStorage.getItem("refreshToken");
+
+    if (!userData || !accessToken || !refreshToken) {
+      navigate("/login");
+    }
+  }, [navigate, userData]); // Runs once when component mounts
+
+  if (!userData) return null; // Prevents further execution
 
   const user = userData?.data?.loggedInUser || userData?.data;
   if (!user) return <div>No user data available.</div>;
 
-  const userId = user._id;
+  const userId = user?._id; // Ensure user is defined before accessing `_id`
+  if (!userId) return <div>Invalid user data.</div>;
   // const [posts, setPosts] = useState(user.posts);
   const [posts, setPosts] = useState(
     useSelector((state) => state.user.userPost)
