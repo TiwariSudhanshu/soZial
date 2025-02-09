@@ -36,6 +36,7 @@ const Bookmark = () => {
     try {
       const response = await fetch(`${serverLink}/api/v1/post/getAllBookmarks`, {
         method: "get",
+        "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
       });
       if (response.ok) {
         const data = await response.json();

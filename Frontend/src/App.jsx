@@ -11,15 +11,11 @@ import ChatPage from './pages/ChatPage';
 import BookmarkPage from './pages/BookmarkPage';
 import Chat from './components/Chat';
 import ForgotPass from './components/ForgotPass';
-import LandingPage from './pages/LandingPage';
 
 const router = createHashRouter([ 
   {
     path: "/login",
     element: <LoginPage />,
-  },{
-    path: "/",
-    element: <LandingPage/>
   },
   {
     path: "/signup",
@@ -30,7 +26,7 @@ const router = createHashRouter([
     element: <Info />,
   },
   {
-    path: "/profile",
+    path: "/",
     element: <Profile />
   },
   {

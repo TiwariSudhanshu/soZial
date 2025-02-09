@@ -61,7 +61,7 @@ const AddPostComponent = ({ setPosts, setIsDialogOpen, isDialogOpen }) => {
         dispatch(addPost(data.data));
         setFormData({ postContent: "", postImage: "" });
         setImagePreview(null);
-        navigate("/profile");
+        navigate("/");
       } else {
         toast.error(data.message || "Failed to add post");
       }

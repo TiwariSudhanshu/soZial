@@ -33,7 +33,7 @@ const LoginPage = () => {
       localStorage.setItem("accessToken", data.data.accessToken);
       localStorage.setItem("refreshToken", data.data.refreshToken);
       dispatch(setPosts(data.data.loggedInUser.posts));
-      navigate("/profile");
+      navigate("/");
     } catch (error) {
       toast.error("No user found with these credentials");
       toast.error("Please recheack email or password");

@@ -36,6 +36,8 @@ const Sidebar = () => {
       if (response.ok) {
         toast("Logged out");
         localStorage.removeItem("user");
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
         navigate("/login");
       }
     } catch (error) {
@@ -55,7 +57,7 @@ const Sidebar = () => {
       {/* Navigation Icons */}
       <div id="nav-side" className="flex-1 flex flex-col items-center mt-6 space-y-8">
         <button
-          onClick={() => { navigate("/profile"); scrollToTop(); }}
+          onClick={() => { navigate("/"); scrollToTop(); }}
           className="p-3 hover:bg-gray-700 rounded-lg w-full flex justify-center"
         >
           <FiHome size={24} />
