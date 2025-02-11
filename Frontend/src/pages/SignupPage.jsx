@@ -235,7 +235,7 @@ const SignupPage = () => {
             <p className="text-lg">
               Already have an account?{" "}
               <a
-                href="/login"
+                href="/"
                 className={`font-semibold ${
                   darkMode
                     ? "text-purple-500 hover:text-purple-400"

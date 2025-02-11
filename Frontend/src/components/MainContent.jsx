@@ -24,7 +24,7 @@ const MainContent = () => {
     const refreshToken = localStorage.getItem("refreshToken");
 
     if (!userData || !accessToken || !refreshToken) {
-      navigate("/login");
+      navigate("/");
     }
   }, [navigate, userData]); // Runs once when component mounts
 

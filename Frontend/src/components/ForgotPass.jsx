@@ -53,7 +53,7 @@ function ForgotPass() {
       });
       if (response.ok) {
         toast.success("Password changed");
-        navigate("/");
+        navigate("/profile");
       } else {
         toast.error("Error in changing password");
       }

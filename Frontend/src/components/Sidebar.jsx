@@ -38,7 +38,7 @@ const Sidebar = () => {
         localStorage.removeItem("user");
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
-        navigate("/login");
+        navigate("/");
       }
     } catch (error) {
       toast.error("Failed to logout");
@@ -57,13 +57,13 @@ const Sidebar = () => {
       {/* Navigation Icons */}
       <div id="nav-side" className="flex-1 flex flex-col items-center mt-6 space-y-8">
         <button
-          onClick={() => { navigate("/"); scrollToTop(); }}
+          onClick={() => { navigate("/profile"); scrollToTop(); }}
           className="p-3 hover:bg-gray-700 rounded-lg w-full flex justify-center"
         >
           <FiHome size={24} />
         </button>
         <a
-          href="/chat"
+          href="/#/chat"
           onClick={scrollToTop}
           id="chat-button"
           className="p-3  hover:bg-gray-700 rounded-lg w-full mt-6 flex justify-center "

@@ -79,7 +79,7 @@ const EditProfileComponent = () => {
       const data = await editUserInfo(dataToSend);
       toast.success("User Info edited");
       localStorage.setItem("user", JSON.stringify(data));
-      navigate("/");
+      navigate("/profile");
     } catch (error) {
       toast.error("User info not edited");
       console.log("Error in change: ", error);
@@ -119,7 +119,7 @@ const EditProfileComponent = () => {
     try {
       await changePassword(passData);
       toast.success("Password changed");
-      navigate("/");
+      navigate("/profile");
     } catch (error) {
       toast.error("Error in response");
       console.log("Error in changePassword: ", error);
