@@ -14,7 +14,7 @@ import ForgotPass from './components/ForgotPass';
 
 const router = createHashRouter([ 
   {
-    path: "/login",
+    path: "/",
     element: <LoginPage />,
   },
   {
@@ -26,7 +26,7 @@ const router = createHashRouter([
     element: <Info />,
   },
   {
-    path: "/",
+    path: "/profile",
     element: <Profile />
   },
   {
