@@ -45,6 +45,7 @@ function Chat() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
         },
         body: JSON.stringify({
           username: username.username,
@@ -69,6 +70,7 @@ function Chat() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
         },
         body: JSON.stringify({
           from: userId,
@@ -122,6 +124,7 @@ function Chat() {
         method: "post",
         headers: {
           "Content-Type": "application/json",
+           "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
         },
         body: JSON.stringify({
           to: toId,
@@ -156,6 +159,7 @@ function Chat() {
         method: "post",
         headers: {
           "Content-Type": "application/json",
+           "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
         },
         body: JSON.stringify({
           from: userId,

@@ -23,7 +23,7 @@ function ChatPage() {
     try {
       const response = await fetch(`${serverLink}/api/v1/user/followStatus`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json",  "Authorization": `Bearer ${localStorage.getItem("accessToken")}` },
         body: JSON.stringify({ profileId }),
       });
       if (response.ok) {
@@ -54,6 +54,7 @@ function ChatPage() {
         method: "post",
         headers: {
           "Content-Type": "application/json",
+           "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
         },
         body: JSON.stringify({
           username: searchUsername,
