@@ -63,7 +63,7 @@ const InfoPage = () => {
 
     if (response.success) {
       toast.success("Registered successfully!");
-      navigate("/profile");
+      navigate("/");
     } else {
       toast.error(response.message);
     }
