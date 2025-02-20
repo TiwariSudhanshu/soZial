@@ -202,7 +202,7 @@ const LoginPage = () => {
           <p className="text-lg">
             Don't have an account?{" "}
             <a
-              href="/signup"
+              href="/#/signup"
               className={`font-semibold ${
                 darkMode
                   ? "text-purple-500 hover:text-purple-400"
