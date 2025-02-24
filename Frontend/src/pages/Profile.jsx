@@ -7,7 +7,10 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { io } from "socket.io-client";
 
-const socket = io("https://sozial-server.onrender.com", { withCredentials: true });
+const socket = io("https://sozial-server.onrender.com", { withCredentials: true,
+  reconnectionAttempts: 5,
+  reconnectionDelay: 2000,
+ });
 function Profile() {
   const darkMode = useSelector((state) => state.user.darkMode);
   const userData = JSON.parse(localStorage.getItem("user"));
@@ -18,12 +21,6 @@ function Profile() {
       console.log("Connected to socket server");
       socket.emit("join", { userId });
     });
-
-    return () => {
-      if (socket) {
-        socket.disconnect();
-      }
-    };
   }, []);
 
   return (
