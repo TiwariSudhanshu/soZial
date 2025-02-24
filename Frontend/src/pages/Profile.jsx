@@ -21,6 +21,12 @@ function Profile() {
       console.log("Connected to socket server");
       socket.emit("join", { userId });
     });
+
+    return () => {
+      if (socket) {
+        socket.disconnect();
+      }
+    };
   }, []);
 
   return (
