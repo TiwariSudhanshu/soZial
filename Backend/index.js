@@ -36,6 +36,16 @@ io.on('connection', (socket)=>{
     });
   })
 })
+const gracefulShutdown = async (signal) => {
+  console.log(`Received ${signal}. Shutting down gracefully...`);
+  server.close(() => {
+    console.log("🛑 Server closed");
+    process.exit(0);
+  });
+};
+
+process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
+process.on("SIGINT", () => gracefulShutdown("SIGINT"));
 
 
 connectDB()
